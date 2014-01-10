@@ -1,0 +1,88 @@
+{% extends 'baseWithNavBar.html' %}
+
+{% block title %} Account {% endblock %}
+
+{% block AccountNavBarActive %} active {% endblock %}
+
+{% block PageArea %}
+	<div class="page-header">
+		<h1>Add User</h1>
+	</div>
+	<script>
+		function validateForm() {
+			var username=document.forms["CreateUserForm"]["username"].value;
+			if (username==null || username=="") {
+				alert("Username must be filled out");
+				return false;
+			}
+			var password=document.forms["CreateUserForm"]["password"].value;
+			var passwordRetry=document.forms["CreateUserForm"]["passwordRetry"].value;
+			if (password==null || password=="") {
+				alert("Password must be between 6 and 30 caracters long");
+				return false;
+			} else if (password!=passwordRetry) {
+				alert("The passwords you have enterd must match");
+				return false;
+			}"
+			var email=document.forms["CreateUserForm"]["email"].value;
+			var atpos=x.indexOf("@");
+			var dotpos=x.lastIndexOf(".");
+			if (email==null || email=="") {
+				alert("Email address not entered");
+				return false;
+			} else if (atpos<1 || dotpos<atpos+2 || dotpos+2>=x.length) {
+				alert("Not a valid e-mail address");
+				return false;
+			}
+			var firstName=document.forms["CreateUserForm"]["firstName"].value;
+			if (firstName==null || firstName=="") {
+				alert("First Name must be filled out");
+				return false;
+			}
+			var surname=document.forms["CreateUserForm"]["surname"].value;
+			if (surname==null || surname=="") {
+				alert("Surname  must be filled out");
+				return false;
+			}
+		}
+	</script>
+		<form action="/account/?command=addUserComplete" method="POST" onsubmit="return validateForm()" name="CreateUserForm">
+			<fieldset>
+				<input type="hidden" name="csrfmiddlewaretoken" value="{{csrfToken}}">
+				<label>Username:</label>
+				<input type="text" name="username" class="form-control" style="width: 200px;" placeholder="Username..." maxlength="30" required pattern="[^]{3,30}">
+				<br>
+				<label>Password:</label>
+				<input type="password" name="password" class="form-control" style="width: 200px;" placeholder="Password..." maxlength="30" required pattern="[^]{3,30}">
+				<br>
+				<label>Password Retry:</label>
+				<input type="password" name="passwordRetry" class="form-control" style="width: 200px;" placeholder="Password..." maxlength="30" required pattern="[^]{3,30}">
+				<br>
+				<label>Email:</label>
+				<input type="email" name="email" class="form-control" style="width: 200px;" placeholder="Email..." maxlength="48" required pattern="[^@]+@[^@]+\.[a-zA-Z]{2,6}">
+				<br>
+				<label>First Name:</label>
+				<input type="text" name="firstName" class="form-control" style="width: 200px;" placeholder="First Name..." required pattern="[a-zA-Z]{1,20}">
+				<br>
+				<label>Surname:</label>
+				<input type="text" name="surname" class="form-control" style="width: 200px;" placeholder="Surname..." required pattern="[a-zA-Z]{1,20}">
+				<br>
+				<label>Set Active State:</label>
+				<select name="activeState" class="form-control" style="width: 200px;">
+					<option name="notActive">Not-Active</option>
+					<option name="active">Active</option>
+				</select>
+				<br>
+				<label>Set Admin Level:</label>
+				<select name="userLevel" class="form-control" style="width: 200px;">
+					<option name="normalUser">User</option>
+					<option name="admin">Admin</option>
+				</select>
+				<br>
+				<button type="submit" class="btn btn-default">Add User</button>
+			</fieldset>
+		</form>
+{% endblock %}
+
+{% block ExtraJavaScript %}
+{% endblock %}

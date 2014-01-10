@@ -1,0 +1,76 @@
+{% extends 'pages/Proxmox/ProxmoxTemplate.html' %}
+{% load proxmox_name_convertion %}
+
+{% block ProxmoxTitle %}"{{Node}}" Node{% endblock %}
+
+{% block ProxmoxPageArea %}
+	<ul class="nav nav-tabs">
+		<li class="active"><a href="#summary" data-toggle="tab">Summary</a></li>
+		<li><a href="#settings" data-toggle="tab">Settings</a></li>
+	</ul>
+	<div class="tab-content">
+		<div class="tab-pane active" id="summary">
+			<div class="col-md-4">
+				<h4>Servers Online:</h4>
+				<p>{{ ServerStatuses.totalOnline }} Online / {{ ServerStatuses.totalTotal }} Total</p>
+				<div class="progress">
+					<div class="progress-bar progress-bar-success" style="width: {{ ServerStatuses.totalOnlinePercentage }}%"></div>
+					<div class="progress-bar progress-bar-danger" style="width: {{ ServerStatuses.totalOffLinePercentage }}%"></div>
+				</div>
+				<h4>Total Storage:</h4>
+				{% for storageDevice in StorageDevices.nodes %}
+					{% if storageDevice.node == Node %}
+						<p>{{storageDevice.usedGb|floatformat:2}} GB Used / {{storageDevice.totalGb|floatformat:2}} GB Avalable</p>
+						<div class="progress">
+							<div class="progress-bar progress-bar-danger" style="width: {% widthratio storageDevice.usedGb storageDevice.totalGb 100 %}%"></div>
+						</div>
+					{% endif %}
+				{% endfor %}
+				<h4>Uptime:</h4>
+				{% for uptimeItem in ServerStatuses.uptimes %}
+						{% if uptimeItem.node == Node %}
+							<p>Uptime: {{uptimeItem.uptime}}</p>
+						{% endif %}
+				{% endfor %}
+				<h4>Basic Controls:</h4>
+				<div>
+					<p>
+						<button type="button" class="btn btn-info">Migrate</button>
+						<button type="button" class="btn btn-info">Console</button>
+						<button type="button" class="btn btn-success">Start</button>
+					</p>
+					<p>
+						<button type="button" class="btn btn-warning">Reset</button>
+						<button type="button" class="btn btn-warning">Shutdown</button>
+						<button type="button" class="btn btn-warning">Stop</button>
+					</p>
+					<p>
+						<button type="button" class="btn btn-danger">Remove</button>
+					</p>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<h4>Storage Devices:</h4>
+				 <div class="list-group" style="height: 300px !important; overflow: scroll;">
+					{% for storageDevice in StorageDevices.devices %}
+						<a class="list-group-item">
+							<h4 class="list-group-item-heading">Node: {{storageDevice.node}}</h4>
+							<h4 class="list-group-item-heading">Devce: {{storageDevice.name}}</h4>
+							<p class="list-group-item-text">{{storageDevice.usedGb|floatformat:2}} GB Used / {{storageDevice.totalGb|floatformat:2}} GB Avalable</p>
+							<div class="progress">
+								<div class="progress-bar progress-bar-danger" style="width: {% widthratio storageDevice.usedGb storageDevice.totalGb 100 %}%"></div>
+							</div>
+						</a>
+					{% endfor %}
+				</div>
+			</div>
+			<div class="col-md-4">
+				<h4>Past Tasks:</h4>
+				
+			</div>
+		</div>
+		<div class="tab-pane" id="settings">
+			
+		</div>
+	</div>
+{% endblock %}

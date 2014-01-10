@@ -1,0 +1,8 @@
+<!-- Subhead
+================================================== -->
+<header class="jumbotron subhead" id="overview">
+	<div class="container">
+		<h1>Control Your Lights</h1>
+		<p class="lead">Control Your Lights In Your Home</p>
+	</div>
+</header>

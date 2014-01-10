@@ -1,0 +1,29 @@
+/*!
+ *In place to fix positioning of side bare with dynamic side bar and content and side bar is longer than the page content
+  */
+
+.wrapper
+{
+    min-height:100%;
+    width:100%;
+    position:relative;
+    background-color:Black;
+    display:inline-block;
+}
+.sidebar
+{
+    width:20%;
+    top:0px;
+    left:0px;
+    bottom:0px;
+    position:absolute;
+    background-color:Aqua;
+}
+.content
+{
+    min-height:500px;
+    width:80%;
+    position:relative;
+    background-color:rgba(255,255,255,0);
+    float:right;
+}

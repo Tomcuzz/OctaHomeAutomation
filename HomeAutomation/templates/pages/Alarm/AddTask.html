@@ -1,0 +1,139 @@
+{% extends 'baseWithNavBar.html' %}
+{% load my_filters %}
+
+{% block AlarmNavBarActive %} active {% endblock %}
+
+{% block title %} Alarm {% endblock %}
+
+{% block PageArea %}
+	<div class="page-header">
+		<h1>Add Alarm Action</h1>
+	</div>
+	<form action="/Alarm/?page=AddTaskComplete" method="POST" name="CreateLightForm">
+		<fieldset>
+			<input type="hidden" name="csrfmiddlewaretoken" value="{{csrfmiddlewaretoken|safe}}">
+			<input type="hidden" name="taskItemIds" value="1">
+			<label>Name:</label><br>
+			<input type="text" name="name" class="form-control" style="width: 300px;" placeholder="Name..." maxlength="30" required="" pattern="[^]{3,30}">
+			<br>
+			<div id="Tasks">
+				<div name="1">
+					<label name="taskLabel1">Task 1:</label>
+					<br>
+					<select name="task1" class="btn form-control" style="width: 300px;">
+						{% for aTaskAction in tasksAction %}
+							<option>{{aTaskAction.name | replaceUnderscores}}</option>
+						{% endfor %}
+					</select>
+					<text> </text>
+					<a name="removeButtonLink1" onClick="removeTask('1')"><button type="button" class="btn btn-default">-</button></a>
+					<text> </text>
+					<a name="addButtonLink1" onClick="addTask('1')"><button type="button" class="btn btn-default">+</button></a>
+				</div>
+			</div>
+			<input type="hidden" name="tasklist" value="1">
+			<br>
+			<a href="/Alarm/?page=AddTaskAction"><button type="button" class="btn btn-default">Create New Task</button></a>
+			<br>
+			<br>
+			<button type="submit" class="btn btn-default">Add Alarm Action</button>
+		</fieldset>
+	</form>
+{% endblock %}
+
+{% block ExtraJavaScript %}
+	<script>
+		function addTask() {
+			id = document.getElementsByName("taskItemIds")[0].value.split(",").length;
+			
+			newId = +id + +1;
+			newLabel = "Task " + newId + ":";
+			var mainDiv = document.createElement("div");
+			document.getElementById("Tasks").appendChild(mainDiv)
+			mainDiv.setAttribute('name', newId);
+			
+			var br = document.createElement("br");
+			var p = document.createElement("p");
+			var titleLabel = document.createElement("label");
+			var mainSelect = document.getElementsByName("task1")[0].cloneNode(true);
+			var textSpace1 = document.createElement("text");
+			var textSpace2 = document.createElement("text");
+			var addButtonLink = document.createElement("a");
+			var addButton = document.createElement("button");
+			var removeButtonLink = document.createElement("a");
+			var removeButton = document.createElement("button");
+			
+			mainDiv.appendChild(br);
+			mainDiv.appendChild(p);
+			mainDiv.appendChild(titleLabel);
+			mainDiv.appendChild(br);
+			mainDiv.appendChild(mainSelect);
+			mainDiv.appendChild(textSpace1);
+			mainDiv.appendChild(removeButtonLink);
+			removeButtonLink.appendChild(removeButton);
+			mainDiv.appendChild(textSpace2);
+			mainDiv.appendChild(addButtonLink);
+			addButtonLink.appendChild(addButton);
+			
+			titleLabel.innerText = newLabel;
+			titleLabelName = "taskLabel" + newId;
+			titleLabel.setAttribute('name', titleLabelName);
+			textSpace1.innerText = " ";
+			textSpace2.innerText = " ";
+			
+			mainSelectNewName = "Task" + newId;
+			mainSelect.setAttribute('name', mainSelectNewName);
+			addButton.innerText = "+";
+			addButton.setAttribute('class', 'btn btn-default');
+			addButton.setAttribute('type', 'button');
+			addButtonLinkName = "addButtonLink" + newId;
+			addButtonLinkAction = "addTask('" + newId + "')";
+			addButtonLink.setAttribute('name', addButtonLinkName);
+			addButtonLink.setAttribute('onClick', addButtonLinkAction);
+			removeButton.innerText = "-";
+			removeButton.setAttribute('class', 'btn btn-default');
+			removeButton.setAttribute('type', 'button');
+			removeButtonLinkName = "removeButtonLink" + newId;
+			removeButtonLinkAction = "removeTask('" + newId + "')";
+			removeButtonLink.setAttribute('name', removeButtonLinkName);
+			removeButtonLink.setAttribute('onClick', removeButtonLinkAction);
+			
+			document.getElementsByName("taskItemIds")[0].value = document.getElementsByName("taskItemIds")[0].value + "," + newId;
+		}
+		function removeTask(id) {
+			var ids = document.getElementsByName("taskItemIds")[0].value.split(",");
+			var idsString = document.getElementsByName("taskItemIds")[0].value;
+			(elem=document.getElementsByName(id)[0]).parentNode.removeChild(elem);
+			
+			toReplace = "," + (ids.length);
+			document.getElementsByName("taskItemIds")[0].value = idsString.replace(toReplace,"");
+			
+			for (var i=0; i < ids.length; i++) {
+				oldId = ids[i];
+				if (oldId > id) {
+					newId = +oldId - 1;
+					
+					mainDiv = document.getElementsByName(oldId)[0];
+					oldTitleName = "taskLabel" + oldId;
+					titleLabel = document.getElementsByName(oldTitleName)[0];
+					oldMainSelectName = "Task" + oldId;
+					mainselect = document.getElementsByName(oldMainSelectName)[0];
+					oldAddButtonLinkName = "addButtonLink" + oldId;
+					addButtonLink = document.getElementsByName(oldAddButtonLinkName)[0];
+					oldRemoveButtonLinkName = "removeButtonLink" + oldId;
+					removeButtonLink = document.getElementsByName(oldRemoveButtonLinkName)[0];
+					
+					mainDiv.setAttribute('name', newId);
+					newLabel = "Task " + newId + ":";
+					titleLabel.innerText = newLabel;
+					mainSelectNewName = "Task" + newId;
+					mainselect.setAttribute('name', mainSelectNewName);
+					addButtonLinkName = "addTask('" + newId + "')";
+					addButtonLink.setAttribute('onClick', addButtonLinkName);
+					removeButtonLinkName = "removeTask('" + newId + "')";
+					removeButtonLink.setAttribute('onClick', removeButtonLinkName);
+				}
+			}
+		}
+	</script>
+{% endblock %}

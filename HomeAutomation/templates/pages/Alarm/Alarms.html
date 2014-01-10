@@ -1,0 +1,101 @@
+{% extends 'baseWithNavBar.html' %}
+
+{% block AlarmNavBarActive %} active {% endblock %}
+
+{% block title %} Alarm {% endblock %}
+
+{% block PageArea %}
+	<div class="page-header">
+		<h1>Alarms</h1>
+	</div>
+	<table id="alarmTable" class="table table-striped">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Time</th>
+					<th>Date</th>
+					<th>User</th>
+					<th>Task</th>
+					<th>State</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			<tbody>
+		{% for aAlarm in alarms %}
+			<tr id="alarm{{ aAlarm.id }}row">
+			<td>{{ aAlarm.id }}</td>
+			<td>{{ aAlarm.time }}</td>
+			<td>{{ aAlarm.date }}</td>
+			<td>{{ aAlarm.user }}</td>
+			<td>{{ aAlarm.task }}</td>
+			{% if aAlarm.state == "Enabled" %}
+				<td name="alarm{{ aAlarm.id }}State" class="text-success">{{ aAlarm.state }}</td>
+				<td><button name="alarm{{ aAlarm.id }}EnableDisableButton" class="btn btn-warning" onClick="toggleEnabledAlarm('{{ aAlarm.id }}')" style="width: 73px;">Disable</button>
+			{% else %}
+				<td name="alarm{{ aAlarm.id }}State" class="text-error">{{ aAlarm.state }}</td>
+				<td><button name="alarm{{ aAlarm.id }}EnableDisableButton" class="btn btn-success" onClick="toggleEnabledAlarm('{{ aAlarm.id }}')" style="width: 73px;">Enable</button>
+			{% endif %}
+			<text> </text>
+			<button class="btn btn-danger" onClick="deleteAlarm('{{ aAlarm.id }}')">Delete</button></td>
+			</tr>
+		{% endfor %}
+
+	<tr>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td><a href="/Alarm/?page=AddAlarm"><button type="button" class="btn btn-primary">+</button></a></td>
+	</tr>
+
+	</tbody>
+	</table>
+{% endblock %}
+
+{% block ExtraJavaScript %}
+	<script>
+		function toggleEnabledAlarm(id) {
+			statusLabelName = "alarm" + id + "State";
+			if (document.getElementsByName(statusLabelName)[0].innerHTML == "Enabled") {
+				disableAlarm(id)
+			} else {
+				enableAlarm(id)
+			}
+		}
+		function disableAlarm(id) {
+			url = "{% url 'Alarm' %}?page=DisableAlarm&alarmId=" + id;
+			httpGet(url);
+			disableEnableButtonName = "alarm" + id + "EnableDisableButton";
+			statusLabelName = "alarm" + id + "State";
+			document.getElementsByName(disableEnableButtonName)[0].innerHTML = "Enable";
+			document.getElementsByName(disableEnableButtonName)[0].className = "btn btn-success";
+			document.getElementsByName(statusLabelName)[0].innerHTML = "Disabled";
+			document.getElementsByName(statusLabelName)[0].className = "text-error";
+		}
+		function enableAlarm(id) {
+			url = "{% url 'Alarm' %}?page=EnableAlarm&alarmId=" + id;
+			httpGet(url);
+			disableEnableButtonId = "alarm" + id + "EnableDisableButton";
+			statusLabelName = "alarm" + id + "State";
+			document.getElementsByName(disableEnableButtonId)[0].innerHTML = "Disable";
+			document.getElementsByName(disableEnableButtonId)[0].className = "btn btn-warning";
+			document.getElementsByName(statusLabelName)[0].innerHTML = "Enabled";
+			document.getElementsByName(statusLabelName)[0].className = "text-success";
+		}
+		function deleteAlarm(id) {
+			url = "{% url 'Alarm' %}?page=DeleteAlarm&alarmId=" + id;
+			httpGet(url);
+			theRowName = "alarm" + id + "row";
+			(elem=document.getElementById(theRowName)).parentNode.removeChild(elem);
+		}
+		function httpGet(theUrl) {
+			var xmlHttp = null;
+			xmlHttp = new XMLHttpRequest();
+			xmlHttp.open( "GET", theUrl, false );
+			xmlHttp.send( null );
+			return xmlHttp.responseText;
+		}
+	</script>
+{% endblock %}

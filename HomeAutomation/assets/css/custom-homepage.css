@@ -1,0 +1,154 @@
+#parent {
+	width: 100%;
+	height: 100%;
+	margin: 0 auto;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+#parent img {
+	width: 100%;
+	height: 100%;
+}
+.container {
+    z-index: 10000;
+    position: relative;
+}
+
+.dp {
+    width: 100%;
+}
+
+.offset {
+    padding-top: 10%;   
+}
+
+.normal {
+    font-family: "proxima-nova",sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 36px;
+    color: white;
+    text-align: center;
+}
+
+.light {
+    font-family: "proxima-nova",sans-serif;
+    font-style: normal;
+    font-weight: 200;
+    font-size: 36px;   
+    color: white;
+    text-align: center;
+}
+
+.smaller {
+    font-family: "proxima-nova",sans-serif;
+    font-style: normal;
+    font-weight: 200;
+    font-size: 18px;   
+    color: white;
+    text-align: center;
+}
+
+.even-smaller {
+    font-family: "proxima-nova",sans-serif;
+    font-style: normal;
+    font-weight: 200;
+    font-size: 16px;   
+    color: white;
+    text-align: center;
+}
+
+.center {
+    text-align: center;   
+}
+
+.glyphs {
+    color: white;
+    font-size: 25px;
+    bottom: 20px;
+    padding-bottom:20px;
+}
+
+.fs1 {
+    padding-right: 10px;   
+}
+
+a {
+    color: white;
+    font-weight: 400;
+    text-decoration: none;
+}
+a:hover {
+    color: black;
+    text-decoration: none;
+}
+
+.bump {
+    padding-top: 20px;   
+}
+
+.bump-top {
+    padding-top: 10px;   
+}
+
+@media (min-width: 768px) {
+    .hideme {
+        display: none;   
+    }
+}
+
+@media (max-width: 768px) {
+    .hideme {
+        display: inline;   
+    }
+}
+
+html,
+body {
+  height: 100%;
+  /* The html and body elements cannot have any padding or margin. */
+}
+
+/* Wrapper for page content to push down footer */
+#wrap {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  /* Negative indent footer by its height */
+  margin: 0 auto -60px;
+  /* Pad bottom by footer height */
+  padding: 0 0 60px;
+}
+
+/* Set the fixed height of the footer here */
+#footer {
+    height: 60px;
+    z-index: 10000;
+    position: relative;
+}
+
+@font-face {
+	font-family: 'icomoon';
+	src:url('fonts/icomoon.eot');
+	src:url('fonts/icomoon-.eot#iefix') format('embedded-opentype'),
+		url('fonts/icomoon.woff') format('woff'),
+		url('fonts/icomoon.ttf') format('truetype'),
+		url('fonts/icomoon.svg#icomoon') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+/* Use the following CSS code if you want to use data attributes for inserting your icons */
+[data-icon]:before {
+	font-family: 'icomoon';
+	content: attr(data-icon);
+	speak: none;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}

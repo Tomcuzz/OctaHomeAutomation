@@ -1,0 +1,51 @@
+{% extends 'baseWithNavBar.html' %}
+{% load my_filters %}
+
+{% block title %} Lights {% endblock %}
+{% block LightsNavBarActive %} active {% endblock %}
+
+{% block PageArea %}
+	<div class="page-header">
+		<h1>Add Light</h1>
+	</div>
+	<script>
+		function validateForm() {
+			var username=document.forms["CreateLightForm"]["username"].value;
+			if (username==null || username=="") {
+				alert("Username must be filled out");
+				return false;
+			}
+		}
+	</script>
+	<form action="/Lights/?command=addLightComplete" method="POST" onsubmit="return validateForm()" name="CreateLightForm">
+		<fieldset>
+			<input type="hidden" name="csrfmiddlewaretoken" value="{{csrfmiddlewaretoken|safe}}"/>
+			<label>Light Name:</label>
+			<input type="text" name="lightname" class="form-control" style="width: 200px;" placeholder="Light Name..." maxlength="30" required pattern="[^]{3,30}">
+			<br>
+			<label>Room Name:</label>
+			{% if room == "All" %}
+				<input type="text" name="roomname" class="form-control" style="width: 200px;" placeholder="Room Name..." maxlength="30" required pattern="[^]{3,30}">
+			{% else %}
+				<input type="text" name="roomname" class="form-control" style="width: 200px;" placeholder="Room Name..." value="{{room | replaceUnderscores}}" maxlength="30" required pattern="[^]{3,30}">
+			{% endif %}
+			<br>
+			<label>Ip Address:</label>
+			<input type="text" name="ipaddress" class="form-control" style="width: 200px;" placeholder="Ip Address..." maxlength="30" required pattern="((^|\.)((25[0-5])|(2[0-4]\d)|(1\d\d)|([1-9]?\d))){4}$">
+			<br>
+			<label>Device Type:</label>
+			<select name="devicetype" class="form-control" style="width: 200px;">
+				<option name="Arduino" value="Arduino">Arduino</option>
+				<option name="MaxPi" value="MaxPi">Max's Pi</option>
+			</select>
+			<br>
+			<label>Light Type:</label>
+			<select name="lightype" class="form-control" style="width: 200px;">
+				<option name="RGBLight" value="RGBLight">RGB</option>
+				<option name="OnOff" value="OnOff">On/Off</option>
+			</select>
+			<br>
+			<button type="submit" class="btn btn-default">Add User</button>
+		</fieldset>
+	</form>
+{% endblock %}

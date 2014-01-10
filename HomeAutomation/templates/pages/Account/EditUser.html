@@ -1,0 +1,54 @@
+{% extends 'baseWithNavBar.html' %}
+
+{% block title %} Account {% endblock %}
+
+{% block AccountNavBarActive %} active {% endblock %}
+
+{% block PageArea %}
+	<div class="page-header">
+                <h1>Personal Details</h1>
+        </div>
+	<label>Username:</label>
+	<s id="CurrentUsernameXeditable" data-type="text" data-pk="1" data-url="/account/?command=changeUsername&editCurrentUser=true" data-original-title="Change Username">
+		{{ username }}
+	</s>
+	<br>
+	<label>Password:</label>
+	<s id="CurrentPasswordXeditable" data-type="password" data-pk="1" data-url="/account/?command=changePassword&editCurrentUser=true" data-original-title="Change Password">
+		**************
+	</s>
+	<br>
+	<label>First Name:</label>
+	<s id="CurrentFirstNameXeditable" data-type="text" data-pk="1" data-url="/account/?command=changeFirstName&editCurrentUser=true" data-original-title="Change First Name">
+		{{ firstname }}
+	</s>
+	<br>
+	<label>Second Name:</label>
+	<s id="CurrentSecondNameXeditable" data-type="text" data-pk="1" data-url="/account/?command=changeSecondName&editCurrentUser=true" data-original-title="Change Second Name">
+		{{ surname }}
+	</s>
+	<br>
+	<label>Email:</label>
+	<s id="CurrentEmailXeditable" data-type="text" data-pk="1" data-url="/account/?command=changeEmail&editCurrentUser=true" data-original-title="Change Email">
+		{{ email }}
+	</s>
+	<br>
+	<label>User Permission Level:</label>
+	{{isAdmin}}
+{% endblock %}
+
+{% block ExtraJavaScript %}
+<link href="{{STATIC_URL}}css/bootstrap-editable.css" rel="stylesheet"/>
+<script src="{{STATIC_URL}}js/bootstrap-editable.js"></script>
+<script>
+	$(document).ready(function() {
+		//$.fn.editable.defaults.mode = 'inline';
+		//$('#userTable s').editable(); //Edit All Users Page
+		$('s').editable({
+			params: {
+				csrfmiddlewaretoken: '{{csrfToken}}'
+			}
+		}); //Edit CurrentUserPage
+	});
+</script>
+{% endblock %}

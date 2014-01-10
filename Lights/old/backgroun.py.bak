@@ -1,0 +1,66 @@
+from time import sleep
+from threading import Thread
+from models import *
+from SharedFunctions.deviceControl import *
+from random import randint
+
+class LightsBackground():
+	startedModes = list()
+	def backgroundLoop(self, manager):
+		self.startedModes = list()
+		while not manager.shutdown:
+			print "loop"
+			for mode in ScrollModes.objects.all():
+				print mode.Name
+				print self.startedModes
+				if not mode.Name in self.startedModes:
+					print mode.Name
+					#allLights = Lights.objects.filter(Scroll=mode.Name)
+					if Lights.objects.filter(Scroll=mode.Name).count():
+						self.startedModes.append(mode.Name)
+						t.start()
+						print "Starting Backround Scroll"
+					#for aLight in allLights:
+					#	if not mode.Name in self.startedModes:
+					#		self.startedModes.append(mode.Name)
+					#		t = Thread(self.runScrollMode(mode.Name))
+					#		t.start()
+					#		print "Starting Backround Scroll"
+					#		break
+				
+			print "Running Light"
+			print self.startedModes
+			time.sleep(5)
+	
+	def runScrollMode(self, scrollName):
+		modeItem = ScrollModes.objects.get(Name=scrollName)
+		lastValue = int(-1)
+		while Lights.objects.filter(Scroll=scrollName).count():
+			rValues = modeItem.RValues.split(',')
+			gValues = modeItem.GValues.split(',')
+			bValues = modeItem.BValues.split(',')
+			
+			randomNum = randint(0, int(len(rValues) - 1))
+			while randomNum==lastValue:
+				if int(len(rValues)) < 2:
+					break
+				randomNum = randint(0, int(len(rValues) - 1))
+			
+			lastValue = randomNum
+			
+			rDestination = int(rValues[randomNum])
+			gDestination = int(gValues[randomNum])
+			bDestination = int(bValues[randomNum])
+			
+			for theLight in Lights.objects.filter(Scroll=scrollName):
+				deviceControler = DeviceControl()
+				Thread(target=deviceControler.scrollDeviceRGBStateWithTime, args=(theLight.IpAddress, theLight.DeviceType, theLight.R, theLight.G, theLight.B, rDestination, gDestination, bDestination, modeItem.Speed)).start()
+				theLight.R = rDestination
+				theLight.G = gDestination
+				theLight.B = bDestination
+				theLight.save()
+			time.sleep(modeItem.Speed)
+		try:
+			self.startedModes.remove(scrollName)
+		except ValueError:
+			pass

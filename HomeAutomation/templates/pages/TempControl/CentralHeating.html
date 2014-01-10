@@ -1,0 +1,414 @@
+{% extends 'baseWithNavBar.html' %}
+{% load my_filters %}
+
+{% block title %} Temperature Control {% endblock %}
+
+{% block TempControlNavBarActive %} active {% endblock %}
+
+
+{% block PageArea %}
+	<div class="page-header">
+		<h1>Central Heating</h1>
+	</div>
+	<div class="row-fluid">
+		<div class="span2">
+			<h5>Target:</h5>
+			<br>
+			<h1>
+				<font size="+6">
+					<big><big><big><big>
+						<a href="#" id="targetTemp" data-type="text" data-pk="1" data-url="/assets/php/SetHomeVariables/SetTargetTemp.php?room=My_Bedroom" data-title="Enter new target:" class="editable editable-click">25</a>
+					</big></big></big></big>
+				</font>
+			</h1>
+		</div>
+		<div class="span2">
+			<h5>Current:</h5>
+			<br>
+			<h1 id="CurrentTemp" class="text-info">
+				<font size="9">
+					<big><big><big><big>
+						<div name="currentTemp">20</div>
+					</big></big></big></big>
+				</font>
+			</h1>
+		</div>
+		<div class="span8">
+			<div class="row-fluid">
+				<div class="span5" style="width: 220px;">
+					<h5>Heat Timming:</h5>
+					<div class="btn-group">
+						<button class="btn" name="fanOff" onclick="setFanSpeedWithFanName('off')">Off</button>
+						<button class="btn" name="fanAuto" onclick="setFanSpeedWithFanName('auto')">On</button>
+						<button class="btn" name="fanLow" onclick="setFanSpeedWithFanName('low')">Once</button>
+						<button class="btn" name="fanMedium" onclick="setFanSpeedWithFanName('medium')">Twice</button>
+					</div>
+				</div>
+				<div class="span3" style="width: 100px;">
+					<h5>First Start:</h5>
+					<select style="width: 100px;">
+						<option>12:00 AM</option>
+						<option>12:30 AM</option>
+						<option>1:00 AM</option>
+						<option>1:30 AM</option>
+						<option>2:00 AM</option>
+						<option>2:30 AM</option>
+						<option>3:00 AM</option>
+						<option>3:30 AM</option>
+						<option>4:00 AM</option>
+						<option>4:30 AM</option>
+						<option>5:00 AM</option>
+						<option>5:30 AM</option>
+						<option>6:00 AM</option>
+						<option>6:30 AM</option>
+						<option>7:00 AM</option>
+						<option>7:30 AM</option>
+						<option>8:00 AM</option>
+						<option>8:30 AM</option>
+						<option>9:00 AM</option>
+						<option>9:30 AM</option>
+						<option>10:00 AM</option>
+						<option>10:30 AM</option>
+						<option>11:00 AM</option>
+						<option>11:30 AM</option>
+						<option>12:00 PM</option>
+						<option>12:30 PM</option>
+						<option>1:00 PM</option>
+						<option>1:30 PM</option>
+						<option>2:00 PM</option>
+						<option>2:30 PM</option>
+						<option>3:00 PM</option>
+						<option>3:30 PM</option>
+						<option>4:00 PM</option>
+						<option>4:30 PM</option>
+						<option>5:00 PM</option>
+						<option>5:30 PM</option>
+						<option>6:00 PM</option>
+						<option>6:30 PM</option>
+						<option>7:00 PM</option>
+						<option>7:30 PM</option>
+						<option>8:00 PM</option>
+						<option>8:30 PM</option>
+						<option>9:00 PM</option>
+						<option>9:30 PM</option>
+						<option>10:00 PM</option>
+						<option>10:30 PM</option>
+						<option>11:00 PM</option>
+						<option>11:30 PM</option>
+					</select>
+				</div>
+				<div class="span1" style="width: 60px;">
+				<h5>Length:</h5>
+						<select style="width: 50px;">
+						<option>1</option>
+						<option>2</option>
+						<option>3</option>
+						<option>4</option>
+						<option>5</option>
+						<option>6</option>
+						<option>7</option>
+						<option>8</option>
+						<option>9</option>
+						<option>10</option>
+						<option>11</option>
+						<option>12</option>
+						<option>13</option>
+						<option>14</option>
+						<option>15</option>
+						<option>16</option>
+						<option>17</option>
+						<option>18</option>
+						<option>19</option>
+						<option>20</option>
+						<option>21</option>
+						<option>22</option>
+						<option>23</option>
+					</select>
+				</div>
+				<div class="span3" style="width: 100px;">
+					<h5>Second Start:</h5>
+					<select style="width: 100px;">
+						<option>12:00 AM</option>
+						<option>12:30 AM</option>
+						<option>1:00 AM</option>
+						<option>1:30 AM</option>
+						<option>2:00 AM</option>
+						<option>2:30 AM</option>
+						<option>3:00 AM</option>
+						<option>3:30 AM</option>
+						<option>4:00 AM</option>
+						<option>4:30 AM</option>
+						<option>5:00 AM</option>
+						<option>5:30 AM</option>
+						<option>6:00 AM</option>
+						<option>6:30 AM</option>
+						<option>7:00 AM</option>
+						<option>7:30 AM</option>
+						<option>8:00 AM</option>
+						<option>8:30 AM</option>
+						<option>9:00 AM</option>
+						<option>9:30 AM</option>
+						<option>10:00 AM</option>
+						<option>10:30 AM</option>
+						<option>11:00 AM</option>
+						<option>11:30 AM</option>
+						<option>12:00 PM</option>
+						<option>12:30 PM</option>
+						<option>1:00 PM</option>
+						<option>1:30 PM</option>
+						<option>2:00 PM</option>
+						<option>2:30 PM</option>
+						<option>3:00 PM</option>
+						<option>3:30 PM</option>
+						<option>4:00 PM</option>
+						<option>4:30 PM</option>
+						<option>5:00 PM</option>
+						<option>5:30 PM</option>
+						<option>6:00 PM</option>
+						<option>6:30 PM</option>
+						<option>7:00 PM</option>
+						<option>7:30 PM</option>
+						<option>8:00 PM</option>
+						<option>8:30 PM</option>
+						<option>9:00 PM</option>
+						<option>9:30 PM</option>
+						<option>10:00 PM</option>
+						<option>10:30 PM</option>
+						<option>11:00 PM</option>
+						<option>11:30 PM</option>
+					</select>
+				</div>
+				<div class="span1">
+					<h5>Length:</h5>
+					<select style="width: 50px;">
+						<option>1</option>
+						<option>2</option>
+						<option>3</option>
+						<option>4</option>
+						<option>5</option>
+						<option>6</option>
+						<option>7</option>
+						<option>8</option>
+						<option>9</option>
+						<option>10</option>
+						<option>11</option>
+						<option>12</option>
+						<option>13</option>
+						<option>14</option>
+						<option>15</option>
+						<option>16</option>
+						<option>17</option>
+						<option>18</option>
+						<option>19</option>
+						<option>20</option>
+						<option>21</option>
+						<option>22</option>
+						<option>23</option>
+					</select>
+				</div>
+			</div>
+			<div class="row-fluid">
+				<div class="span5" style="width: 220px;">
+					<h5>Hot Water Timming:</h5>
+					<div class="btn-group">
+						<button class="btn" name="fanOff" onclick="setFanSpeedWithFanName('off')">Off</button>
+						<button class="btn" name="fanAuto" onclick="setFanSpeedWithFanName('auto')">On</button>
+						<button class="btn" name="fanLow" onclick="setFanSpeedWithFanName('low')">Once</button>
+						<button class="btn" name="fanMedium" onclick="setFanSpeedWithFanName('medium')">Twice</button>
+					</div>
+				</div>
+				<div class="span3" style="width: 100px;">
+					<h5>First Start:</h5>
+					<select style="width: 100px;">
+						<option>12:00 AM</option>
+						<option>12:30 AM</option>
+						<option>1:00 AM</option>
+						<option>1:30 AM</option>
+						<option>2:00 AM</option>
+						<option>2:30 AM</option>
+						<option>3:00 AM</option>
+						<option>3:30 AM</option>
+						<option>4:00 AM</option>
+						<option>4:30 AM</option>
+						<option>5:00 AM</option>
+						<option>5:30 AM</option>
+						<option>6:00 AM</option>
+						<option>6:30 AM</option>
+						<option>7:00 AM</option>
+						<option>7:30 AM</option>
+						<option>8:00 AM</option>
+						<option>8:30 AM</option>
+						<option>9:00 AM</option>
+						<option>9:30 AM</option>
+						<option>10:00 AM</option>
+						<option>10:30 AM</option>
+						<option>11:00 AM</option>
+						<option>11:30 AM</option>
+						<option>12:00 PM</option>
+						<option>12:30 PM</option>
+						<option>1:00 PM</option>
+						<option>1:30 PM</option>
+						<option>2:00 PM</option>
+						<option>2:30 PM</option>
+						<option>3:00 PM</option>
+						<option>3:30 PM</option>
+						<option>4:00 PM</option>
+						<option>4:30 PM</option>
+						<option>5:00 PM</option>
+						<option>5:30 PM</option>
+						<option>6:00 PM</option>
+						<option>6:30 PM</option>
+						<option>7:00 PM</option>
+						<option>7:30 PM</option>
+						<option>8:00 PM</option>
+						<option>8:30 PM</option>
+						<option>9:00 PM</option>
+						<option>9:30 PM</option>
+						<option>10:00 PM</option>
+						<option>10:30 PM</option>
+						<option>11:00 PM</option>
+						<option>11:30 PM</option>
+					</select>
+				</div>
+				<div class="span1" style="width: 60px;">
+					<h5>Length:</h5>
+					<select style="width: 50px;">
+						<option>1</option>
+						<option>2</option>
+						<option>3</option>
+						<option>4</option>
+						<option>5</option>
+						<option>6</option>
+						<option>7</option>
+						<option>8</option>
+						<option>9</option>
+						<option>10</option>
+						<option>11</option>
+						<option>12</option>
+						<option>13</option>
+						<option>14</option>
+						<option>15</option>
+						<option>16</option>
+						<option>17</option>
+						<option>18</option>
+						<option>19</option>
+						<option>20</option>
+						<option>21</option>
+						<option>22</option>
+						<option>23</option>
+					</select>
+				</div>
+				<div class="span3" style="width: 100px;">
+					<h5>Second Start:</h5>
+					<select style="width: 100px;">
+						<option>12:00 AM</option>
+						<option>12:30 AM</option>
+						<option>1:00 AM</option>
+						<option>1:30 AM</option>
+						<option>2:00 AM</option>
+						<option>2:30 AM</option>
+						<option>3:00 AM</option>
+						<option>3:30 AM</option>
+						<option>4:00 AM</option>
+						<option>4:30 AM</option>
+						<option>5:00 AM</option>
+						<option>5:30 AM</option>
+						<option>6:00 AM</option>
+						<option>6:30 AM</option>
+						<option>7:00 AM</option>
+						<option>7:30 AM</option>
+						<option>8:00 AM</option>
+						<option>8:30 AM</option>
+						<option>9:00 AM</option>
+						<option>9:30 AM</option>
+						<option>10:00 AM</option>
+						<option>10:30 AM</option>
+						<option>11:00 AM</option>
+						<option>11:30 AM</option>
+						<option>12:00 PM</option>
+						<option>12:30 PM</option>
+						<option>1:00 PM</option>
+						<option>1:30 PM</option>
+						<option>2:00 PM</option>
+						<option>2:30 PM</option>
+						<option>3:00 PM</option>
+						<option>3:30 PM</option>
+						<option>4:00 PM</option>
+						<option>4:30 PM</option>
+						<option>5:00 PM</option>
+						<option>5:30 PM</option>
+						<option>6:00 PM</option>
+						<option>6:30 PM</option>
+						<option>7:00 PM</option>
+						<option>7:30 PM</option>
+						<option>8:00 PM</option>
+						<option>8:30 PM</option>
+						<option>9:00 PM</option>
+						<option>9:30 PM</option>
+						<option>10:00 PM</option>
+						<option>10:30 PM</option>
+						<option>11:00 PM</option>
+						<option>11:30 PM</option>
+					</select>
+				</div>
+				<div class="span1">
+					<h5>Length:</h5>
+					<select style="width: 50px;">
+						<option>1</option>
+						<option>2</option>
+						<option>3</option>
+						<option>4</option>
+						<option>5</option>
+						<option>6</option>
+						<option>7</option>
+						<option>8</option>
+						<option>9</option>
+						<option>10</option>
+						<option>11</option>
+						<option>12</option>
+						<option>13</option>
+						<option>14</option>
+						<option>15</option>
+						<option>16</option>
+						<option>17</option>
+						<option>18</option>
+						<option>19</option>
+						<option>20</option>
+						<option>21</option>
+						<option>22</option>
+						<option>23</option>
+					</select>
+				</div>
+			</div>
+		</div>
+	</div>
+	<p>
+	</p>
+{% endblock %}
+
+{% block ExtraJavaScript %}
+	<script>
+		$('#targetTemp').editable({
+			type: 'text',
+			pk: 1,
+			url: '/assets/php/SetHomeVariables/SetTargetTemp.php?room=My_Bedroom',
+			title: 'Target Temperature:'
+		});
+		
+		function updateCuttentTempLabeTo(newTemp) {
+		    	document.getElementsByName("currentTemp")[0].innerHTML = newTemp;
+    		}
+		
+		function httpGet(theUrl) {
+			var xmlHttp = null;
+			
+			xmlHttp = new XMLHttpRequest();
+			xmlHttp.open( "GET", theUrl, false );
+			xmlHttp.send( null );
+			return xmlHttp.responseText;
+		}
+		window.setInterval(function(){
+			/// call your function here
+		}, 10000);
+	</script>
+{% endblock %}

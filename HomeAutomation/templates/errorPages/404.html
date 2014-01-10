@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %} Error 404 {% endblock %}
+
+{% block PageAreaWithoutSubhead %}
+	<div class="container">
+		<h1>404 Page Not Found</h1>
+	<p>Sorry the page you have requested has not been found.
+	<br>
+	<br>
+	
+	</p><div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span4">
+				<img src="/assets/img/taken-404.jpg" class="img-rounded">
+			</div>
+			<div class="span8">
+				<p>"I don't know who you are. I don't know what you
+				want. If you are looking for a web page. I can tell you I
+				don't have it.</p>
+				
+				<p>But what I do have are a very particular set of error
+				pages; error pages I have acquired over a very long
+				career. Error pages that make me a nightmare for
+				people like you.</p>
+				
+				<p>If you return to the previous page, that'll be the end of
+				it. I will not look for you, I will not pursue you. But if
+				you don't, I will look for you, I will find you, and I will
+				serve you."</p>
+			</div>
+		</div>
+  	</div>
+	
+	<br>The page you requested was:
+	<br>
+		<script type="text/javascript">
+			document.write(location.href);
+		</script>
+	<p></p>
+	</div>
+{% endblock %}
