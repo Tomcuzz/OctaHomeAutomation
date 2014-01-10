@@ -15,7 +15,7 @@ def LoginMain(request):
 
 def returnLogin(request):
 	nextPage = request.GET.get('next', 'Home')
-	return render(request, 'pages/Login.html', {'nextPage': nextPage})
+	return render(request, 'pages/LoginFailed.html', {'nextPage': nextPage})
 
 def checkLogin(request):
 	username = request.POST.get('username', 'None')
