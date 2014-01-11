@@ -1,0 +1,64 @@
+#!/bin/sh
+
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+DAEMON=/usr/bin/python
+NAME=homeautomation
+DESC="Home Automation Server"
+PID=`ps ax | grep runserver | grep -v grep | awk '{print $1}' | tail -n 1)`
+PIDC=`ps ax | grep celery | grep -v grep | awk '{print $1}' | tail -n 1)`
+
+test -x $DAEMON || exit 0
+
+case "$1" in
+	start)
+		
+		echo -n "Starting $DESC: "
+		
+		# Check if the ULIMIT is set in /etc/default/nginx
+	
+		if [ "$PID" = "" ]; then
+			su -m www-data -c 'nohup python /var/www/HomeAutomation/manage.py runserver &' > /var/log/homeautomation.log 2>&1
+			su -m www-data -c 'nohup python /var/www/HomeAutomation/manage.py celery worker --loglevel=info -E -C &' > /var/log/homeautomationcelery.log 2>&1
+			echo "Started";
+		else
+			echo "Already running";
+			exit 0;
+		fi;;
+	stop)
+		echo -n "Stopping $DESC: "
+                if [ "$PID" = "" ]; then
+                        echo "Already stopped";
+                else
+                        kill -9 "$PID" > /dev/null;
+                        kill -9 "$PIDC" > /dev/null;
+                        echo "Stopped";
+                        exit 0;
+                fi;;		
+
+	restart|force-reload)
+		echo -n "Restarting $DESC: "
+               if [ "$PID" = "" ]; then
+					su -m www-data -c 'nohup python /var/www/HomeAutomation/manage.py runserver &' > /var/log/homeautomation.log 2>&1
+					su -m www-data -c 'nohup python /var/www/HomeAutomation/manage.py celery worker --loglevel=info -E -C &' > /var/log/homeautomationcelery.log 2>&1	
+					echo "Started"; 
+                else 
+                        kill -9 "$PID" > /dev/null;
+						kill -9 "$PIDC" > /dev/null;
+						su -m www-data -c 'nohup python /var/www/HomeAutomation/manage.py runserver &' > /var/log/homeautomation.log 2>&1
+						su -m www-data -c 'nohup python /var/www/HomeAutomation/manage.py celery worker --loglevel=info -E -C &' > /var/log/homeautomationcelery.log 2>&1
+                        echo "Restarted succesfully";
+                        exit 0;
+                fi;;
+
+	status) 
+                echo -n "$DESC Status: "
+               if [ "$PID" = "" ]; then
+                        echo "Stopped";
+			exit 0;
+                else
+                        echo "Running";
+                        exit 0;
+                fi;;
+esac
+
+exit 0
