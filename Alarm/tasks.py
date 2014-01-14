@@ -65,10 +65,10 @@ class alarmActions():
 				tomorrowsMinForcastedTempString = getTempMin(postcode, 1) + " " + getTempUnits(postcode)
 				tomorrowsMaxForcastedTempString = getTempMax(postcode, 1) + " " + getTempUnits(postcode)
 				
-				currentTextWeather = weather["weather"]["curren_weather"][0]["weather_text"]
+				currentTextWeather = getWeatherTypeText(postcode)
 				
-				todaysForcastedTextWeather = weather["weather"]["forecast"][0]["day"][0]["weather_text"]
-				tomorrowsForcastedTextWeather = weather["weather"]["forecast"][1]["day"][0]["weather_text"]
+				todaysForcastedTextWeather = getWeatherTypeText(postcode)
+				tomorrowsForcastedTextWeather = getWeatherTypeText(postcode, 1)
 				
 				speach = speach.replace("/%wct%/", currentTempString)
 				speach = speach.replace("/%wtt%/", todaysMinForcastedTempString)

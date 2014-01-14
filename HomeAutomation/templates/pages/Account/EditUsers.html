@@ -115,10 +115,14 @@
 <script src="{{STATIC_URL}}js/bootstrap-editable.js"></script>
 <script>
 	$(document).ready(function() {
-		$.fn.editable.defaults.ajaxOptions = {type: "GET"};
-		//$.fn.editable.defaults.mode = 'inline';
+		$.fn.editable.defaults.ajaxOptions = {type: "POST"};
+		$.fn.editable.defaults.mode = 'inline';
 		//$('#userTable s').editable(); //Edit All Users Page
-		$('s').editable(); //Edit CurrentUserPage
+		$('s').editable({
+			params: {
+				csrfmiddlewaretoken: '{{csrfToken}}'
+			}
+		}); //Edit CurrentUserPage
 	});
 </script>
 {% endblock %}
