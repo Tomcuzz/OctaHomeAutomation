@@ -6,11 +6,10 @@
 
 {% block HomeHeadJavaScript %}
 
-    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/assets/css/custom-homepage.css">
+    
+    <link rel="stylesheet" href="{{STATIC_URL}}css/custom-homepage.css">
     <script type="text/javascript" src="http://use.typekit.net/mvd4hdx.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
     <script src="http://squaresend.com/squaresend.js"></script>
 
     
@@ -45,7 +44,25 @@
 {% block PageAreaWithoutSubhead %}
 <body onload="run();">
 	<div id="parent">
-		<img id="kitties" alt="background" src="/assets/img/city-day.jpg" />
+		<img id="kitties" alt="background" src="
+		{% if background == "lightning" %}
+			/assets/img/city-lightning.jpg
+		{% elif background == "night" %}
+			/assets/img/city-night.jpg
+		{% elif background == "sunset" %}
+			/assets/img/city-sunset.jpg
+		{% elif background == "day" %}
+			/assets/img/city-day.jpg
+		{% elif background == "snow" %}
+			/assets/img/city-snow.jpg
+		{% elif background == "overcast" %}
+			/assets/img/city-overcast.jpg
+		{% elif background == "fog" %}
+			/assets/img/city-fog.jpg
+		{% else %}
+			/assets/img/city-day.jpg
+		{% endif %}
+		" />
 	</div>
     <div id="wrap">
         <div class="container offset">

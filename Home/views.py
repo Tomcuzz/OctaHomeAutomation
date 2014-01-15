@@ -9,4 +9,4 @@ def HomeMain(request):
         else:
 		title = "Yay"
 		stuff = "Hello This May Help"
-		return render(request, 'pages/Home.html', {'PageAreaTitle':title, 'PageAreaContent': stuff})
+		return render(request, 'pages/Home.html', {'PageAreaTitle':title, 'PageAreaContent': stuff, 'background':"fog"})
