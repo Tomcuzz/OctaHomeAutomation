@@ -65,116 +65,99 @@
 {% endblock %}
 
 {% block ExtraJavaScript %}
-	<link href="assets/css/bootstrap-editable.css" rel="stylesheet">
-	<script src="assets/js/bootstrap-editable.js"></script>
+	<link href="{{STATIC_URL}}css/bootstrap-editable.css" rel="stylesheet">
+	<script src="{{STATIC_URL}}js/bootstrap-editable.js"></script>
 	<script>
-		$('#targetTemp').editable({
-			type: 'text',
-			pk: 1,
-			url: '/assets/php/SetHomeVariables/SetTargetTemp.php?room=My_Bedroom',
-			title: 'Target Temperature:'
+		$(document).ready(function() {
+			$('#targetTemp').editable();
 		});
 
 		function updateCuttentTempLabeTo(newTemp) {
 			document.getElementsByName("currentTemp")[0].innerHTML = newTemp;
 		}
-
-		
-		
-		
-		
-		
-		
-		
- 	$('#targetTemp').editable({
-		type: 'text',
-		pk: 1,
-		url: '/assets/php/SetHomeVariables/SetTargetTemp.php?room=My_Bedroom',
-		title: 'Target Temperature:'
-	});
-	function setFanSpeedWithFanName(name) {
-		if (name == 'off') {
-			document.getElementsByName("fanOff")[0].disabled = true;
-			document.getElementsByName("fanAuto")[0].disabled = false;
-			document.getElementsByName("fanLow")[0].disabled = false;
-			document.getElementsByName("fanMedium")[0].disabled = false;
-			document.getElementsByName("fanFull")[0].disabled = false;
-			document.getElementsByName("barLow")[0].style.width = '0.0%';
-			document.getElementsByName("barMedium")[0].style.width = '0.0%';
-			document.getElementsByName("barHigh")[0].style.width = '0.0%';
-		} else if (name == 'auto') {
-			document.getElementsByName("fanOff")[0].disabled = false;
-			document.getElementsByName("fanAuto")[0].disabled = true;
-			document.getElementsByName("fanLow")[0].disabled = false;
-			document.getElementsByName("fanMedium")[0].disabled = false;
-			document.getElementsByName("fanFull")[0].disabled = false;
-		} else if (name == 'low') {
-			document.getElementsByName("fanOff")[0].disabled = false;
-			document.getElementsByName("fanAuto")[0].disabled = false;
-			document.getElementsByName("fanLow")[0].disabled = true;
-			document.getElementsByName("fanMedium")[0].disabled = false;
-			document.getElementsByName("fanFull")[0].disabled = false;
-			document.getElementsByName("barLow")[0].style.width = '33.3%';
-			document.getElementsByName("barMedium")[0].style.width = '0.0%';
-			document.getElementsByName("barHigh")[0].style.width = '0.0%';
-		} else if (name == 'medium') {
-			document.getElementsByName("fanOff")[0].disabled = false;
-			document.getElementsByName("fanAuto")[0].disabled = false;
-			document.getElementsByName("fanLow")[0].disabled = false;
-			document.getElementsByName("fanMedium")[0].disabled = true;
-			document.getElementsByName("fanFull")[0].disabled = false;
-			document.getElementsByName("barLow")[0].style.width = '33.3%';
-			document.getElementsByName("barMedium")[0].style.width = '33.3%';
-			document.getElementsByName("barHigh")[0].style.width = '0.0%';
-		} else if (name == 'full') {
-			document.getElementsByName("fanOff")[0].disabled = false;
-			document.getElementsByName("fanAuto")[0].disabled = false;
-			document.getElementsByName("fanLow")[0].disabled = false;
-			document.getElementsByName("fanMedium")[0].disabled = false;
-			document.getElementsByName("fanFull")[0].disabled = true;
-			document.getElementsByName("barLow")[0].style.width = '33.3%';
-			document.getElementsByName("barMedium")[0].style.width = '33.3%';
-			document.getElementsByName("barHigh")[0].style.width = '33.4%';
+		function setFanSpeedWithFanName(name) {
+			if (name == 'off') {
+				document.getElementsByName("fanOff")[0].disabled = true;
+				document.getElementsByName("fanAuto")[0].disabled = false;
+				document.getElementsByName("fanLow")[0].disabled = false;
+				document.getElementsByName("fanMedium")[0].disabled = false;
+				document.getElementsByName("fanFull")[0].disabled = false;
+				document.getElementsByName("barLow")[0].style.width = '0.0%';
+				document.getElementsByName("barMedium")[0].style.width = '0.0%';
+				document.getElementsByName("barHigh")[0].style.width = '0.0%';
+			} else if (name == 'auto') {
+				document.getElementsByName("fanOff")[0].disabled = false;
+				document.getElementsByName("fanAuto")[0].disabled = true;
+				document.getElementsByName("fanLow")[0].disabled = false;
+				document.getElementsByName("fanMedium")[0].disabled = false;
+				document.getElementsByName("fanFull")[0].disabled = false;
+			} else if (name == 'low') {
+				document.getElementsByName("fanOff")[0].disabled = false;
+				document.getElementsByName("fanAuto")[0].disabled = false;
+				document.getElementsByName("fanLow")[0].disabled = true;
+				document.getElementsByName("fanMedium")[0].disabled = false;
+				document.getElementsByName("fanFull")[0].disabled = false;
+				document.getElementsByName("barLow")[0].style.width = '33.3%';
+				document.getElementsByName("barMedium")[0].style.width = '0.0%';
+				document.getElementsByName("barHigh")[0].style.width = '0.0%';
+			} else if (name == 'medium') {
+				document.getElementsByName("fanOff")[0].disabled = false;
+				document.getElementsByName("fanAuto")[0].disabled = false;
+				document.getElementsByName("fanLow")[0].disabled = false;
+				document.getElementsByName("fanMedium")[0].disabled = true;
+				document.getElementsByName("fanFull")[0].disabled = false;
+				document.getElementsByName("barLow")[0].style.width = '33.3%';
+				document.getElementsByName("barMedium")[0].style.width = '33.3%';
+				document.getElementsByName("barHigh")[0].style.width = '0.0%';
+			} else if (name == 'full') {
+				document.getElementsByName("fanOff")[0].disabled = false;
+				document.getElementsByName("fanAuto")[0].disabled = false;
+				document.getElementsByName("fanLow")[0].disabled = false;
+				document.getElementsByName("fanMedium")[0].disabled = false;
+				document.getElementsByName("fanFull")[0].disabled = true;
+				document.getElementsByName("barLow")[0].style.width = '33.3%';
+				document.getElementsByName("barMedium")[0].style.width = '33.3%';
+				document.getElementsByName("barHigh")[0].style.width = '33.4%';
+			}
 		}
-	}
-	function setFanSwivelToState(state) {
-		if (state == 'off') {
-			httpGet('http://homedecadedev.no-ip.info/assets/php/GetHomeVariables/GetRoomTemp.php?fan=My_Bedroom');
-			document.getElementsByName("swivelOff")[0].disabled = true;
-			document.getElementsByName("swivelOn")[0].disabled = false;
-		} else if (state == 'on') {
-			httpGet('http://homedecadedev.no-ip.info/assets/php/GetHomeVariables/GetRoomTemp.php?fan=My_Bedroom');
-			document.getElementsByName("swivelOff")[0].disabled = false;
-			document.getElementsByName("swivelOn")[0].disabled = true;
+		function setFanSwivelToState(state) {
+			if (state == 'off') {
+				httpGet('http://homedecadedev.no-ip.info/assets/php/GetHomeVariables/GetRoomTemp.php?fan=My_Bedroom');
+				document.getElementsByName("swivelOff")[0].disabled = true;
+				document.getElementsByName("swivelOn")[0].disabled = false;
+			} else if (state == 'on') {
+				httpGet('http://homedecadedev.no-ip.info/assets/php/GetHomeVariables/GetRoomTemp.php?fan=My_Bedroom');
+				document.getElementsByName("swivelOff")[0].disabled = false;
+				document.getElementsByName("swivelOn")[0].disabled = true;
+			}
 		}
-	}
-	function updateFan() {
-		updateCuttentTempLabeTo(httpGet('http://homedecadedev.no-ip.info/assets/php/GetHomeVariables/GetRoomTemp.php?room=My_Bedroom'));
-		var speedState = httpGet('http://homedecadedev.no-ip.info/assets/php/GetHomeVariables/GetFanSpeed.php?fan=Fan_1')
-		if (speedState == "0") {
-			setFanSpeedWithFanName('off');
-		} else if (speedState == "1") {
-			setFanSpeedWithFanName('low');
-		} else if (speedState == "2") {
-			setFanSpeedWithFanName('medium');
-		} else if (speedState == "3") {
-			setFanSpeedWithFanName('full');
+		function updateFan() {
+			updateCuttentTempLabeTo(httpGet('http:///10.101.10.1/assets/php/GetHomeVariables/GetRoomTemp.php?room=My_Bedroom'));
+			var speedState = httpGet('http:///10.101.10.1/assets/php/GetHomeVariables/GetFanSpeed.php?fan=Fan_1')
+			if (speedState == "0") {
+				setFanSpeedWithFanName('off');
+			} else if (speedState == "1") {
+				setFanSpeedWithFanName('low');
+			} else if (speedState == "2") {
+				setFanSpeedWithFanName('medium');
+			} else if (speedState == "3") {
+				setFanSpeedWithFanName('full');
+			}
+			if (httpGet('http://10.101.10.1/assets/php/GetHomeVariables/GetFanAutoState.php?fan=Fan_1') == "1") {
+				setFanSpeedWithFanName('auto');
+			}
+			if (httpGet('http:///10.101.10.1/assets/php/GetHomeVariables/GetFanTwistState.php?fan=Fan_1') == "1") {
+				document.getElementsByName("swivelOff")[0].disabled = false;
+				document.getElementsByName("swivelOn")[0].disabled = true;
+			} else {
+				document.getElementsByName("swivelOff")[0].disabled = true;
+				document.getElementsByName("swivelOn")[0].disabled = false;
+			}
 		}
-		if (httpGet('http://homedecadedev.no-ip.info/assets/php/GetHomeVariables/GetFanAutoState.php?fan=Fan_1') == "1") {
-			setFanSpeedWithFanName('auto');
-		}
-		if (httpGet('http://homedecadedev.no-ip.info/assets/php/GetHomeVariables/GetFanTwistState.php?fan=Fan_1') == "1") {
-			document.getElementsByName("swivelOff")[0].disabled = false;
-			document.getElementsByName("swivelOn")[0].disabled = true;
-		} else {
-			document.getElementsByName("swivelOff")[0].disabled = true;
-			document.getElementsByName("swivelOn")[0].disabled = false;
-		}
-	}
 	
-	function updateCuttentTempLabeTo(newTemp) {
+		function updateCuttentTempLabeTo(newTemp) {
 	    	document.getElementsByName("currentTemp")[0].innerHTML = newTemp;
-    	}
+		}
 		
 		function httpGet(theUrl) {
 		    var xmlHttp = null;
