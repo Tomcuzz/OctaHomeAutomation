@@ -66,14 +66,3 @@
 {% block PageAreaWithoutFooter %}{% endblock %}
 
 
-><div id="updatetime"></div></span>
-                </div>
-            </div>
-        </div>
-	  </div>
-	</div>
-</body>
-{% endblock %}
-{% block PageAreaWithoutFooter %}{% endblock %}
-
-
