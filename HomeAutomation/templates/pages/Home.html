@@ -44,25 +44,7 @@
 {% block PageAreaWithoutSubhead %}
 <body onload="run();">
 	<div id="parent">
-		<img id="kitties" alt="background" src="
-		{% if background == "lightning" %}
-			/assets/img/city-lightning.jpg
-		{% elif background == "night" %}
-			/assets/img/city-night.jpg
-		{% elif background == "sunset" %}
-			/assets/img/city-sunset.jpg
-		{% elif background == "day" %}
-			/assets/img/city-day.jpg
-		{% elif background == "snow" %}
-			/assets/img/city-snow.jpg
-		{% elif background == "overcast" %}
-			/assets/img/city-overcast.jpg
-		{% elif background == "fog" %}
-			/assets/img/city-fog.jpg
-		{% else %}
-			/assets/img/city-day.jpg
-		{% endif %}
-		" />
+		<img id="kitties" alt="background" src="/assets/img/city-{{background}}.jpg" />
 	</div>
     <div id="wrap">
         <div class="container offset">

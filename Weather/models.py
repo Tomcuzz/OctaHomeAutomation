@@ -15,7 +15,7 @@ class WeatherLocations(models.Model):
 class Weather(models.Model):
 	Postcode = models.TextField()
 	LoadDate = models.DateTimeField(auto_now=True)
-	WeatherString = models.TextField()
+	FiveDayWeatherString = models.TextField(default="")
 	
 	class Meta:
 		db_table = u'Weather'

@@ -10,10 +10,36 @@ import datetime
 def WeatherMain(request):
 	raise Http404
 
-def updateLocations(location):
+def updateLocations():
 	apiKey = "c07dabd7-a7b1-4136-8f4c-0afd4716bcfd"
 	url = "http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/sitelist?key=" + apiKey
+	page = urllib.urlopen(url).read()
+	jsonResult = json.loads(page)
 	
+	
+	locationItems = jsonResult['Locations']['Location']
+	
+	for location in locationItems:
+		try:
+			weatherLocationObject = WeatherLocations.objects.get(locationId=location['id'])
+			
+		except WeatherLocations.DoesNotExist:
+			weatherLocationObject = WeatherLocations(locationId=location['id'])
+		
+		weatherLocationObject.name = location['name']
+		weatherLocationObject.region = location['region']
+		try:
+			weatherLocationObject.unitaryAuthArea = location['unitaryAuthArea']
+		except KeyError:
+			weatherLocationObject.unitaryAuthArea = ""
+		weatherLocationObject.longitude = location['longitude']
+		weatherLocationObject.latitude = location['latitude']
+		try:
+			weatherLocationObject.elevation = location['elevation']
+		except KeyError:
+			weatherLocationObject.elevation = ""
+		
+		weatherLocationObject.save()
 
 def getWeatherArray(location):
 	try:
@@ -23,9 +49,9 @@ def getWeatherArray(location):
 	except Weather.DoesNotExist:
 		localWeatherObject = updateWeather(location)
 	
-	return json.loads(localWeatherObject.WeatherString)
+	return json.loads(localWeatherObject.FiveDayWeatherString)
 
-def returnWeatherItem(location):
+def return5DayWeatherItem(location):
 	try:
 		localWeatherObject = Weather.objects.get(Postcode=location)
 		if localWeatherObject.LoadDate < datetime.datetime.utcnow().replace(tzinfo=utc) - datetime.timedelta(hours=1):
@@ -33,42 +59,40 @@ def returnWeatherItem(location):
 	except Weather.DoesNotExist:
 		localWeatherObject = updateWeather(location)
 	
-	return json.loads(localWeatherObject.WeatherString)
+	return json.loads(localWeatherObject.FiveDayWeatherString)
 
 def updateWeather(location):
-	oldapiKey = "/cfKV7kxu5"
-	oldurl = "http://www.myweather2.com/developer/forecast.ashx?uac=" + oldapiKey + "&output=json&query=" + location
 	apiKey = "c07dabd7-a7b1-4136-8f4c-0afd4716bcfd"
-	url = "http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/" + location + "?res=daily&key=" + apiKey
-	page = urllib.urlopen(url).read()
+	fivedayurl = "http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/" + location + "?res=daily&key=" + apiKey
+	fivedaypage = urllib.urlopen(fivedayurl).read()
 	
 	try:
 		localWeatherObject = Weather.objects.get(Postcode=location)
-		localWeatherObject.WeatherString = page
+		localWeatherObject.FiveDayWeatherString = fivedaypage
 		localWeatherObject.save()
 	except Weather.DoesNotExist:
-		localWeatherObject = Weather(Postcode=location, WeatherString=page)
+		localWeatherObject = Weather(Postcode=location, FiveDayWeatherString=fivedaypage)
 		localWeatherObject.save()
 	
 	return localWeatherObject
 
 def getTempUnits(location):
-	weatherItem = returnWeatherItem(location)
+	weatherItem = return5DayWeatherItem(location)
 	if weatherItem['SiteRep']['Wx']['Param'][0]['units'] == "F":
 		return "fahrenheit"
 	else:
 		return "celsius"
 
 def getTempMax(loaction, day=0):
-	weatherItem = returnWeatherItem(location)
+	weatherItem = return5DayWeatherItem(location)
 	return weatherItem['SiteRep']['DV']['Location']['Period'][day]['Rep'][0]['Dm']
 
 def getTempMin(loaction, day=0):
-	weatherItem = returnWeatherItem(location)
+	weatherItem = return5DayWeatherItem(location)
 	return weatherItem['SiteRep']['DV']['Location']['Period'][day]['Rep'][1]['Nm']
 
 def getFeelsLikeTemp(loaction, day=0, forDay=True):
-	weatherItem = returnWeatherItem(location)
+	weatherItem = return5DayWeatherItem(location)
 	if forDay:
 		dayInt = 0
 		tempKey = "FDm"
@@ -78,7 +102,7 @@ def getFeelsLikeTemp(loaction, day=0, forDay=True):
 	return weatherItem['SiteRep']['DV']['Location']['Period'][day]['Rep'][dayInt][tempKey]
 
 def getHumidity(loaction, day=0, forDay=True):
-	weatherItem = returnWeatherItem(location)
+	weatherItem = return5DayWeatherItem(location)
 	if forDay:
 		dayInt = 0
 		tempKey = "Hn"
@@ -88,15 +112,15 @@ def getHumidity(loaction, day=0, forDay=True):
 	return weatherItem['SiteRep']['DV']['Location']['Period'][day]['Rep'][dayInt][tempKey]
 
 def getWindDirection(location, day=0):
-	weatherItem = returnWeatherItem(location)
+	weatherItem = return5DayWeatherItem(location)
 	return weatherItem['SiteRep']['DV']['Location']['Period'][day]['Rep'][0]['D']
 
 def getWindSpeed(location, day=0):
-	weatherItem = returnWeatherItem(location)
+	weatherItem = return5DayWeatherItem(location)
 	return weatherItem['SiteRep']['DV']['Location']['Period'][day]['Rep'][0]['S']
 
 def getWindGust(loaction, day=0, forDay=True):
-	weatherItem = returnWeatherItem(location)
+	weatherItem = return5DayWeatherItem(location)
 	if forDay:
 		dayInt = 0
 		tempKey = "Gn"
@@ -105,16 +129,16 @@ def getWindGust(loaction, day=0, forDay=True):
 		tempKey = "Gm"
 	return weatherItem['SiteRep']['DV']['Location']['Period'][day]['Rep'][dayInt][tempKey]
 
-def getWeatherTypeNum(location, day=0):
-	weatherItem = returnWeatherItem(location)
-	return weatherItem['SiteRep']['DV']['Location']['Period'][day]['Rep'][0]['W']
+def getWeatherTypeNum(location, day=0, isNight=0):
+	weatherItem = return5DayWeatherItem(location)
+	return weatherItem['SiteRep']['DV']['Location']['Period'][day]['Rep'][isNight]['W']
 
 def getMaxUVIndex(location, day=0):
-	weatherItem = returnWeatherItem(location)
+	weatherItem = return5DayWeatherItem(location)
 	return weatherItem['SiteRep']['DV']['Location']['Period'][day]['Rep'][0]['U']
 
 def getPrecipitationProbability(loaction, day=0, forDay=True):
-	weatherItem = returnWeatherItem(location)
+	weatherItem = return5DayWeatherItem(location)
 	if forDay:
 		dayInt = 0
 		tempKey = "PPd"
@@ -124,7 +148,7 @@ def getPrecipitationProbability(loaction, day=0, forDay=True):
 	return weatherItem['SiteRep']['DV']['Location']['Period'][day]['Rep'][dayInt][tempKey]
 
 def getVisibilityNum(loaction, day=0):
-	weatherItem = returnWeatherItem(location)
+	weatherItem = return5DayWeatherItem(location)
 	return weatherItem['SiteRep']['DV']['Location']['Period'][day]['Rep'][0]['V']
 
 def getVisibilityText(loaction, day=0):
@@ -146,8 +170,8 @@ def getVisibilityText(loaction, day=0):
 	else:
 		return "Unavalable"
 
-def getWeatherTypeText(location, day=0):
-	weatherNum = getWeatherTypeNum(location, day)
+def getWeatherTypeText(location, day=0, isNight=0):
+	weatherNum = getWeatherTypeNum(location, day, isNight)
 	if weatherNum == "NA":
 		return "Not available"
 	elif weatherNum == "0":
