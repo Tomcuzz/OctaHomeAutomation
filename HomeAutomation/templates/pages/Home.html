@@ -24,19 +24,21 @@
 		<script>
 			function run() {
 				var engine = new RainyDay({
-						var engine = new RainyDay('canvas', 'background', window.innerWidth, window.innerHeight);
-						engine.gravity = engine.GRAVITY_NON_LINEAR;
-						engine.trail = engine.TRAIL_DROPS;
 					
-						engine.rain([
+					var engine = new RainyDay('kitties');
+					engine.gravity = engine.GRAVITY_NON_LINEAR;
+					engine.trail = engine.TRAIL_DROPS;
+					
+					engine.rain([
 						engine.preset(0, 2, 500)
-				]);
-
-				engine.rain([
-					engine.preset(3, 3, 0.88),
-					engine.preset(5, 5, 0.9),
-					engine.preset(6, 2, 1),
-				], 100);
+					]);
+					
+					engine.rain([
+						engine.preset(3, 3, 0.88),
+						engine.preset(5, 5, 0.9),
+						engine.preset(6, 2, 1),
+					], 100);
+				});
 			}
 		</script>
 		<script>
@@ -62,17 +64,6 @@
             <div class="row">
                 <div class="col-lg-offset-2 col-lg-8 center">
                     <span class="smaller"><div id="updatetime"></div></span>
-                </div>
-            </div>
-        </div>
-	  </div>
-	</div>
-</body>
-{% endblock %}
-{% block PageAreaWithoutFooter %}{% endblock %}
-
-
-><div id="updatetime"></div></span>
                 </div>
             </div>
         </div>
