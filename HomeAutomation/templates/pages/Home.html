@@ -30,7 +30,17 @@
 					fps: 20
 				});
 				engine.trail = engine.TRAIL_DROPS;
-				engine.rain([ [3, 1, 1] ], 100);
+				engine.rain([
+				{% if rain == "norain" %}
+				{% elif rain == "drizzel" %}
+					[1, 1, 0.5]
+				{% elif rain == "lightrain" %}
+					[3, 1, 1]
+				{% elif rain == "heavyrain" %}
+					[5, 1, 2]
+				{% else %}
+				{% endif %}
+				], 100);
 			}
 		</script>
 		<script>
@@ -64,16 +74,3 @@
 </body>
 {% endblock %}
 {% block PageAreaWithoutFooter %}{% endblock %}
-
-
-><div id="updatetime"></div></span>
-                </div>
-            </div>
-        </div>
-	  </div>
-	</div>
-</body>
-{% endblock %}
-{% block PageAreaWithoutFooter %}{% endblock %}
-
-
