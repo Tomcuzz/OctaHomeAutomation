@@ -2,7 +2,7 @@
 from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render
 from django.shortcuts import redirect
-from Lights.background import *
+from Lights.tasks import *
 from SharedFunctions.deviceControl import *
 from models import *
 from Lights.api import *

@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseNotFound, Http404
 from django.middleware.csrf import get_token
 from django.shortcuts import render
 from django.shortcuts import redirect
-from Lights.background import *
+from Lights.tasks import *
 from SharedFunctions.deviceControl import *
 from Lights.commands import *
 from models import *
