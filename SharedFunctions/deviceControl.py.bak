@@ -25,8 +25,42 @@ class DeviceControl():
                         CommunicationControl().sendUDPMessage(ipAddress, 100, message)
 	
 	def scrollDeviceRGBState(self, ipAddress, deviceType, oldR, oldG, oldB, newR, newG, newB):
-		scrollDeviceRGBStateTaskWithTime.delay(ipAddress, deviceType, oldR, oldG, oldB, newR, newG, newB, "1") 
-		
+		pool = Pool(processes=1)	      # Start a worker processes.
+		result = pool.apply_async(self.scrollDeviceRGBStateProcess(ipAddress, deviceType, oldR, oldG, oldB, newR, newG, newB), [], self.SetDeviceFinish()) # Evaluate "f(10)" asynchronously
+	
+	def scrollDeviceRGBStateProcess(self, ipAddress, deviceType, oldR, oldG, oldB, newR, newG, newB):
+		if deviceType == "MaxPi":
+			self.setDeviceRGBState(ipAddress, deviceType, newR, newG, newB)
+			return
+		tempR = int(str(oldR))
+		tempG = int(str(oldG))
+		tempB = int(str(oldB))
+		newR = int(str(newR))
+		newG = int(str(newG))
+		newB = int(str(newB))
+		while not ((tempR == newR) & (tempG == newG) & (tempB == newB)):
+			if tempR > (newR + 4):		tempR = tempR - 4
+			if tempR > newR:		tempR = tempR - 1
+			elif tempR < (newR - 4):	tempR = tempR + 4
+			elif tempR < newR:      	tempR = tempR + 1
+			else:				tempR = newR
+			
+			if tempG > (newG + 4):		tempG = tempG - 4
+			if tempG > newG:		tempG = tempG - 1
+			elif tempG < (newG - 4):	tempG = tempG + 4
+			elif tempG < newG:		tempG = tempG + 1
+			else:				tempG = newG
+			
+			if tempB > (newB + 4):		tempB = tempB - 4
+			if tempB > newB:		tempB = tempB - 1
+			elif tempB < (newB - 4):	tempB = tempB + 4
+			elif tempB < newB:		tempB = tempB + 1
+			else:				tempB = newB
+			
+			self.setDeviceRGBState(ipAddress, deviceType, tempR, tempG, tempB)
+			
+	def SetDeviceFinish(self):
+		finish = 1;
 	def scrollDeviceRGBStateWithTime(self, ipAddress, deviceType, oldR, oldG, oldB, newR, newG, newB, scrollTime):
 		scrollDeviceRGBStateTaskWithTime.delay(ipAddress, deviceType, oldR, oldG, oldB, newR, newG, newB, scrollTime)
 	
@@ -41,9 +75,9 @@ def scrollDeviceRGBStateTaskWithTime(ipAddress, deviceType, oldR, oldG, oldB, ne
 		while (float(scrollTime)/step) < 0.05:
 			step = step / 2
 		
-		rGap = int(oldR) - int(newR)
-		gGap = int(oldG) - int(newG)
-		bGap = int(oldB) - int(newB)
+		rGap = oldR - newR
+		gGap = oldG - newG
+		bGap = oldB - newB
 		
 		delayTime = float(scrollTime)/step
 		
@@ -52,11 +86,11 @@ def scrollDeviceRGBStateTaskWithTime(ipAddress, deviceType, oldR, oldG, oldB, ne
 			gTemp = oldG - ((float(gGap) / step) * x)
 			bTemp = oldB - ((float(bGap) / step) * x)
 			
-			DeviceControl().setDeviceRGBState(ipAddress, deviceType, int(rTemp), int(gTemp), int(bTemp))
+			self.setDeviceRGBState(ipAddress, deviceType, int(rTemp), int(gTemp), int(bTemp))
 			
 			time.sleep(delayTime)
 		
-		DeviceControl().setDeviceRGBState(ipAddress, deviceType, str(newR), str(newG), str(newB))
+		self.setDeviceRGBState(ipAddress, deviceType, newR, newG, newB)
 	
 class CommunicationControl():
 	BUFFER_SIZE = 1024

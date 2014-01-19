@@ -46,34 +46,30 @@
 					<div class="btn-group">
 						{% if alight.LightState == "Off" %}
 							<button class="btn btn-success" name="light{{alight.id}}OnOff" onClick="switchState('{{alight.id}}')">Turn On</button>
-							<button class="btn btn-success dropdown-toggle" name="light{{alight.id}}DropDown" data-toggle="dropdown"><span class="caret"></span></button>
 						{% else %}
 							<button class="btn btn-danger" name="light{{alight.id}}OnOff" onClick="switchState('{{alight.id}}')">Turn Off</button>
-							<button class="btn btn-danger dropdown-toggle" name="light{{alight.id}}DropDown" data-toggle="dropdown"><span class="caret"></span></button>
 						{% endif %}
+						<a class="btn btn-primary" onClick="changeColour('{{alight.id}}')" rel="drevil"> Set Colour </a>
+						<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">
+							 Dropdown 
+						<span class="caret"></span>
+						</button>
 						<ul class="dropdown-menu">
-							<li class="dropdown-submenu pull-left">
-								<a tabindex="-1" href="#">Scroll Mode</a>
-								<ul class="dropdown-menu">
-									<li><a tabindex="-1" onClick="setScroll('{{alight.id}}', 'Off')">Off<i name="Light{{alight.id}}ScrollOff" class="{% if alight.Scroll == "Off" %}icon-ok{% endif %}pull-right"></i></a></li>
-									{% for scrollMode in scrollModes %}
-										<li><a tabindex="-1" onClick="setScroll('{{alight.id}}', '{{scrollMode.Name}}')">{{scrollMode.Name}}<i name="Light{{alight.id}}Scroll{{scrollMode.Name}}" class="{% if alight.Scroll == "{{scrollMode.Name}}" %}icon-ok{% endif %}pull-right"></i></a></li>
-									{% endfor %}
-								</ul>
-							</li>
-							<li class="dropdown-submenu pull-left">
-								<a tabindex="-2" href="#">Scene</a>
-								<ul class="dropdown-menu">
-									<li><a tabindex="-2" onClick="setScroll('{{alight.id}}', 'Off')">Movie<i name="Light{{alight.id}}ScrollOff" class="pull-right"></i></a></li>
-								</ul>
-							</li>
+							<li role="presentation" class="dropdown-header">Scroll Modes</li>
+							<li><a href="#" onClick="setScroll('{{alight.id}}', 'Off')">Off<i name="Light{{alight.id}}ScrollOff" class="{% if alight.Scroll == "Off" %}icon-ok{% endif %}pull-right"></i></a></li>
+							{% for scrollMode in scrollModes %}
+								<li><a href="#" onClick="setScroll('{{alight.id}}', '{{scrollMode.Name}}')">{{scrollMode.Name}}<i name="Light{{alight.id}}Scroll{{scrollMode.Name}}" class="{% if alight.Scroll == "{{scrollMode.Name}}" %}icon-ok{% endif %}pull-right"></i></a></li>
+							{% endfor %}
+							<li role="presentation" class="dropdown-header">Scenes</li>
+							<li><a href="#" onClick="setScroll('{{alight.id}}', 'Off')">Movie<i name="Light{{alight.id}}ScrollOff" class="pull-right"></i></a></li>
 						</ul>
 					</div>
-					<a class="btn btn-primary" onClick="changeColour('{{alight.id}}')" rel="drevil">Set Colour</a>
-						<div id="colorpicker">
+					
+					
+					<div id="colorpicker">
 							<div class="my-farbtastic"></div>
-						</div>
 					</div>
+					
 					{% else %}
 						{% if alight.LightState == "Off" %}
 							<button class="btn btn-success" name="light{{alight.id}}OnOff" onClick="switchState('{{alight.id}}')">Turn On</button>
@@ -119,15 +115,13 @@
 		
 		function turnOff(id) {
 			lightObject = "light" + id + "OnOff";
-			lightDropDown = "light" + id + "DropDown";
 			lightState = "light" + id + "State";
 			lightRedLevel = "light" + id + "Red";
 			lightGreenLevel = "light" + id + "Green";
 			lightBlueLevel = "light" + id + "Blue";
 			document.getElementsByName(lightObject)[0].innerHTML = "Turn On";
 			document.getElementsByName(lightObject)[0].className = "btn btn-success";
-			if (document.getElementsByName(lightDropDown).length != 0){
-				document.getElementsByName(lightDropDown)[0].className = "btn btn-success dropdown-toggle";
+			if (document.getElementsByName(lightRedLevel).length != 0){
 				document.getElementsByName(lightRedLevel)[0].innerHTML = "R=0";
 				document.getElementsByName(lightGreenLevel)[0].innerHTML = "G=0";
 				document.getElementsByName(lightBlueLevel)[0].innerHTML = "B=0";
@@ -160,8 +154,7 @@
 			
 			document.getElementsByName(lightObject)[0].innerHTML = "Turn Off";
 			document.getElementsByName(lightObject)[0].className = "btn btn-danger";
-			if (document.getElementsByName(lightDropDown).length != 0){
-				document.getElementsByName(lightDropDown)[0].className = "btn btn-danger dropdown-toggle";
+			if (document.getElementsByName(lightRedLevel).length != 0){
 				document.getElementsByName(lightRedLevel)[0].innerHTML = "R=" + R;
 				document.getElementsByName(lightGreenLevel)[0].innerHTML = "G=" + G;
 				document.getElementsByName(lightBlueLevel)[0].innerHTML = "B=" + B;

@@ -54,7 +54,7 @@ def command(request):
 		theLight.save()
 		if str(currentlyRunningCount) == "0":
 			if str(newScrollMode) != "Off":
-				runScrollMode.apply_async(kwargs={'scrollName': newScrollMode})   #.delay(newScrollMode)
+				runScrollMode.apply_async(args=[str(newScrollMode)])   #.delay(newScrollMode)
 		return HttpResponse("Ok")
 	elif request.GET.get('command', 'None') == 'getR':
 		theLight = Lights.objects.get(id=lightId)

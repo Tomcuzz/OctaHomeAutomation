@@ -5,7 +5,7 @@ from models import *
 from SharedFunctions.deviceControl import *
 from random import randint
 
-@task()
+@task
 def runScrollMode(scrollName):
 	modeItem = ScrollModes.objects.get(Name=scrollName)
 	lastValue = int(-1)
@@ -27,8 +27,7 @@ def runScrollMode(scrollName):
 		bDestination = int(bValues[randomNum])
 		
 		for theLight in Lights.objects.filter(Scroll=scrollName):
-			deviceControler = DeviceControl()
-			Thread(target=deviceControler.scrollDeviceRGBStateWithTime, args=(theLight.IpAddress, theLight.DeviceType, theLight.R, theLight.G, theLight.B, rDestination, gDestination, bDestination, modeItem.Speed)).start()
+			scrollDeviceRGBStateTaskWithTime.delay(theLight.IpAddress, theLight.DeviceType, theLight.R, theLight.G, theLight.B, rDestination, gDestination, bDestination, modeItem.Speed)
 			theLight.R = rDestination
 			theLight.G = gDestination
 			theLight.B = bDestination
