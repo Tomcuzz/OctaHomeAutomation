@@ -27,12 +27,12 @@
 				<td>{{alight.RoomName | replaceUnderscores}}</td>
 				{% if alight.LightType == "RGBLight" %}
 					<td>
-						<p class="text-danger" name="light{{alight.id}}Red">R= 
-						<s id="rgbR{{alight.id}}" data-type="text" data-pk="1" data-url="/Lights/?command=setR&lightId={{alight.id}}" data-original-title="Set Red Level">{{alight.R}}</s>, </p>
-						<p class="text-success" name="light{{alight.id}}Green">G= 
-						<s id="rgbG{{alight.id}}" data-type="text" data-pk="1" data-url="/Lights/?command=setG&lightId={{alight.id}}" data-original-title="Set Green Level">{{alight.G}}</s>, </p>
-						<p class="text-info" name="light{{alight.id}}Blue">B= 
-						<s id="rgbB{{alight.id}}" data-type="text" data-pk="1" data-url="/Lights/?command=setB&lightId={{alight.id}}" data-original-title="Set Blue Level">{{alight.B}}</s></p>
+						<p class="text-danger">R= 
+						<s id="rgbR{{alight.id}}" name="light{{alight.id}}Red" data-type="text" data-pk="1" data-url="/Lights/?command=setR&lightId={{alight.id}}" data-original-title="Set Red Level">{{alight.R}}</s>, </p>
+						<p class="text-success">G= 
+						<s id="rgbG{{alight.id}}" name="light{{alight.id}}Green" data-type="text" data-pk="1" data-url="/Lights/?command=setG&lightId={{alight.id}}" data-original-title="Set Green Level">{{alight.G}}</s>, </p>
+						<p class="text-info">B= 
+						<s id="rgbB{{alight.id}}" name="light{{alight.id}}Blue" data-type="text" data-pk="1" data-url="/Lights/?command=setB&lightId={{alight.id}}" data-original-title="Set Blue Level">{{alight.B}}</s></p>
 					</td>
 				{% else %}
 					{% if alight.LightState == "On" %}
@@ -122,9 +122,9 @@
 			document.getElementsByName(lightObject)[0].innerHTML = "Turn On";
 			document.getElementsByName(lightObject)[0].className = "btn btn-success";
 			if (document.getElementsByName(lightRedLevel).length != 0){
-				document.getElementsByName(lightRedLevel)[0].innerHTML = "R=0";
-				document.getElementsByName(lightGreenLevel)[0].innerHTML = "G=0";
-				document.getElementsByName(lightBlueLevel)[0].innerHTML = "B=0";
+				document.getElementsByName(lightRedLevel)[0].innerHTML = "0";
+				document.getElementsByName(lightGreenLevel)[0].innerHTML = "0";
+				document.getElementsByName(lightBlueLevel)[0].innerHTML = "0";
 			} else {
 				document.getElementsByName(lightState)[0].innerHTML = "Off";
 				document.getElementsByName(lightState)[0].className = "text-error";
@@ -155,9 +155,9 @@
 			document.getElementsByName(lightObject)[0].innerHTML = "Turn Off";
 			document.getElementsByName(lightObject)[0].className = "btn btn-danger";
 			if (document.getElementsByName(lightRedLevel).length != 0){
-				document.getElementsByName(lightRedLevel)[0].innerHTML = "R=" + R;
-				document.getElementsByName(lightGreenLevel)[0].innerHTML = "G=" + G;
-				document.getElementsByName(lightBlueLevel)[0].innerHTML = "B=" + B;
+				document.getElementsByName(lightRedLevel)[0].innerHTML = R;
+				document.getElementsByName(lightGreenLevel)[0].innerHTML = G;
+				document.getElementsByName(lightBlueLevel)[0].innerHTML = B;
 			} else {
 				document.getElementsByName(lightState)[0].innerHTML = "On";
 				document.getElementsByName(lightState)[0].className = "text-success";
