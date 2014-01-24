@@ -31,8 +31,8 @@ def triggerAlarm(alarmId):
 					if aTask.actionType == "Play_Speach":
 						ipAddress = taskAction['targetIpAddress']
 						speach = taskAction['speachScript']
-						postcode = taskAction['postcode']
-						alarmActions().makeDevicePlaySpeach(ipAddress=ipAddress, speach=speach, postcode=postcode)
+						location = taskAction['location']
+						alarmActions().makeDevicePlaySpeach(ipAddress=ipAddress, speach=speach, location=location)
 					elif aTask.actionType == "Play_Music":
 						ipAddress = taskAction['targetIpAddress']
 						targetPort = taskAction['targetPort']
@@ -56,22 +56,22 @@ def triggerAlarm(alarmId):
 	
 
 class alarmActions():
-	def makeDevicePlaySpeach(self, ipAddress="NS", speach="NS", postcode=""):
+	def makeDevicePlaySpeach(self, ipAddress="NS", speach="NS", location=""):
 		speach = speach.replace("_", " ")
 		if "/%w" in speach:
-			if postcode != "":
-				currentTempString = getFeelsLikeTemp(postcode) + " " + getTempUnits(postcode)
+			if location != "":
+				currentTempString = getFeelsLikeTemp(location) + " " + getTempUnits(location)
 				
-				todaysMinForcastedTempString = getTempMin(postcode) + " " + getTempUnits(postcode)
-				todaysMaxForcastedTempString = getTempMax(postcode) + " " + getTempUnits(postcode)
+				todaysMinForcastedTempString = getTempMin(location) + " " + getTempUnits(location)
+				todaysMaxForcastedTempString = getTempMax(location) + " " + getTempUnits(location)
 				
-				tomorrowsMinForcastedTempString = getTempMin(postcode, 1) + " " + getTempUnits(postcode)
-				tomorrowsMaxForcastedTempString = getTempMax(postcode, 1) + " " + getTempUnits(postcode)
+				tomorrowsMinForcastedTempString = getTempMin(location, 1) + " " + getTempUnits(location)
+				tomorrowsMaxForcastedTempString = getTempMax(location, 1) + " " + getTempUnits(location)
 				
-				currentTextWeather = getWeatherTypeText(postcode)
+				currentTextWeather = getWeatherTypeText(location)
 				
-				todaysForcastedTextWeather = getWeatherTypeText(postcode)
-				tomorrowsForcastedTextWeather = getWeatherTypeText(postcode, 1)
+				todaysForcastedTextWeather = getWeatherTypeText(location)
+				tomorrowsForcastedTextWeather = getWeatherTypeText(location, 1)
 				
 				speach = speach.replace("/%wct%/", currentTempString)
 				speach = speach.replace("/%wtt%/", todaysMinForcastedTempString)

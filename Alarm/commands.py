@@ -112,7 +112,7 @@ class alarm():
 			targetPort = request.POST.get('speachdeviceport', '')
 			speachScript = request.POST.get('speachscript', '').replace(" ", "_")
 			speachpostcode = request.POST.get('speachpostcode', '').replace(" ", "").lower()
-			actionVeriables = {'targetIpAddress':targetIpAddress, 'targetPort':targetPort, 'speachScript':speachScript, 'postcode':speachpostcode}
+			actionVeriables = {'targetIpAddress':targetIpAddress, 'targetPort':targetPort, 'speachScript':speachScript, 'location':speachpostcode}
 			newAlarmTaskAction.actionVeriables = json.dumps(actionVeriables, sort_keys=False, separators=(',',':'))
 		elif request.POST.get('actiontasktype', '') == "Play Music":
 			targetIpAddress = request.POST.get('musicdeviceipaddress', '')

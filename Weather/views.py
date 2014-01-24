@@ -83,15 +83,15 @@ def getTempUnits(location):
 	else:
 		return "celsius"
 
-def getTempMax(loaction, day=0):
+def getTempMax(location, day=0):
 	weatherItem = return5DayWeatherItem(location)
 	return weatherItem['SiteRep']['DV']['Location']['Period'][day]['Rep'][0]['Dm']
 
-def getTempMin(loaction, day=0):
+def getTempMin(location, day=0):
 	weatherItem = return5DayWeatherItem(location)
 	return weatherItem['SiteRep']['DV']['Location']['Period'][day]['Rep'][1]['Nm']
 
-def getFeelsLikeTemp(loaction, day=0, forDay=True):
+def getFeelsLikeTemp(location, day=0, forDay=True):
 	weatherItem = return5DayWeatherItem(location)
 	if forDay:
 		dayInt = 0
@@ -101,7 +101,7 @@ def getFeelsLikeTemp(loaction, day=0, forDay=True):
 		tempKey = "FNm"
 	return weatherItem['SiteRep']['DV']['Location']['Period'][day]['Rep'][dayInt][tempKey]
 
-def getHumidity(loaction, day=0, forDay=True):
+def getHumidity(location, day=0, forDay=True):
 	weatherItem = return5DayWeatherItem(location)
 	if forDay:
 		dayInt = 0
@@ -119,7 +119,7 @@ def getWindSpeed(location, day=0):
 	weatherItem = return5DayWeatherItem(location)
 	return weatherItem['SiteRep']['DV']['Location']['Period'][day]['Rep'][0]['S']
 
-def getWindGust(loaction, day=0, forDay=True):
+def getWindGust(location, day=0, forDay=True):
 	weatherItem = return5DayWeatherItem(location)
 	if forDay:
 		dayInt = 0
@@ -137,7 +137,7 @@ def getMaxUVIndex(location, day=0):
 	weatherItem = return5DayWeatherItem(location)
 	return weatherItem['SiteRep']['DV']['Location']['Period'][day]['Rep'][0]['U']
 
-def getPrecipitationProbability(loaction, day=0, forDay=True):
+def getPrecipitationProbability(location, day=0, forDay=True):
 	weatherItem = return5DayWeatherItem(location)
 	if forDay:
 		dayInt = 0
@@ -147,12 +147,12 @@ def getPrecipitationProbability(loaction, day=0, forDay=True):
 		tempKey = "PPn"
 	return weatherItem['SiteRep']['DV']['Location']['Period'][day]['Rep'][dayInt][tempKey]
 
-def getVisibilityNum(loaction, day=0):
+def getVisibilityNum(location, day=0):
 	weatherItem = return5DayWeatherItem(location)
 	return weatherItem['SiteRep']['DV']['Location']['Period'][day]['Rep'][0]['V']
 
-def getVisibilityText(loaction, day=0):
-	visabilityNum = getVisibilityNum(loaction, day)
+def getVisibilityText(location, day=0):
+	visabilityNum = getVisibilityNum(location, day)
 	if visabilityNum == "UN":
 		return "Unknown"
 	elif visabilityNum == "VP":
