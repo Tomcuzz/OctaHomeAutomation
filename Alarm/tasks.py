@@ -1,9 +1,11 @@
 from celery.task import task
 from Alarm.models import *
 from Weather.views import *
+from Lights.models import *
 import json
 import time
 from subprocess import call
+from SharedFunctions.deviceControl import *
 
 
 @task
@@ -31,11 +33,12 @@ def triggerAlarm(alarmId):
 						speach = taskAction['speachScript']
 						postcode = taskAction['postcode']
 						alarmActions().makeDevicePlaySpeach(ipAddress=ipAddress, speach=speach, postcode=postcode)
-					elif aTask.actionType == "Play_Music_Playlist":
+					elif aTask.actionType == "Play_Music":
 						ipAddress = taskAction['targetIpAddress']
-						playlist = taskActionAction['playlist']
-						alarmActions().makeDevicePlayMusicPlayList(ipAddress=ipAddress, playlist=playlist)
-					elif aTask.actionType == "Set_Light":
+						targetPort = taskAction['targetPort']
+						playlist = taskAction['playListName']
+						alarmActions().makeDevicePlayMusicPlayList(ipAddress, targetPort, playlist)
+					elif aTask.actionType == "Set_Lights":
 						lightId = taskAction['lightId']
 						setType = taskAction['setType']
 						state = taskAction['state']
@@ -101,14 +104,16 @@ class alarmActions():
 			speach = speach.replace("/%ts%/", time.strftime("%S"))
 			speach = speach.replace("/%ta%/", time.strftime("%p"))
 		
-		sayItem = "say " + speach
+		message = "say " + speach
 		
-		return_code = call(sayItem, shell=True)
+		CommunicationControl().sendTCPMessage(ipAddress, 5005, message)
 	
-	def makeDevicePlayMusicPlayList(ipAddress="NS", playlist="NS"):
-		test = "TO BE IMPLEMENTED"
+	def makeDevicePlayMusicPlayList(self, ipAddress="NS", targetPort="5005", playlist="NS"):
+		playlist = playlist.replace("_", " ")
+		message = "command playplaylist " + playlist
+		CommunicationControl().sendTCPMessage(ipAddress, int(targetPort), message)
 	
-	def setLightToState(lightId="NS", setType="NS", state="NS", r="NS", g="NS", b="NS", scrollMode="NS", scene="NS"): #NS Stands For Not Set
+	def setLightToState(self, lightId="NS", setType="NS", state="NS", r="NS", g="NS", b="NS", scrollMode="NS", scene="NS"): #NS Stands For Not Set
 		theLight = Lights.objects.get(id=lightId)
 		if setType == "OnOff":
 			if theLight.LightType == "RGBLight":

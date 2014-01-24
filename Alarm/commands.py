@@ -124,20 +124,25 @@ class alarm():
 		elif request.POST.get('actiontasktype', '') == "Set Lights":
 			lightId = request.POST.get('lightid', '')
 			setType = request.POST.get('settype', '').replace("/", "")
-			actionVeriables = {}
-			if setType == "OnOff":
-				onOffStateToSet = request.POST.get('setlightonoff', '')
-				actionVeriables = {'lightId':lightId, 'setType':setType, 'onOffStateToSet':onOffStateToSet}
-			elif setType == "RGB":
-				rToSet = request.POST.get('setlightrvalue', '')
-				gToSet = request.POST.get('setlightgvalue', '')
-				bToSet = request.POST.get('setlightbvalue', '')
-				actionVeriables = {'lightId':lightId, 'setType':setType, 'rToSet':rToSet, 'gToSet':gToSet, 'bToSet':bToSet}
-			elif setType == "Scroll":
-				setLightScroll = request.POST.get('setlightscroll', '').replace(" ", "_")
-				actionVeriables = {'lightId':lightId, 'setType':setType, 'setLightScroll':setLightScroll}
-			elif setType == "Scene":
-				setLightScene = request.POST.get('setlightscene', '').replace(" ", "_")
-				actionVeriables = {'lightId':lightId, 'setType':setType, 'setLightScene':setLightScene}
+			onOffStateToSet = request.POST.get('setlightonoff', '')
+			rToSet = request.POST.get('setlightrvalue', '')
+			gToSet = request.POST.get('setlightgvalue', '')
+			bToSet = request.POST.get('setlightbvalue', '')
+			setLightScroll = request.POST.get('setlightscroll', '').replace(" ", "_")
+			setLightScene = request.POST.get('setlightscene', '').replace(" ", "_")
+			actionVeriables = {'lightId':lightId, 'setType':setType, 'state':onOffStateToSet, 'r':rToSet, 'g':gToSet, 'b':bToSet, 'scrollMode':setLightScroll, 'scene':setLightScene}
 			newAlarmTaskAction.actionVeriables = json.dumps(actionVeriables, sort_keys=False, separators=(',',':'))
 		newAlarmTaskAction.save()
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		

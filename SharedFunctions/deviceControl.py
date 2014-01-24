@@ -21,8 +21,8 @@ class DeviceControl():
 				boolString = "On"
 			else:
 				boolString = "Off"
-                        message = "light=" + boolString
-                        CommunicationControl().sendUDPMessage(ipAddress, 100, message)
+			message = "light=" + boolString
+			CommunicationControl().sendUDPMessage(ipAddress, 100, message)
 	
 	def scrollDeviceRGBState(self, ipAddress, deviceType, oldR, oldG, oldB, newR, newG, newB):
 		scrollDeviceRGBStateTaskWithTime.delay(ipAddress, deviceType, oldR, oldG, oldB, newR, newG, newB, "1") 
@@ -59,8 +59,9 @@ def scrollDeviceRGBStateTaskWithTime(ipAddress, deviceType, oldR, oldG, oldB, ne
 		DeviceControl().setDeviceRGBState(ipAddress, deviceType, str(newR), str(newG), str(newB))
 	
 class CommunicationControl():
-	BUFFER_SIZE = 1024
 	def sendTCPMessage(self, ipAddress, port, message):
+		BUFFER_SIZE = 1024
+		port = int(port)
 		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		s.connect((ipAddress, port))
 		s.send(message)
