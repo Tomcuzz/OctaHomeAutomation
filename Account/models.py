@@ -18,6 +18,7 @@ class AccountModel():
 			return "Admin"
 		else:
 			return "User"
-	
+	def getWeatherLocation(self, request):
+		return request.user.home_location
 	def getAllUsers(self):
 		return CustomUser.objects.filter()

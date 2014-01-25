@@ -23,7 +23,7 @@
 			} else if (password!=passwordRetry) {
 				alert("The passwords you have enterd must match");
 				return false;
-			}"
+			}
 			var email=document.forms["CreateUserForm"]["email"].value;
 			var atpos=x.indexOf("@");
 			var dotpos=x.lastIndexOf(".");
@@ -77,6 +77,13 @@
 				<select name="userLevel" class="form-control" style="width: 200px;">
 					<option name="normalUser">User</option>
 					<option name="admin">Admin</option>
+				</select>
+				<br>
+				<label>Set Location:</label>
+				<select name="userLoaction" class="form-control" style="width: 400px;">
+					{% for aLocation in locations|dictsort:"unitaryAuthArea" %}
+						<option value="{{aLocation.locationId}}">{{aLocation.locationId}} - {%if aLocation.unitaryAuthArea == ""%}N/A{%else%}{{aLocation.unitaryAuthArea}}{%endif%} - {{aLocation.name}}</option>
+					{% endfor %}
 				</select>
 				<br>
 				<button type="submit" class="btn btn-default">Add User</button>

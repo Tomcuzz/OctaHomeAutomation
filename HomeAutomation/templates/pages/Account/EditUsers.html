@@ -1,4 +1,5 @@
 {% extends 'baseWithNavBar.html' %}
+{% load weather_filters %}
 
 {% block title %} Account {% endblock %}
 
@@ -32,6 +33,7 @@
 					<th>Email</th>
 					<th>First Name</th>
 					<th>Surname</th>
+					<th>Weather Location</th>
 					<th>Admin Level</th>
 					<th>Active Status</th>
 					<th>Last Login</th>
@@ -56,6 +58,7 @@
 					<td>
 						<s id="SecondName{{aUser.id}}" data-type="text" data-pk="1" data-url="/account/?command=changeSecondName&user={{aUser.username}}" data-original-title="Change Surname">{{aUser.last_name}}</s>
 					</td>
+					<td>{{aUser.home_location}}</td>
 					<td>
 						<s id="AdmingLevel{{aUser.id}}" data-type="select" data-pk="1" data-url="/account/?command=changeAdminLevel&user={{aUser.username}}" data-original-title="Change Adming Level">
 							{% if aUser.is_superuser %}

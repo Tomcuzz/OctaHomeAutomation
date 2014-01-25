@@ -21,11 +21,13 @@ def AccountCommand(request):
 			surname = request.POST.get('surname', '')
 			activeState = request.POST.get('activeState', '')
 			userLevel = request.POST.get('userLevel', '')
+			location = request.POST.get('userLoaction', '310002')
 			
 			user = CustomUser.objects.create_user(email, firstName, surname, password)
 			user.username = username
 			user.first_name = firstName
 			user.last_name = surname
+			user.home_location = location
 			if activeState == "Active":
 				user.is_active = True
 			else:
