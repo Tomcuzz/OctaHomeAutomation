@@ -7,6 +7,9 @@ import sys
 from proxmoxer import ProxmoxAPI
 
 def ProxmoxMain(request):
+	if not request.user.is_authenticated():
+		return redirect('/Login?next=%s' % request.path)
+	
 	proxmox = ProxmoxAPI('10.101.1.200', user='root@pam', password='Fish01', verify_ssl=False)
 	currentNode = request.GET.get('node', 'none')
 	currentVz = request.GET.get('openvz', 'none')
