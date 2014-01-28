@@ -4,6 +4,8 @@ from Weather.views import *
 from Lights.models import *
 import json
 import time
+import datetime
+from dateutil.relativedelta import *
 from subprocess import call
 from SharedFunctions.deviceControl import *
 
@@ -52,6 +54,43 @@ def triggerAlarm(alarmId):
 					aTask = None
 			
 			if newAlarm.recurrence == "Single Occurance":
+				newAlarm.delete()
+			elif newAlarm.recurrence.startswith("Once"):
+				dateArray = newAlarm.date.split("/")
+				timeArray = newAlarm.time.split(":")
+				
+				hour = timeArray[0]
+				mins = timeArray[1]
+				amPm = timeArray[2]
+				
+				if hour == "12":
+					hour = "0";
+				
+				if amPm == "AM":
+					hour = hour
+				else:
+					hour = str(int(hour)+12)
+				
+				tempDate = datetime.datetime(int(dateArray[2]), int(dateArray[1]), int(dateArray[0]), int(hour), int(mins))
+				
+				if newAlarm.recurrence == "Once A Hour":
+					tempDate = tempDate + datetime.timedelta(hours=1)
+				elif newAlarm.recurrence == "Once A Day":
+					tempDate = tempDate + datetime.timedelta(days=1)
+				elif newAlarm.recurrence == "Once A Week":
+					tempDate = tempDate + datetime.timedelta(days=7)
+				elif newAlarm.recurrence == "Once A Month":
+					tempDate = tempDate + relativedelta(months=1)
+				
+				celeryRunningTask = triggerAlarm.apply_async(args=[str(newAlarm.id)], kwargs={}, eta=tempDate)
+				newAlarm.celeryTaskId = celeryRunningTask.id
+				newTime = tempDate.strftime(' %I:%M:%p').replace(" 0", "").replace(" ", "")
+				newDate = tempDate.strftime('%d/%m/%Y')
+				newAlarm.time = newTime
+				newAlarm.date = newDate
+				
+				newAlarm.save()
+			else:
 				newAlarm.delete()
 	
 
