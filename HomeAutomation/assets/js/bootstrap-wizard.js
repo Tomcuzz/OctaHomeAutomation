@@ -380,6 +380,7 @@
                         '<div class="modal-header wizard-header">',
                             '<button type="button" class="close wizard-close" aria-hidden="true">&times;</button>',
                             '<h3 class="modal-title wizard-title"></h3>',
+                            '<span class="wizard-subtitle"></span>',
                         '</div>',
                         '<div class="modal-body wizard-body">',
                             '<div class="pull-left wizard-steps">',
@@ -481,7 +482,7 @@
             this.navList				= 	this.modal.find('.wizard-nav-list');
             this.progressContainer		= 	this.modal.find('.wizard-progress-container');
             this.progress				= 	this.progressContainer.find('.progress-bar');
-            this.closeButton 			= 	this.modal.find('button.wizard-close');
+            this.closeButton 			= 	this.modal.find('button.wizard-close.close');
             this.cardsContainer			=	this.modal.find('wizard-cards-container');
             this.form					=	this.modal.find('form');
             this.footer 				= 	this.modal.find(".wizard-footer");
@@ -511,14 +512,17 @@
             
             // Register Array Holder for popovers
             this.popovers				= [];
-            
-            // Register Close Button
+
             var self = this;
-            this.closeButton.click(function() {
+            var _close = function() {
                 self.reset();
                 self.close();
                 self.trigger("closed");
-            });
+            };
+
+            // Register Close Button
+            this.closeButton.click(_close);
+            this.cancelButton.click(_close);
             
             this.wizardSteps.on("click", "li.already-visited a.wizard-nav-link", this,
             function(event) {
@@ -693,7 +697,11 @@
                 this.setCard(0);
                 this._firstShow = false;
             }
-            if (this.args.showCancel) { this.cancelButton.show(); }
+            if (this.args.showCancel) { 
+                this.cancelButton.show(); 
+            } else {
+                this.cancelButton.hide(); 
+            }
             if (this.args.showClose) { this.closeButton.show(); }
             this.modal.modal('show');
             
@@ -943,7 +951,11 @@
 
         showButtons: function() {
             this.log("showing buttons");
-            if (this.args.showCancel) { this.cancelButton.show(); }
+            if (this.args.showCancel) { 
+                this.cancelButton.show(); 
+            } else {
+                this.cancelButton.hide(); 
+            }
             if (this.args.showClose) { this.closeButton.show(); };
             this.nextButton.show();
             this.backButton.show();

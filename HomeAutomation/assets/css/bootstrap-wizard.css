@@ -123,14 +123,14 @@ li.wizard-nav-item {
 	border-top: 1px solid #EEE;
 	display:none;
 	padding:35px;
-	padding-top:0px;
+	padding-top:20px;
 	overflow-y:auto;
 	
-	
+	/*
 	position:relative;
 	height:300px;
 	margin-right: 5px;
-	
+	*/
 }
 
 .wizard-card-overlay {

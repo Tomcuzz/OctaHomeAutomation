@@ -1,0 +1,60 @@
+{% extends 'baseWithNavBar.html' %}
+{% load proxmox_name_convertion %}
+
+{% block ProxmoxNavBarActive %} active {% endblock %}
+
+{% block title %} Proxmox {% endblock %}
+
+{% block extraCSS %}
+	<link href="{{STATIC_URL}}css/bootstrap-wizard.css" rel="stylesheet">
+{% endblock %}
+
+{% block PageArea %}
+	<div class="page-header">
+		<h1>{% block ProxmoxTitle %}{% endblock %}</h1>
+	</div>
+		{% block ProxmoxPageArea %}{% endblock %}
+		<div class="wizard" id="addServerWizard" data-title="Create Server">
+			<div class="wizard-card" data-cardname="card1">
+				<h3>Machine Setup</h3>
+				<div class="wizard-input-section">
+					<p>Location:</p>
+					<select class="form-control wizard-ns-select" style="width: 300px;">
+						{% for link in links %}
+							{% if link.title != "System Stats" and link.title != "Add New Server" %}
+								<option>{{link.title}}</option>
+							{% endif %}
+						{% endfor %}
+					</select>
+					<br>
+					<p>Vm/Container Id:</p>
+					<div class="form-group">
+						<div class="col-sm-6">
+							<input type="text" class="form-control" id="VmId" name="Vm Id" placeholder="Auto" style="width: 300px;" data-validate>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="wizard-card" data-cardname="card2">
+				<h3>Card 2</h3>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block ExtraJavaScript %}
+	<script src="{{STATIC_URL}}js/bootstrap-wizard.js" type="text/javascript"></script>
+	<script>
+		$(document).ready(function() {
+			var wizard = $('#addServerWizard').wizard({
+			});
+			$('#open-wizard').click(function(e) {
+				e.preventDefault();
+				wizard.show();
+			});
+			$('#addServer').click(function(e) {
+				wizard.show();
+			});
+		});
+	</script>
+{% endblock %}
