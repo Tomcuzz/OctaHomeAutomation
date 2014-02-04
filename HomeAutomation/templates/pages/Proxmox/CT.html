@@ -1,7 +1,7 @@
 {% extends 'pages/Proxmox/ProxmoxTemplate.html' %}
 {% load proxmox_name_convertion %}
 
-{% block ProxmoxTitle %}"{{Node}}" Node{% endblock %}
+{% block ProxmoxTitle %}"{{Vz}}" Vz Container{% endblock %}
 
 {% block ProxmoxPageArea %}
 	<ul class="nav nav-tabs">
@@ -11,7 +11,7 @@
 	<div class="tab-content">
 		<div class="tab-pane active" id="summary">
 			<div class="col-md-4">
-				<h4>Servers Online:</h4>
+				<h4>Server Status:</h4>
 				<p>{{ ServerStatuses.totalOnline }} Online / {{ ServerStatuses.totalTotal }} Total</p>
 				<div class="progress">
 					<div class="progress-bar progress-bar-success" style="width: {{ ServerStatuses.totalOnlinePercentage }}%"></div>
@@ -35,16 +35,13 @@
 				<h4>Basic Controls:</h4>
 				<div>
 					<p>
-						<button type="button" class="btn btn-info">Migrate</button>
-						<button type="button" class="btn btn-info">Console</button>
-						<button type="button" class="btn btn-success">Start</button>
+						<button type="button" class="btn btn-info" style="width: 79px">Migrate</button>
+						<button type="button" class="btn btn-info" style="width: 83px">Console</button>
+						<button type="button" class="btn btn-success" style="width: 62px">Start</button>
 					</p>
 					<p>
-						<button type="button" class="btn btn-warning">Reset</button>
 						<button type="button" class="btn btn-warning">Shutdown</button>
 						<button type="button" class="btn btn-warning">Stop</button>
-					</p>
-					<p>
 						<button type="button" class="btn btn-danger">Remove</button>
 					</p>
 				</div>
