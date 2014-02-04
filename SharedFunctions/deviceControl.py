@@ -24,11 +24,19 @@ class DeviceControl():
 			message = "light=" + boolString
 			CommunicationControl().sendUDPMessage(ipAddress, 100, message)
 	
-	def scrollDeviceRGBState(self, ipAddress, deviceType, oldR, oldG, oldB, newR, newG, newB):
-		scrollDeviceRGBStateTaskWithTime.delay(ipAddress, deviceType, oldR, oldG, oldB, newR, newG, newB, "1") 
+	def scrollDeviceRGBState(self, ipAddress, deviceType, oldR, oldG, oldB, newR, newG, newB, setType="celery"):
+		if setType == "celery":
+			scrollDeviceRGBStateTaskWithTime.delay(ipAddress, deviceType, oldR, oldG, oldB, newR, newG, newB, "1")
+		else:
+			pool = Pool(processes=1)
+			result = pool.apply_async(scrollDeviceRGBStateTaskWithTime(ipAddress, deviceType, oldR, oldG, oldB, newR, newG, newB, "1"))
 		
-	def scrollDeviceRGBStateWithTime(self, ipAddress, deviceType, oldR, oldG, oldB, newR, newG, newB, scrollTime):
-		scrollDeviceRGBStateTaskWithTime.delay(ipAddress, deviceType, oldR, oldG, oldB, newR, newG, newB, scrollTime)
+	def scrollDeviceRGBStateWithTime(self, ipAddress, deviceType, oldR, oldG, oldB, newR, newG, newB, scrollTime, setType="celery"):
+		if setType == "celery":
+			scrollDeviceRGBStateTaskWithTime.delay(ipAddress, deviceType, oldR, oldG, oldB, newR, newG, newB, scrollTime)
+		else:
+			pool = Pool(processes=1)
+			result = pool.apply_async(scrollDeviceRGBStateTaskWithTime(ipAddress, deviceType, oldR, oldG, oldB, newR, newG, newB, scrollTime))
 	
 @task()
 def scrollDeviceRGBStateTaskWithTime(ipAddress, deviceType, oldR, oldG, oldB, newR, newG, newB, scrollTime):
