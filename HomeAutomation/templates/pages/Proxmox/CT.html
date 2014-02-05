@@ -1,7 +1,7 @@
 {% extends 'pages/Proxmox/ProxmoxTemplate.html' %}
 {% load proxmox_name_convertion %}
 
-{% block ProxmoxTitle %}"{{Vz}}" Vz Container{% endblock %}
+{% block ProxmoxTitle %}"{{Vz.name}}" Vz Container{% endblock %}
 
 {% block ProxmoxPageArea %}
 	<ul class="nav nav-tabs">
@@ -35,6 +35,11 @@
 				<h4>Basic Controls:</h4>
 				<div>
 					<p>
+						{% if Vz.status == "running" %}
+							
+						{% else%}
+							
+						{% endif %}
 						<button type="button" class="btn btn-info" style="width: 79px">Migrate</button>
 						<button type="button" class="btn btn-info" style="width: 83px">Console</button>
 						<button type="button" class="btn btn-success" style="width: 62px">Start</button>
