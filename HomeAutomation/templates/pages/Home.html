@@ -8,8 +8,6 @@
 
     
     <link rel="stylesheet" href="{{STATIC_URL}}css/custom-homepage.css">
-    <script type="text/javascript" src="http://use.typekit.net/mvd4hdx.js"></script>
-    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
     <script src="http://squaresend.com/squaresend.js"></script>
 
     
@@ -20,27 +18,12 @@
 			#sound { position: absolute; width: 30%; height: 30%; overflow-y: auto; margin-left: 35%; -moz-border-radius: 15px; border-radius: 15px; background-color: #C4C4C4; opacity: 0.3; margin-top: 5%; }
 			.video { position: absolute; width: 90%; height: 80%; margin-left: 5%; margin-top: 5%; }
 		</style>
-		<script src="/assets/js/rainyday.0.1.1.min.js" type="text/javascript"></script>
+		<script src="/assets/js/rainyday.js" type="text/javascript"></script>
 		<script>
-			function run() {
-				var engine = new RainyDay({
-					
-					var engine = new RainyDay('kitties');
-					engine.gravity = engine.GRAVITY_NON_LINEAR;
-					engine.trail = engine.TRAIL_DROPS;
-					
-					engine.rain([
-						engine.preset(0, 2, 500)
-					]);
-					
-					engine.rain([
-						engine.preset(3, 3, 0.88),
-						engine.preset(5, 5, 0.9),
-						engine.preset(6, 2, 1),
-					], 100);
-				});
-<<<<<<< HEAD
-				engine.trail = engine.TRAIL_DROPS;
+			function run() {					
+				var engine = new RainyDay('kitties');
+				engine.gravity = engine.GRAVITY_NON_LINEAR;
+				engine.trail = engine.TRAIL_DROPS;					
 				engine.rain([
 				{% if rain == "norain" %}
 				{% elif rain == "drizzel" %}
@@ -51,9 +34,7 @@
 					[5, 1, 2]
 				{% else %}
 				{% endif %}
-				], 100);
-=======
->>>>>>> NewRainyDayVersion
+				], 100);		
 			}
 		</script>
 		<script>
@@ -63,7 +44,6 @@
 		</script>
 
 {% endblock %}
-
 {% block PageAreaWithoutSubhead %}
 <body onload="run();">
 	<div id="parent">
@@ -80,16 +60,9 @@
                 <div class="col-lg-offset-2 col-lg-8 center">
                     <span class="smaller"><div id="updatetime"></div></span>
                 </div>
-            </div>
-        </div>
+         </div>
 	  </div>
 	</div>
 </body>
 {% endblock %}
-<<<<<<< HEAD
 {% block PageAreaWithoutFooter %}{% endblock %}
-=======
-{% block PageAreaWithoutFooter %}{% endblock %}
-
-
->>>>>>> NewRainyDayVersion
