@@ -39,7 +39,7 @@
 				<h4>Basic Controls:</h4>
 				<div>
 					<p>
-						<button type="button" class="btn btn-info" style="width: 79px">Migrate</button>
+						<button type="button" class="btn btn-info" style="width: 79px" data-toggle="modal" data-target="#migrateWindow">Migrate</button>
 						<button type="button" class="btn btn-info" style="width: 83px">Console</button>
 						{% if Vz.status == "running" %}
 								<button onclick="startClicked" id="startButton" type="button" type="button" class="btn btn-success" style="width: 62px" disabled>Start</button>
@@ -82,10 +82,38 @@
 			
 		</div>
 	</div>
+	<!-- Modal -->
+	<div class="modal fade bs-modal-sm" id="migrateWindow" tabindex="-1" role="dialog" aria-labelledby="Migrate Container" aria-hidden="true">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">Migrate Container</h4>
+				</div>
+				<div class="modal-body">
+					<p>Please Select The Target:</p>
+					<select class="form-control" id="migrateTarget">
+						{% for aNode in ServerStatuses.uptimes %}
+							<option>{{aNode.node}}</option>
+						{% endfor %}
+					</select>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+					<button type="button" class="btn btn-primary" onclick="submitMigrate()" data-dismiss="modal">Migrate Server</button>
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}
 
 {% block ExtraJavaScript %}
 	<script>
+		function submitMigrate() {
+			target = document.getElementById("migrateTarget").value;
+			url = '{% url 'Proxmox' %}?command=migrateCT&node={{node}}&ct={{Vz.vmid}}&target=' + target;
+			httpGet(url);
+		}
 		function startClicked(){
 			httpGet('{% url 'Proxmox' %}?command=startCT&node={{node}}&ct={{Vz.vmid}}')
 			
@@ -95,7 +123,6 @@
 			document.getElementById("state").innerHTML = "Running";
 			document.getElementById("state").className = "text-success";
 		}
-		
 		function shutdownClicked(){
 			httpGet('{% url 'Proxmox' %}?command=shutdownCT&node={{node}}&ct={{Vz.vmid}}')
 			
@@ -105,7 +132,6 @@
 			document.getElementById("state").innerHTML = "Stopped";
 			document.getElementById("state").className = "text-danger";
 		}
-		
 		function stopClicked(){
 			httpGet('{% url 'Proxmox' %}?command=stopCT&node={{node}}&ct={{Vz.vmid}}')
 			
@@ -115,7 +141,6 @@
 			document.getElementById("state").innerHTML = "Stopped";
 			document.getElementById("state").className = "text-danger";
 		}
-		
 		function httpGet(theUrl) {
 		    var xmlHttp = null;
 		    xmlHttp = new XMLHttpRequest();
