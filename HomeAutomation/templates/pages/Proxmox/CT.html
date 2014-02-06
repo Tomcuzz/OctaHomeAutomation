@@ -12,11 +12,15 @@
 		<div class="tab-pane active" id="summary">
 			<div class="col-md-4">
 				<h4>Server Status:</h4>
-				<p>{{ ServerStatuses.totalOnline }} Online / {{ ServerStatuses.totalTotal }} Total</p>
-				<div class="progress">
-					<div class="progress-bar progress-bar-success" style="width: {{ ServerStatuses.totalOnlinePercentage }}%"></div>
-					<div class="progress-bar progress-bar-danger" style="width: {{ ServerStatuses.totalOffLinePercentage }}%"></div>
-				</div>
+				{% if Vz.status == "running" %}
+					<h4 id="state" class="text-success">Running</h4>
+				{% else %}
+					<h4 id="state" class="text-danger">Stopped</h4>
+				{% endif %}
+				<p></p>
+				<p></p>
+				<p></p>
+				<p></p>
 				<h4>Total Storage:</h4>
 				{% for storageDevice in StorageDevices.nodes %}
 					{% if storageDevice.node == Node %}
@@ -35,18 +39,21 @@
 				<h4>Basic Controls:</h4>
 				<div>
 					<p>
-						{% if Vz.status == "running" %}
-							
-						{% else%}
-							
-						{% endif %}
 						<button type="button" class="btn btn-info" style="width: 79px">Migrate</button>
 						<button type="button" class="btn btn-info" style="width: 83px">Console</button>
-						<button type="button" class="btn btn-success" style="width: 62px">Start</button>
-					</p>
-					<p>
-						<button type="button" class="btn btn-warning">Shutdown</button>
-						<button type="button" class="btn btn-warning">Stop</button>
+						{% if Vz.status == "running" %}
+								<button onclick="startClicked" id="startButton" type="button" type="button" class="btn btn-success" style="width: 62px" disabled>Start</button>
+							</p>
+							<p>
+								<button onclick="shutdownClicked()" id="shutdownButton" type="button" class="btn btn-warning">Shutdown</button>
+								<button onclick="stopClicked()" id="stopButton" type="button" class="btn btn-warning">Stop</button>
+						{% else %}
+								<button onclick="startClicked()" id="startButton" type="button" class="btn btn-success" style="width: 62px">Start</button>
+							</p>
+							<p>
+								<button onclick="shutdownClicked()" id="shutdownButton" type="button" class="btn btn-warning" disabled>Shutdown</button>
+								<button onclick="stopClicked()" id="stopButton" type="button" class="btn btn-warning" disabled>Stop</button>
+						{% endif %}
 						<button type="button" class="btn btn-danger">Remove</button>
 					</p>
 				</div>
@@ -75,4 +82,46 @@
 			
 		</div>
 	</div>
+{% endblock %}
+
+{% block ExtraJavaScript %}
+	<script>
+		function startClicked(){
+			httpGet('{% url 'Proxmox' %}?command=startCT&node={{node}}&ct={{Vz.vmid}}')
+			
+			document.getElementById("startButton").disabled = true;
+			document.getElementById("shutdownButton").disabled = false;
+			document.getElementById("stopButton").disabled = false;
+			document.getElementById("state").innerHTML = "Running";
+			document.getElementById("state").className = "text-success";
+		}
+		
+		function shutdownClicked(){
+			httpGet('{% url 'Proxmox' %}?command=startCT&node={{node}}&ct={{Vz.vmid}}')
+			
+			document.getElementById("startButton").disabled = false;
+			document.getElementById("shutdownButton").disabled = true;
+			document.getElementById("stopButton").disabled = true;
+			document.getElementById("state").innerHTML = "Stopped";
+			document.getElementById("state").className = "text-danger";
+		}
+		
+		function stopClicked(){
+			httpGet('{% url 'Proxmox' %}?command=stopCT&node={{node}}&ct={{Vz.vmid}}')
+			
+			document.getElementById("startButton").disabled = false;
+			document.getElementById("shutdownButton").disabled = true;
+			document.getElementById("stopButton").disabled = true;
+			document.getElementById("state").innerHTML = "Stopped";
+			document.getElementById("state").className = "text-danger";
+		}
+		
+		function httpGet(theUrl) {
+		    var xmlHttp = null;
+		    xmlHttp = new XMLHttpRequest();
+		    xmlHttp.open( "GET", theUrl, false );
+		    xmlHttp.send( null );
+		    return xmlHttp.responseText;
+	    }
+	</script>
 {% endblock %}

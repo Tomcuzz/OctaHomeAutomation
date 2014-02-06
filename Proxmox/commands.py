@@ -3,13 +3,13 @@ from django.http import HttpResponse
 def runcommand(request, proxmox):
 	command = request.GET.get('command', 'none')
 	if command == 'startCT':
-		node = str(equest.POST.get('node', ''))
-		ct = str(request.POST.get('ct', ''))
+		node = str(request.GET.get('node', ''))
+		ct = str(request.GET.get('ct', ''))
 		proxmox.nodes(node).openvz(ct).status.start.post()
 		return HttpResponse("Ok")
 	elif command == 'stopCT':
-		node = str(equest.POST.get('node', ''))
-		ct = str(request.POST.get('ct', ''))
+		node = str(request.GET.get('node', ''))
+		ct = str(request.GET.get('ct', ''))
 		proxmox.nodes(node).openvz(ct).status.stop.post()
 		return HttpResponse("Ok")
 	elif command == 'shutdownCT':
