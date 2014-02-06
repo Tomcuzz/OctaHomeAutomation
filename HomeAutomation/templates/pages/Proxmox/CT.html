@@ -97,7 +97,7 @@
 		}
 		
 		function shutdownClicked(){
-			httpGet('{% url 'Proxmox' %}?command=startCT&node={{node}}&ct={{Vz.vmid}}')
+			httpGet('{% url 'Proxmox' %}?command=shutdownCT&node={{node}}&ct={{Vz.vmid}}')
 			
 			document.getElementById("startButton").disabled = false;
 			document.getElementById("shutdownButton").disabled = true;
