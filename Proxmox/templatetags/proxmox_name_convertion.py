@@ -31,3 +31,7 @@ def formatTaskType(value):
 	elif value == "startall":
 		return "Start All VM's/Containers"
 	return value
+
+@register.filter
+def spaceToGB(value):
+	return float(float(value) / float(1073741824))

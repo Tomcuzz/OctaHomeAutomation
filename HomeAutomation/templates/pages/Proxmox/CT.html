@@ -25,9 +25,9 @@
 				<h4>Total Storage:</h4>
 				{% for storageDevice in StorageDevices.nodes %}
 					{% if storageDevice.node == Node %}
-						<p>{{storageDevice.usedGb|floatformat:2}} GB Used / {{storageDevice.totalGb|floatformat:2}} GB Avalable</p>
+						<p>{{Vz.disk|spaceToGB|floatformat:2}} GB Used / {{Vz.maxdisk|spaceToGB|floatformat:2}} GB Avalable</p>
 						<div class="progress">
-							<div class="progress-bar progress-bar-danger" style="width: {% widthratio storageDevice.usedGb storageDevice.totalGb 100 %}%"></div>
+							<div class="progress-bar progress-bar-danger" style="width: {% widthratio Vz.disk|spaceToGB Vz.maxdisk|spaceToGB 100 %}%"></div>
 						</div>
 					{% endif %}
 				{% endfor %}
