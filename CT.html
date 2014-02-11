@@ -81,10 +81,9 @@
 			
 		</div>
 		<div class="tab-pane" id="console">
-		<div id="ConsloleLoadAlert" class="alert alert-warning" style="margin-top:10px;">
+		<div class="alert alert-warning" style="margin-top:10px;">
 		Loading of server console may take a moment, press enter when screen appears.
 		</div>
-		<br>
 		 <div id="pveKVMConsole-1018-body" style="height: 500px; left: 0px; top: 0px; ">
 		 	<div id="vncviewer-applet" role="presentation" style="margin: 0px;height: 500px;">
 		 	</div>
@@ -184,8 +183,6 @@
 			    var $response = $(data);
 			    var vncviewerapplet=document.getElementById("vncviewer-applet");
 			    vncviewerapplet.innerHTML=data;
-			    
-				(elem=document.getElementById("ConsloleLoadAlert")).parentNode.removeChild(elem);
 			});
 	    }
 	</script>

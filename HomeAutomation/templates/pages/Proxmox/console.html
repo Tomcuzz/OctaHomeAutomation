@@ -1,0 +1,31 @@
+<HTML class="x-border-box x-quirks x-viewport">
+	<HEAD>
+		<TITLE>Client Console: <%= @vm.comment %></TITLE>
+		<script type="text/javascript" src="{{STATIC_URL}}js/ext-all-debug.js"></script>
+		<script type="text/javascript">function gettext(buf) { return buf; }</script>
+		<script type="text/javascript" src="{{STATIC_URL}}js/pvemanagerlib.js"></script>
+	</HEAD> 
+	<body class="x-body x-webkit x-safari x-mac x-reset x-container x-container-default x-layout-fit" id="ext-gen1009" role="application">  
+		<div id="pveKVMConsole-1018-body" class="x-panel-body x-panel-body-default x-panel-body-default x-layout-fit x-docked-noborder-right x-docked-noborder-bottom x-docked-noborder-left" style="width: 1024px; height: 768px; left: 0px; top: 0px; ">
+			<div id="component-1019" class="x-component x-fit-item x-component-default" role="presentation" style="margin: 0px; width: 1024px; height: 767px; ">
+				<applet width="100%" height="100%" border="false" archive="{{STATIC_URL}}jar/VncViewer.jar" code="com.tigervnc.vncviewer.VncViewer" style="width: 1024px; height: 768px;">
+					<param name="PVECert" value="{{vnc.cert}}">
+					<param name="HOST" value="10.101.1.200">
+					<param name="PORT" value="{{vnc.port}}">  
+					<param name="Show Controls" value="No">
+					<param name="Offer Relogin" value="No">  
+					<param name="USERNAME" value="{{vnc.user}}">
+					<param name="PASSWORD" value="{{vnc.ticket}}">
+				</APPLET>
+			</div>
+		</div>
+		<!-- Fields required for history management -->
+		<form id="history-form" class="x-hidden">
+			<input type="hidden" id="x-history-field">
+		</form>
+		<iframe frameborder="0" class="x-shim" src="about:blank" id="ext-gen1014" style="display: none; "></iframe>
+		<div id="ext-comp-1015" class="x-tip x-tip-default x-layer" style="position: absolute; display: none; left: 373px; top: 214px; " role="tooltip" aria-labelledby="component-1017">
+		<div id="ext-comp-1015-body" class="x-tip-body  x-tip-body-default x-tip-body-default"></div>
+		<div class="x-tip-anchor x-tip-anchor-top" id="ext-gen1011" style="z-index: 1; "></div></div><div tabindex="-1" class="x-focus-element" id="ext-gen1035"></div>
+	</body>  
+</HTML>
