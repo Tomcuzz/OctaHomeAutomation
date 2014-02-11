@@ -58,23 +58,48 @@
 				</div>
 			</div>
 			<div class="col-md-4">
-				<h4>Storage Devices:</h4>
-				 <div class="list-group" style="height: 300px !important; overflow: scroll;">
-					{% for storageDevice in StorageDevices.devices %}
-						<a class="list-group-item">
-							<h4 class="list-group-item-heading">Node: {{storageDevice.node}}</h4>
-							<h4 class="list-group-item-heading">Devce: {{storageDevice.name}}</h4>
-							<p class="list-group-item-text">{{storageDevice.usedGb|floatformat:2}} GB Used / {{storageDevice.totalGb|floatformat:2}} GB Avalable</p>
-							<div class="progress">
-								<div class="progress-bar progress-bar-danger" style="width: {% widthratio storageDevice.usedGb storageDevice.totalGb 100 %}%"></div>
-							</div>
-						</a>
-					{% endfor %}
-				</div>
+				<h4>Domain Name:</h4>
+				<h4 id="state" class="text-success">{{Vz.name}}</h4>
+				<h4>IP Address:</h4>
+				<h4 id="state" class="text-success">{{Vz.ip}}</h4>
 			</div>
 			<div class="col-md-4">
 				<h4>Past Tasks:</h4>
-				
+				<ul class="list-group" style="height: 300px !important; overflow: scroll;">
+				{% for task in tasks %}
+					{% if task.id == Vz.vmid %}
+						<li class="list-group-item">
+							{% if task.type == "vzcreate" %}
+								<h4 class="list-group-item-heading text-info">
+							{% elif task.type == "vzstart" %}
+								<h4 class="list-group-item-heading text-success">
+							{% elif task.type == "vzshutdown" %}
+								<h4 class="list-group-item-heading text-warning">
+							{% elif task.type == "vzstop" %}
+								<h4 class="list-group-item-heading text-warning">
+							{% elif task.type == "vncproxy" %}
+								<h4 class="list-group-item-heading text-info">
+							{% elif task.type == "vzdestroy" %}
+								<h4 class="list-group-item-heading text-danger">
+							{% elif task.type == "startall" %}
+								<h4 class="list-group-item-heading text-success">
+							{% elif task.type == "vzclone" %}
+								<h4 class="list-group-item-heading text-primary">
+							{% elif task.type == "vzmigrate" %}
+								<h4 class="list-group-item-heading text-primary">
+							{% else %}
+								<h4 class="list-group-item-heading">
+							{% endif %}
+							{% if task.id %}{{task.id}}{% else %}System{% endif %}: {{task.type|formatTaskType}}</h4>
+							{% if task.status == "OK" %}
+								<p class="list-group-item-text text-success">{{task.status}}</p>
+							{% else %}
+								<p class="list-group-item-text text-danger">{{task.status}}</p>
+							{% endif %}
+						</li>
+					{% endif %}
+				{% endfor %}
+				</ul>
 			</div>
 		</div>
 		<div class="tab-pane" id="settings">

@@ -14,8 +14,12 @@ def formatTaskType(value):
 		return "Stopped Container"
 	elif value == "vncproxy":
 		return "Started Console"
+	elif value == "vzclone":
+		return "Clone Container"
 	elif value == "vzdestroy":
 		return "Deleted Container"
+	elif value == "vzmigrate":
+		return "Migrate Container"
 	
 	elif value == "qmcreate":
 		return "Create VM"
@@ -25,6 +29,12 @@ def formatTaskType(value):
 		return "Shutdown VM"
 	elif value == "qmstop":
 		return "Stopped VM"
+	elif value == "qmclone":
+		return "Clone VM"
+	elif value == "qmreset":
+		return "Reset VM"
+	elif value == "qmigrate":
+		return "Migrate VM"
 	elif value == "qmdestroy":
 		return "Deleted VM"
 	
