@@ -9,6 +9,9 @@ class DeviceControl():
 		if deviceType == "Arduino":
 			message = "r=" + str(r) + ",g=" + str(g) + ",b=" + str(b) + ","
 			CommunicationControl().sendUDPMessage(ipAddress, 100, message)
+		elif deviceType == "ArduinoV2":
+			message = "r=" + str(r) + ",g=" + str(g) + ",b=" + str(b) + ","
+			CommunicationControl().sendUDPMessage(ipAddress, 100, message)
 		elif deviceType == "MaxPi":
 			urlLocation = "/colour?r=" + str(r) + "&g=" + str(g) + "&b=" + str(b)
 			port = 8080
@@ -41,9 +44,12 @@ class DeviceControl():
 @task()
 def scrollDeviceRGBStateTaskWithTime(ipAddress, deviceType, oldR, oldG, oldB, newR, newG, newB, scrollTime):
 	if deviceType == "MaxPi":
-		urlLocation = "/colour?r=" + str(r) + "&g=" + str(g) + "&b=" + str(b) + "&delay=" + str(int(float(scrollTime) * 100))
+		urlLocation = "/colour?r=" + str(newR) + "&g=" + str(newG) + "&b=" + str(newB) + "&delay=" + str(int(float(scrollTime) * 100))
 		port = 8080
 		CommunicationControl().sendHTTPGetRequest(ipAddress, port, urlLocation)
+	elif deviceType == "ArduinoV2":
+		message = "r=" + str(newR) + ",g=" + str(newG) + ",b=" + str(newB) + ",t=" + str(scrollTime) + ","
+		CommunicationControl().sendUDPMessage(ipAddress, 100, message)
 	else:
 		step = 255
 		while (float(scrollTime)/step) < 0.05:

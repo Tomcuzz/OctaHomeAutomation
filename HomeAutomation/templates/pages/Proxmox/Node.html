@@ -51,14 +51,57 @@
 		</div>
 		<div class="col-md-4">
 			<h4>Past Tasks:</h4>
-			<div class="list-group" style="height: 300px !important; overflow: scroll;">
+			<ul class="list-group" style="height: 300px !important; overflow: scroll;">
 				{% for task in tasks %}
-					<a class="list-group-item">
-						<h4 class="list-group-item-heading">{% if task.id %}{{task.id}}{% else %}System{% endif %}: {{task.type|formatTaskType}}</h4>
-						<p class="list-group-item-text">{{task.status}}</p>
-					</a>
+					{% if task.node == Node %}
+						<li class="list-group-item">
+						{% if task.type == "vzcreate" %}
+							<h4 class="list-group-item-heading text-info">
+						{% elif task.type == "vzstart" %}
+							<h4 class="list-group-item-heading text-success">
+						{% elif task.type == "vzshutdown" %}
+							<h4 class="list-group-item-heading text-warning">
+						{% elif task.type == "vzstop" %}
+							<h4 class="list-group-item-heading text-warning">
+						{% elif task.type == "vncproxy" %}
+							<h4 class="list-group-item-heading text-info">
+						{% elif task.type == "vzdestroy" %}
+							<h4 class="list-group-item-heading text-danger">
+						{% elif task.type == "startall" %}
+							<h4 class="list-group-item-heading text-success">
+						{% elif task.type == "vzclone" %}
+							<h4 class="list-group-item-heading text-primary">
+						{% elif task.type == "vzmigrate" %}
+							<h4 class="list-group-item-heading text-primary">
+						{% elif task.type == "qmcreate" %}
+							<h4 class="list-group-item-heading text-info">
+						{% elif task.type == "qmstart" %}
+							<h4 class="list-group-item-heading text-success">
+						{% elif task.type == "qmshutdown" %}
+							<h4 class="list-group-item-heading text-warning">
+						{% elif task.type == "qmstop" %}
+							<h4 class="list-group-item-heading text-warning">
+						{% elif task.type == "qmreset" %}
+							<h4 class="list-group-item-heading text-warning">
+						{% elif task.type == "qmclone" %}
+							<h4 class="list-group-item-heading text-info">
+						{% elif task.type == "qmdestroy" %}
+							<h4 class="list-group-item-heading text-danger">
+						{% elif task.type == "qmigrate" %}
+							<h4 class="list-group-item-heading text-primary">
+						{% else %}
+							<h4 class="list-group-item-heading">
+						{% endif %}
+						{% if task.id %}{{task.id}}{% else %}System{% endif %}: {{task.type|formatTaskType}}</h4>
+						{% if task.status == "OK" %}
+							<p class="list-group-item-text text-success">{{task.status}}</p>
+						{% else %}
+							<p class="list-group-item-text text-danger">{{task.status}}</p>
+						{% endif %}
+						</li>
+					{% endif %}
 				{% endfor %}
-			</div>
+			</ul>
 		</div>
 	</div>
 {% endblock %}
