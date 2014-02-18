@@ -42,7 +42,7 @@ def AlarmMain(request):
 			UsersAlarms = Alarms.objects.filter(user=request.user.username)
 			return render(request, 'pages/Alarm/Alarms.html', {'links': getSideBar(request), 'alarms':UsersAlarms})
 		elif request.GET.get('currentPage', 'User') == "AllUser":
-			UsersAlarms = Alarms.objects.filter(~Q(user="System"))
+			UsersAlarms = Alarms.objects.filter(user="System")
 			return render(request, 'pages/Alarm/Alarms.html', {'links': getSideBar(request), 'alarms':UsersAlarms})
 		else:
 			return render(request, 'pages/Alarm/Alarms.html', {'links': getSideBar(request), 'alarms':Alarms.objects.all()})

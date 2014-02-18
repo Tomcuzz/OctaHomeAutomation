@@ -14,7 +14,7 @@ class alarm():
 		amPm = request.POST.get('timeampm', '')
 		date = request.POST.get('date', '')
 		recurrence = request.POST.get('recurrence', '')
-		task = request.POST.get('task', '')
+		task = request.POST.get('task', '').replace(' ', '_')
 		state = request.POST.get('state', '')
 		tasksUser = request.POST.get('tasksuser', '')
 		
@@ -29,7 +29,9 @@ class alarm():
 		
 		celeryTaskId = "TaskNotStarted"
 		
-		newAlarm = Alarms(time=timeString, date=date, user=user, task=task, celeryTaskId=celeryTaskId, state=state, recurrence=recurrence)	
+		taskObject = AlarmTasks.objects.get(name=task)
+		
+		newAlarm = Alarms(time=timeString, date=date, user=user, task=taskObject, celeryTaskId=celeryTaskId, state=state, recurrence=recurrence)	
 		newAlarm.save()
 		
 		dateArray = date.split("/")

@@ -21,11 +21,8 @@ def triggerAlarm(alarmId):
 		if newAlarm.state == "Enabled":
 			name = str(newAlarm.task)
 			name = name.replace(" ", "_")
-			try:
-				actionTask = AlarmTasks.objects.get(name=name)
-				taskNames = json.loads(actionTask.actions)
-			except actionTask.DoesNotExist:
-				taskNames = []
+			
+			taskNames = json.loads(newAlarm.task.actions)
 			for aTaskName in taskNames:
 				try:
 					aTask = AlarmTaskAction.objects.get(name=aTaskName)

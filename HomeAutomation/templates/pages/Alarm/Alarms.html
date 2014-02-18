@@ -1,4 +1,5 @@
 {% extends 'baseWithNavBar.html' %}
+{% load my_filters %}
 
 {% block AlarmNavBarActive %} active {% endblock %}
 
@@ -27,7 +28,7 @@
 			<td>{{ aAlarm.time }}</td>
 			<td>{{ aAlarm.date }}</td>
 			<td>{{ aAlarm.user }}</td>
-			<td>{{ aAlarm.task }}</td>
+			<td>{{ aAlarm.task.name | replaceUnderscores }}</td>
 			{% if aAlarm.state == "Enabled" %}
 				<td name="alarm{{ aAlarm.id }}State" class="text-success">{{ aAlarm.state }}</td>
 				<td><button name="alarm{{ aAlarm.id }}EnableDisableButton" class="btn btn-warning" onClick="toggleEnabledAlarm('{{ aAlarm.id }}')" style="width: 73px;">Disable</button>
