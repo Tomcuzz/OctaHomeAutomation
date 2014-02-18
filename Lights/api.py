@@ -13,7 +13,7 @@ class LightApi():
 				pageContent += "\"Light\":"
 				pageContent += "\"" + alight.LightName.replace("_", " ") + "\", "
 				pageContent += "\"Room\":"
-				pageContent += "\"" + alight.RoomName.replace("_", " ") + "\", "
+				pageContent += "\"" + alight.Room.Name.replace("_", " ") + "\", "
 				pageContent += "\"Type\":"
 				pageContent += "\"" + alight.LightType + "\", "
 				pageContent += "\"State\":"
@@ -33,6 +33,7 @@ class LightApi():
 			ipAddress = request.POST.get('ipaddress', '')
 			deviceType = request.POST.get('devicetype', '')
 			lightType = request.POST.get('lightype', '')
-			newLight = Lights(LightName=lightName, RoomName=roomName, IpAddress=ipAddress, DeviceType=deviceType, LightType=lightType, LightState="Off", R=0, G=0, B=0, Scroll="Off", BeingSetId="0")
+			dbRooms = Rooms.objects.get(Name=room)
+			newLight = Lights(LightName=lightName, Room=dbRooms, IpAddress=ipAddress, DeviceType=deviceType, LightType=lightType, LightState="Off", R=0, G=0, B=0, Scroll="Off", BeingSetId="0")
 			newLight.save()
 			return redirect('/Lights') 

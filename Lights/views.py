@@ -5,6 +5,7 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from Lights.tasks import *
 from SharedFunctions.deviceControl import *
+from SharedFunctions.models import *
 from Lights.commands import *
 from models import *
 from Lights.api import *
@@ -33,9 +34,9 @@ def getSideBar(currentPage, lights):
 	links = [{'title': 'All Rooms', 'address': '/Lights', 'active': getSideBarActiveState('all', currentPage)}]
 	rooms = []
 	
-	for alight in lights:
-		if not alight.RoomName in rooms:
-			rooms.append(alight.RoomName)
+	dbRooms = Rooms.objects.all()
+	for aRoom in dbRooms:
+		rooms.append(aRoom.Name)
 	
 	for room in rooms:
 		address = '/Lights?room=' + room
@@ -54,4 +55,5 @@ def getLightsForRoom(room):
 	if room == 'all':
 		return Lights.objects.all()
 	else:
-		return Lights.objects.filter(RoomName=room)
+		dbRooms = Rooms.objects.get(Name=room)
+		return Lights.objects.filter(Room=dbRooms)
