@@ -11,7 +11,7 @@ def DeviceInputMain(request):
 	
 	if request.GET.get('command', 'None') == 'toggleLightState':
 		return command(request)
-	elif request.GET.get('DeviceType','Button') == '':
+	elif request.GET.get('DeviceType','None') == 'buttonInput':
 		return HttpResponse("Ok")
 	elif not request.user.is_authenticated():
 		return redirect('/Login?next=%s' % request.path)

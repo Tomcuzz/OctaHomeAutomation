@@ -2,6 +2,7 @@ from django.db import models
 
 class Lights(models.Model):
 	LightName = models.TextField()
+	Room = models.ForeignKey('SharedFunctions.Rooms', blank=True, null=True, on_delete=models.SET_NULL)
 	RoomName = models.TextField()
 	IpAddress = models.TextField()
 	DeviceType = models.TextField()

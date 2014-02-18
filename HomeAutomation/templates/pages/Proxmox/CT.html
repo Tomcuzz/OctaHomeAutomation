@@ -10,6 +10,7 @@
 {% block ProxmoxPageArea %}
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="#summary" data-toggle="tab">Summary</a></li>
+		<li><a href="#stats" data-toggle="tab">Statistics</a></li>
 		<li><a href="#settings" data-toggle="tab">Settings</a></li>
 		<li><a href="#console" data-toggle="tab" onclick="consoleClicked()">Console</a></li>
 	</ul>
@@ -105,26 +106,19 @@
 				{% endfor %}
 				</ul>
 			</div>
+		</div>
+		<div class="tab-pane" id="stats">
+			<br>
 			<h4>CPU Usage:</h4>
 			<canvas id="cpuChart" width="1000" height="200"></canvas>
 			<br>
 			<br>
-			<div class="btn-group" data-toggle="buttons">
-				<label class="btn btn-primary active" data-loading-text="Loading..." type="button">
-					<input type="radio" name="options" id="hourCpuLabel">Hour
-				</label>
-				<label class="btn btn-primary" data-loading-text="Loading..." type="button">
-					<input type="radio" name="options" id="dayCpuLabel">Day
-				</label>
-				<label class="btn btn-primary" data-loading-text="Loading..." type="button">
-					<input type="radio" name="options" id="weekCpuLabel">Week
-				</label>
-				<label class="btn btn-primary" data-loading-text="Loading..." type="button">
-					<input type="radio" name="options" id="monthCpuLabel">Month
-				</label>
-				<label class="btn btn-primary" data-loading-text="Loading..." type="button">
-					<input type="radio" name="options" id="yearCpuLabel">Year
-				</label>
+			<div class="btn-group">
+				<button class="btn btn-primary active" data-loading-text="Loading..." type="button" id="hourCpu">Hour</button>
+				<button class="btn btn-primary" data-loading-text="Loading..." type="button" id="dayCpu">Day</button>
+				<button class="btn btn-primary" data-loading-text="Loading..." type="button" id="weekCpu">Week</button>
+				<button class="btn btn-primary" data-loading-text="Loading..." type="button" id="monthCpu">Month</button>
+				<button class="btn btn-primary" data-loading-text="Loading..." type="button" id="yearCpu">Year</button>
 			</div>
 			<br>
 			<br>
@@ -132,22 +126,12 @@
 			<canvas id="ramChart" width="1000" height="200"></canvas>
 			<br>
 			<br>
-			<div class="btn-group" id="hourRam" data-toggle="buttons">
-				<label class="btn btn-primary active" data-loading-text="Loading..." type="button">
-					<input type="radio" name="options" id="hourRamLabel">Hour
-				</label>
-				<label class="btn btn-primary" id="dayRam" data-loading-text="Loading..." type="button">
-					<input type="radio" name="options" id="dayRamLabel">Day
-				</label>
-				<label class="btn btn-primary" id="weekRam" data-loading-text="Loading..." type="button">
-					<input type="radio" name="options" id="weekRamLabel">Week
-				</label>
-				<label class="btn btn-primary" id="monthRam" data-loading-text="Loading..." type="button">
-					<input type="radio" name="options" id="monthRamLabel">Month
-				</label>
-				<label class="btn btn-primary" id="yearRam" data-loading-text="Loading..." type="button">
-					<input type="radio" name="options" id="yearRamLabel">Year
-				</label>
+			<div class="btn-group">
+				<button class="btn btn-primary active" data-loading-text="Loading..." type="button" id="hourRam">Hour</button>
+				<button class="btn btn-primary" data-loading-text="Loading..." type="button" id="dayRam">Day</button>
+				<button class="btn btn-primary" data-loading-text="Loading..." type="button" id="weekRam">Week</button>
+				<button class="btn btn-primary" data-loading-text="Loading..." type="button" id="monthRam">Month</button>
+				<button class="btn btn-primary" data-loading-text="Loading..." type="button" id="yearRam">Year</button>
 			</div>
 			<br>
 			<br>
@@ -273,50 +257,127 @@
 	    });
 	    
 	    $('#hourCpu').click(function () {
+			deselectAllCpuChartButtons();
 			var btn = $(this)
 			btn.button('loading')
 			$.get('{% url 'Proxmox' %}?command=ctStats&node={{node}}&ct={{Vz.vmid}}&time=hour', function(data){
 	    		drawCPUTable(data);
-	    		drawRAMTable(data);
 				btn.button('reset');
+				selectButton("hourCpu");
 	    	});
 		});
 	    $('#dayCpu').click(function () {
+	    	deselectAllCpuChartButtons();
 	    	var btn = $(this)
 			btn.button('loading')
 			$.get('{% url 'Proxmox' %}?command=ctStats&node={{node}}&ct={{Vz.vmid}}&time=day', function(data){
 	    		drawCPUTable(data);
-	    		drawRAMTable(data);
 				btn.button('reset');
+				selectButton("dayCpu");
 	    	});
 		});
 		$('#weekCpu').click(function () {
+			deselectAllCpuChartButtons();
 	    	var btn = $(this)
 			btn.button('loading')
 			$.get('{% url 'Proxmox' %}?command=ctStats&node={{node}}&ct={{Vz.vmid}}&time=week', function(data){
 	    		drawCPUTable(data);
-	    		drawRAMTable(data);
 				btn.button('reset');
+				selectButton("weekCpu");
 	    	});
 		});
 		$('#monthCpu').click(function () {
+			deselectAllCpuChartButtons();
 	    	var btn = $(this)
 			btn.button('loading')
 			$.get('{% url 'Proxmox' %}?command=ctStats&node={{node}}&ct={{Vz.vmid}}&time=month', function(data){
 	    		drawCPUTable(data);
-	    		drawRAMTable(data);
 				btn.button('reset');
+				selectButton("monthCpu");
 	    	});
 		});
 		$('#yearCpu').click(function () {
+			deselectAllCpuChartButtons();
 	    	var btn = $(this)
 			btn.button('loading')
 			$.get('{% url 'Proxmox' %}?command=ctStats&node={{node}}&ct={{Vz.vmid}}&time=year', function(data){
 	    		drawCPUTable(data);
-	    		drawRAMTable(data);
 				btn.button('reset');
+				selectButton("yearCpu");
 	    	});
 		});
+	    
+	    $('#hourRam').click(function () {
+			deselectAllRamChartButtons();
+			var btn = $(this)
+			btn.button('loading')
+			$.get('{% url 'Proxmox' %}?command=ctStats&node={{node}}&ct={{Vz.vmid}}&time=hour', function(data){
+	    		drawRAMTable(data);
+				btn.button('reset');
+				selectButton("hourRam");
+	    	});
+		});
+	    $('#dayRam').click(function () {
+			deselectAllRamChartButtons();
+	    	var btn = $(this)
+			btn.button('loading')
+			$.get('{% url 'Proxmox' %}?command=ctStats&node={{node}}&ct={{Vz.vmid}}&time=day', function(data){
+	    		drawRAMTable(data);
+				btn.button('reset');
+				selectButton("dayRam");
+	    	});
+		});
+		$('#weekRam').click(function () {
+			deselectAllRamChartButtons();
+	    	var btn = $(this)
+			btn.button('loading')
+			$.get('{% url 'Proxmox' %}?command=ctStats&node={{node}}&ct={{Vz.vmid}}&time=week', function(data){
+	    		drawRAMTable(data);
+				btn.button('reset');
+				selectButton("weekRam");
+	    	});
+		});
+		$('#monthRam').click(function () {
+			deselectAllRamChartButtons();
+	    	var btn = $(this)
+			btn.button('loading')
+			$.get('{% url 'Proxmox' %}?command=ctStats&node={{node}}&ct={{Vz.vmid}}&time=month', function(data){
+	    		drawRAMTable(data);
+				btn.button('reset');
+				selectButton("monthRam");
+	    	});
+		});
+		$('#yearRam').click(function () {
+			deselectAllRamChartButtons();
+	    	var btn = $(this)
+			btn.button('loading')
+			$.get('{% url 'Proxmox' %}?command=ctStats&node={{node}}&ct={{Vz.vmid}}&time=year', function(data){
+	    		drawRAMTable(data);
+				btn.button('reset');
+				selectButton("yearRam");
+	    	});
+		});
+	    
+	    function deselectAllCpuChartButtons() {
+		    document.getElementById("hourCpu").className = "btn btn-primary";
+		    document.getElementById("dayCpu").className = "btn btn-primary";
+		    document.getElementById("weekCpu").className = "btn btn-primary";
+		    document.getElementById("monthCpu").className = "btn btn-primary";
+		    document.getElementById("yearCpu").className = "btn btn-primary";
+	    }
+	    
+	    function deselectAllRamChartButtons() {
+		    document.getElementById("hourRam").className = "btn btn-primary";
+		    document.getElementById("dayRam").className = "btn btn-primary";
+		    document.getElementById("weekRam").className = "btn btn-primary";
+		    document.getElementById("monthRam").className = "btn btn-primary";
+		    document.getElementById("yearRam").className = "btn btn-primary";
+	    }
+	    
+	    function selectButton(selectedButton) {
+		    document.getElementById(selectedButton).className = "btn btn-primary active";
+	    }
+	    
 	    
 	    function drawCPUTable(jsonWebData) {
 	    	var webData = JSON.parse(jsonWebData);
