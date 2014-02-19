@@ -19,7 +19,7 @@ class LightApi():
 				pageContent += "\"Light\":"
 				pageContent += "\"" + alight.LightName.replace("_", " ") + "\", "
 				pageContent += "\"Room\":"
-				pageContent += "\"" + alight.RoomName.replace("_", " ") + "\", "
+				pageContent += "\"" + alight.Room.Name.replace("_", " ") + "\", "
 				pageContent += "\"Type\":"
 				pageContent += "\"" + alight.LightType + "\", "
 				pageContent += "\"State\":"
@@ -48,7 +48,7 @@ class LightApi():
 						oldR = theLight.R
 						oldG = theLight.G
 						oldB = theLight.B
-					DeviceControl().scrollDeviceRGBStateProcess(theLight.IpAddress, theLight.DeviceType, oldR, oldG, oldB, newR, newG, newB)
+					DeviceControl().scrollDeviceRGBState(theLight.IpAddress, theLight.DeviceType, theLight.R, theLight.G, theLight.B, newR, theLight.G, theLight.B, setType="tread")
 					if ((int(newR) == 0) and (int(newG) == 0) and (int(newB) == 0)):
 						theLight.LightState = "Off"
 					else:
