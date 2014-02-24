@@ -1,7 +1,86 @@
-{% extends 'base.html' %}
+{% extends 'baseWithNavBar.html' %}
 
 {% block title %} Settings - Device Input {% endblock %}
 
 {% block AccountNavBarActive %} active {% endblock %}
 
+{% block PageArea %}
+	<div class="page-header">
+		<h1>Input Devices</h1>
+	</div>
+	<h2>Button Devices</h2>
+	<table id="buttonTable" class="table table-striped">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Room</th>
+				<th>Device Name</th>
+				<th>Single Press Action</th>
+				<th>Double Press Action</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for ButtonDevice in ButtonDevices %}
+				<tr>
+				<td>{{ButtonDevice.id}}</td>
+				<td>{{ButtonDevice.Name}}</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				</tr>
+			{% endfor %}
+			<tr>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td><a href="/Lights?page=addLightPage&room={{room}}"><button class="btn btn-primary">+</button></a></td>
+			</tr>
+		</tbody>
+	</table>
+	<h2>Motion Devices</h2>
+	<table id="motionTable" class="table table-striped">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Room</th>
+				<th>Device Name</th>
+				<th>Triggered State</th>
+				<th>Trigger Action</th>
+				<th>Time Out Action</th>
+				<th>Time Out Time</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for MotionDevice in MotionDevices %}
+				<tr>
+					<td>{{MotionDevice.id}}</td>
+					<td>{{MotionDevice.Name}}</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+			{% endfor %}
+			<tr>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td><a href="/Lights?page=addLightPage&room={{room}}"><button class="btn btn-primary">+</button></a></td>
+			</tr>
+		</tbody>
+	</table>
+{% endblock %}
 
+{% block ExtraJavaScript %}
+{% endblock %}

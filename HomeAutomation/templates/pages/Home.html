@@ -4,14 +4,13 @@
 
 {% block HomeNavBarActive %} active {% endblock %}
 
+{% block extraCSS %}
+	<link rel="stylesheet" href="{{STATIC_URL}}css/custom-homepage.css">
+	<script src="http://squaresend.com/squaresend.js"></script>
+{% endblock %}
+
 {% block HomeHeadJavaScript %}
-
-    
-    <link rel="stylesheet" href="{{STATIC_URL}}css/custom-homepage.css">
-    <script src="http://squaresend.com/squaresend.js"></script>
-
-    
-    		<style media="screen" type="text/css">
+		<style media="screen" type="text/css">
 			#background { display: none; }
 			body { overflow: hidden; }
 			#canvas { position: absolute; top: 0px; left: 0px; }

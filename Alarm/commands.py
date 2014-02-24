@@ -29,7 +29,7 @@ class alarm():
 		
 		celeryTaskId = "TaskNotStarted"
 		
-		taskObject = AlarmTasks.objects.get(name=task)
+		taskObject = Tasks.objects.get(name=task)
 		
 		newAlarm = Alarms(time=timeString, date=date, user=user, task=taskObject, celeryTaskId=celeryTaskId, state=state, recurrence=recurrence)	
 		newAlarm.save()
@@ -91,7 +91,7 @@ class alarm():
 			theAlarm = Alarms.objects.get(id=alarmId)
 			theAlarm.delete()
 	def addTask(self, request):
-		task = AlarmTasks(name="", actions="")
+		task = Tasks(name="", actions="")
 		task.name = request.POST.get('name', '').replace(" ", "_")
 		inputTaskNumbers = request.POST.get('tasklist', '').split(",")
 		tasksArray = []
@@ -104,7 +104,7 @@ class alarm():
 		if request.POST.get('name', '') == "":
 			return
 		
-		newAlarmTaskAction = AlarmTaskAction(name="", actionType="", actionVeriables="")
+		newAlarmTaskAction = TaskAction(name="", actionType="", actionVeriables="")
 		newAlarmTaskAction.name = request.POST.get('name', '').replace(" ", "_")
 		newAlarmTaskAction.actionType = request.POST.get('actiontasktype', '').replace(" ", "_")
 		newAlarmTaskAction.syncAsyncRunType = request.POST.get('runtype', 'Asynchronous').replace(" ", "_")

@@ -11,8 +11,9 @@
 	width: 100%;
 	height: 100%;
 }
+
 .container {
-    z-index: 10000;
+    /*z-index: 10000;*/
     position: relative;
 }
 
@@ -23,6 +24,7 @@
 .offset {
     padding-top: 10%;   
 }
+
 
 .normal {
     font-family: "proxima-nova",sans-serif;

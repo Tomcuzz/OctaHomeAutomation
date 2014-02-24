@@ -19,7 +19,7 @@ def AccountMain(request):
 		return AccountCommand(request)
 	else:
 		page = request.GET.get('page', 'editPersonalDetails')
-		links = getSideBar(request.GET.get(page), request)
+		links = getSideBar(page, request)
 		
 		if page == "editPersonalDetails":
 			return render(request, 'pages/Account/EditUser.html', {'csrfToken':get_token(request), 'username':AccountModel().getUserName(request), 'firstname':AccountModel().getName(request), 'surname':AccountModel().getSurName(request), 'email':AccountModel().getEmail(request), 'isAdmin':AccountModel().isAdmin(request), 'location':AccountModel().getWeatherLocation(request), 'links': links})

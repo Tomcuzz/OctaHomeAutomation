@@ -47,14 +47,14 @@ def AlarmMain(request):
 		else:
 			return render(request, 'pages/Alarm/Alarms.html', {'links': getSideBar(request), 'alarms':Alarms.objects.all()})
 	elif request.GET.get('page', 'Alarm') == "AddAlarm":
-		return render(request, 'pages/Alarm/AddAlarm.html', {'links': getSideBar(request), 'csrfmiddlewaretoken':get_token(request), 'todayDate':datetime.date.today().strftime("%d-%m-%Y"), 'tasks':AlarmTasks.objects.all()})
+		return render(request, 'pages/Alarm/AddAlarm.html', {'links': getSideBar(request), 'csrfmiddlewaretoken':get_token(request), 'todayDate':datetime.date.today().strftime("%d-%m-%Y"), 'tasks':Tasks.objects.all()})
 	elif request.GET.get('page', 'Alarm') == "AddTaskAction":
 		lights = Lights.objects.all()
 		lightScrolls = ScrollModes.objects.all()
 		lightScenes = LightScenes.objects.all()
 		return render(request, 'pages/Alarm/AddTaskAction.html', {'links': getSideBar(request), 'csrfmiddlewaretoken':get_token(request), 'lights':lights, 'lightScrolls':lightScrolls, 'lightScenes':lightScenes})
 	elif request.GET.get('page', 'Alarm') == "AddTask":
-		return render(request, 'pages/Alarm/AddTask.html', {'links': getSideBar(request), 'csrfmiddlewaretoken':get_token(request), 'tasksAction':AlarmTaskAction.objects.all()})
+		return render(request, 'pages/Alarm/AddTask.html', {'links': getSideBar(request), 'csrfmiddlewaretoken':get_token(request), 'tasksAction':TaskAction.objects.all()})
 	else:
 		raise Http404
 

@@ -25,7 +25,7 @@ def triggerAlarm(alarmId):
 			taskNames = json.loads(newAlarm.task.actions)
 			for aTaskName in taskNames:
 				try:
-					aTask = AlarmTaskAction.objects.get(name=aTaskName)
+					aTask = TaskAction.objects.get(name=aTaskName)
 					taskAction = json.loads(aTask.actionVeriables)
 					if aTask.actionType == "Play_Speach":
 						ipAddress = taskAction['targetIpAddress']

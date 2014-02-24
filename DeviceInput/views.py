@@ -1,6 +1,8 @@
 # Create your views here.
 from django.http import HttpResponse, HttpResponseNotFound
+from models import *
 from Lights.commands import *
+from Account.sideBar import *
 
 import SocketServer
 from wsgiref import handlers
@@ -17,8 +19,11 @@ def DeviceInputMain(request):
 		return redirect('/Login?next=%s' % request.path)
 	else:
 		title = "Under Construction"
-        stuff = "This Page Is Currently Under Construction"
-        return render(request, 'pages/DeviceInput/Settings.html', {'PageAreaTitle':title, 'PageAreaContent': stuff})
+        links = getSideBar("DeviceInput", request)
+        buttonDevices = ButtonInputDevice.objects.all()
+        motionDevices = MotionInputDevice.objects.all()
+        
+        return render(request, 'pages/DeviceInput/Settings.html', {'PageAreaTitle':title, 'ButtonDevices': buttonDevices, 'MotionDevices':motionDevices, 'links': links})
 		
 	test = "Not Implemented"
 	return HttpResponse("Ok")
