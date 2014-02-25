@@ -19,36 +19,7 @@ def triggerAlarm(alarmId):
 		newAlarm = None
 	if newAlarm is not None:
 		if newAlarm.state == "Enabled":
-			name = str(newAlarm.task)
-			name = name.replace(" ", "_")
-			
-			taskNames = json.loads(newAlarm.task.actions)
-			for aTaskName in taskNames:
-				try:
-					aTask = TaskAction.objects.get(name=aTaskName)
-					taskAction = json.loads(aTask.actionVeriables)
-					if aTask.actionType == "Play_Speach":
-						ipAddress = taskAction['targetIpAddress']
-						speach = taskAction['speachScript']
-						location = taskAction['location']
-						alarmActions().makeDevicePlaySpeach(ipAddress=ipAddress, speach=speach, location=location)
-					elif aTask.actionType == "Play_Music":
-						ipAddress = taskAction['targetIpAddress']
-						targetPort = taskAction['targetPort']
-						playlist = taskAction['playListName']
-						alarmActions().makeDevicePlayMusicPlayList(ipAddress, targetPort, playlist)
-					elif aTask.actionType == "Set_Lights":
-						lightId = taskAction['lightId']
-						setType = taskAction['setType']
-						state = taskAction['state']
-						r = taskAction['r']
-						g = taskAction['g']
-						b = taskAction['b']
-						scrollMode = taskAction['scrollMode']
-						scene = taskAction['scene']
-						alarmActions().setLightToState(lightId=lightId, setType=setType, state=state, r=r, g=g, b=b, scrollMode=scrollMode, scene=scene)
-				except AlarmTaskAction.DoesNotExist:
-					aTask = None
+			performActions(newAlarm.task.actions)
 			
 			if newAlarm.recurrence == "Single Occurance":
 				newAlarm.delete()
@@ -89,6 +60,37 @@ def triggerAlarm(alarmId):
 				newAlarm.save()
 			else:
 				newAlarm.delete()
+		
+def performActions(actions, runType="celery"):
+	taskNames = json.loads(actions)
+	for aTaskName in taskNames:
+		try:
+			aTask = TaskAction.objects.get(name=aTaskName)
+			taskAction = json.loads(aTask.actionVeriables)
+			if aTask.actionType == "Play_Speach":
+				ipAddress = taskAction['targetIpAddress']
+				speach = taskAction['speachScript']
+				location = taskAction['location']
+				alarmActions().makeDevicePlaySpeach(ipAddress=ipAddress, speach=speach, location=location)
+			elif aTask.actionType == "Play_Music":
+				ipAddress = taskAction['targetIpAddress']
+				targetPort = taskAction['targetPort']
+				playlist = taskAction['playListName']
+				alarmActions().makeDevicePlayMusicPlayList(ipAddress, targetPort, playlist)
+			elif aTask.actionType == "Set_Lights":
+				lightId = taskAction['lightId']
+				setType = taskAction['setType']
+				state = taskAction['state']
+				r = taskAction['r']
+				g = taskAction['g']
+				b = taskAction['b']
+				scrollMode = taskAction['scrollMode']
+				scene = taskAction['scene']
+				alarmActions().setLightToState(lightId=lightId, setType=setType, state=state, r=r, g=g, b=b, scrollMode=scrollMode, scene=scene, runType=runType)
+		except AlarmTaskAction.DoesNotExist:
+			aTask = None
+	
+	
 	
 
 class alarmActions():
@@ -149,22 +151,22 @@ class alarmActions():
 		message = "command playplaylist " + playlist
 		CommunicationControl().sendTCPMessage(ipAddress, int(targetPort), message)
 	
-	def setLightToState(self, lightId="NS", setType="NS", state="NS", r="NS", g="NS", b="NS", scrollMode="NS", scene="NS"): #NS Stands For Not Set
+	def setLightToState(self, lightId="NS", setType="NS", state="NS", r="NS", g="NS", b="NS", scrollMode="NS", scene="NS", runType="celery"): #NS Stands For Not Set
 		theLight = Lights.objects.get(id=lightId)
 		if setType == "OnOff":
 			if theLight.LightType == "RGBLight":
 				if state == "Toggle":
 					if theLight.LightState == "Off":
-						DeviceControl().scrollDeviceRGBState(theLight.IpAddress, theLight.DeviceType, 0, 0, 0, theLight.R, theLight.G, theLight.B)
+						DeviceControl().scrollDeviceRGBState(theLight.IpAddress, theLight.DeviceType, 0, 0, 0, theLight.R, theLight.G, theLight.B, runType)
 						theLight.LightState = "On"
 					else:
-						DeviceControl().scrollDeviceRGBState(theLight.IpAddress, theLight.DeviceType, theLight.R, theLight.G, theLight.B, 0, 0, 0)
+						DeviceControl().scrollDeviceRGBState(theLight.IpAddress, theLight.DeviceType, theLight.R, theLight.G, theLight.B, 0, 0, 0, runType)
 						theLight.LightState = "Off"
 				elif state == "On":
-					DeviceControl().scrollDeviceRGBState(theLight.IpAddress, theLight.DeviceType, 0, 0, 0, theLight.R, theLight.G, theLight.B)
+					DeviceControl().scrollDeviceRGBState(theLight.IpAddress, theLight.DeviceType, 0, 0, 0, theLight.R, theLight.G, theLight.B, runType)
 					theLight.LightState = "On"
 				else:
-					DeviceControl().scrollDeviceRGBState(theLight.IpAddress, theLight.DeviceType, theLight.R, theLight.G, theLight.B, 0, 0, 0)
+					DeviceControl().scrollDeviceRGBState(theLight.IpAddress, theLight.DeviceType, theLight.R, theLight.G, theLight.B, 0, 0, 0, runType)
 					theLight.LightState = "Off"
 			else:
 				if state == "Toggle":
@@ -182,7 +184,7 @@ class alarmActions():
 					theLight.LightState = "Off"
 		elif setType == "RGB":
 			if theLight.LightType == "RGBLight":
-				DeviceControl().scrollDeviceRGBState(theLight.IpAddress, theLight.DeviceType, theLight.R, theLight.G, theLight.B, r, g, b)
+				DeviceControl().scrollDeviceRGBState(theLight.IpAddress, theLight.DeviceType, theLight.R, theLight.G, theLight.B, r, g, b, runType)
 				theLight.R = str(r)
 				theLight.G = str(g)
 				theLight.B = str(b)
