@@ -82,7 +82,7 @@ Dynamic Veraiable Key:
 				<label>Light Id:</label>
 				<select name="lightid" class="form-control" style="width: 400px;">
 					{% for aLight in lights %}
-						<option value="{{aLight.id}}">{{aLight.id}} - {{aLight.RoomName | replaceUnderscores}} - {{aLight.LightName | replaceUnderscores}}</option>
+						<option value="{{aLight.id}}">{{aLight.id}} - {{aLight.Room.Name | replaceUnderscores}} - {{aLight.LightName | replaceUnderscores}}</option>
 					{% endfor %}
 				</select>
 				<br>
