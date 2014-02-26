@@ -43,18 +43,18 @@ def DeviceInputMain(request):
 
 def singleButtonAction(buttonId):
 	buttonInput = ButtonInputDevice.objects.get(id=int(buttonId))
-	performActions(buttonInput.ButtonOneAction.actions, runType="tread")
+	performActions(buttonInput.ButtonOneAction.actions)
 
 def doubleButtonAction(buttonId):
 	buttonInput = ButtonInputDevice.objects.get(id=int(buttonId))
-	performActions(buttonInput.ButtonTwoAction.actions, runType="tread")
+	performActions(buttonInput.ButtonTwoAction.actions)
 
 def motionActivated(deviceId):
 	motionDevice = MotionInputDevice.objects.get(id=int(deviceId))
 	if not motionDevice.Activated:
 		motionDevice.Activated = True
 		motionDevice.save()
-		performActions(motionDevice.TriggerAction, runType="tread")
+		performActions(motionDevice.TriggerAction)
 		motionTimeOut.apply_async(args=[str(deviceId)], kwargs={}, countdown=motionDevice.WaitTime)
 
 @task

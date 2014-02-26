@@ -5,15 +5,12 @@ from multiprocessing import Pool
 from celery.task import task
 
 class DeviceControl():
-	def setDeviceRGBState(self, ipAddress, deviceType, r, g, b):
+	def setDeviceRGBState(self, ipAddress, deviceType, r, g, b, scrollTime="1"):
 		if deviceType == "Arduino":
-			message = "r=" + str(r) + ",g=" + str(g) + ",b=" + str(b) + ","
-			CommunicationControl().sendUDPMessage(ipAddress, 100, message)
-		elif deviceType == "ArduinoV2":
-			message = "r=" + str(r) + ",g=" + str(g) + ",b=" + str(b) + ","
+			message = "r=" + str(r) + ",g=" + str(g) + ",b=" + str(b) + ",t=" + str(scrollTime) + ","
 			CommunicationControl().sendUDPMessage(ipAddress, 100, message)
 		elif deviceType == "MaxPi":
-			urlLocation = "/colour?r=" + str(r) + "&g=" + str(g) + "&b=" + str(b)
+			urlLocation = "/colour?r=" + str(r) + "&g=" + str(g) + "&b=" + str(b) + "&delay=" + str(int(float(scrollTime) * 100))
 			port = 8080
 			CommunicationControl().sendHTTPGetRequest(ipAddress, port, urlLocation)
 	
@@ -26,52 +23,8 @@ class DeviceControl():
 				boolString = "Off"
 			message = "light=" + boolString
 			CommunicationControl().sendUDPMessage(ipAddress, 100, message)
-	
-	def scrollDeviceRGBState(self, ipAddress, deviceType, oldR, oldG, oldB, newR, newG, newB, setType="celery"):
-		if setType == "celery":
-			scrollDeviceRGBStateTaskWithTime.delay(ipAddress, deviceType, oldR, oldG, oldB, newR, newG, newB, "1")
-		else:
-			pool = Pool(processes=1)
-			result = pool.apply_async(scrollDeviceRGBStateTaskWithTime(ipAddress, deviceType, oldR, oldG, oldB, newR, newG, newB, "1"))
-		
-	def scrollDeviceRGBStateWithTime(self, ipAddress, deviceType, oldR, oldG, oldB, newR, newG, newB, scrollTime, setType="celery"):
-		if setType == "celery":
-			scrollDeviceRGBStateTaskWithTime.delay(ipAddress, deviceType, oldR, oldG, oldB, newR, newG, newB, scrollTime)
-		else:
-			pool = Pool(processes=1)
-			result = pool.apply_async(scrollDeviceRGBStateTaskWithTime(ipAddress, deviceType, oldR, oldG, oldB, newR, newG, newB, scrollTime))
-	
-@task()
-def scrollDeviceRGBStateTaskWithTime(ipAddress, deviceType, oldR, oldG, oldB, newR, newG, newB, scrollTime):
-	if deviceType == "MaxPi":
-		urlLocation = "/colour?r=" + str(newR) + "&g=" + str(newG) + "&b=" + str(newB) + "&delay=" + str(int(float(scrollTime) * 100))
-		port = 8080
-		CommunicationControl().sendHTTPGetRequest(ipAddress, port, urlLocation)
-	elif deviceType == "ArduinoV2":
-		message = "r=" + str(newR) + ",g=" + str(newG) + ",b=" + str(newB) + ",t=" + str(scrollTime) + ","
-		CommunicationControl().sendUDPMessage(ipAddress, 100, message)
-	else:
-		step = 255
-		while (float(scrollTime)/step) < 0.05:
-			step = step / 2
-		
-		rGap = int(oldR) - int(newR)
-		gGap = int(oldG) - int(newG)
-		bGap = int(oldB) - int(newB)
-		
-		delayTime = float(scrollTime)/step
-		
-		for x in range(1,step): 
-			rTemp = oldR - ((float(rGap) / step) * x)
-			gTemp = oldG - ((float(gGap) / step) * x)
-			bTemp = oldB - ((float(bGap) / step) * x)
-			
-			DeviceControl().setDeviceRGBState(ipAddress, deviceType, int(rTemp), int(gTemp), int(bTemp))
-			
-			time.sleep(delayTime)
-		
-		DeviceControl().setDeviceRGBState(ipAddress, deviceType, str(newR), str(newG), str(newB))
-	
+
+
 class CommunicationControl():
 	def sendTCPMessage(self, ipAddress, port, message):
 		BUFFER_SIZE = 1024

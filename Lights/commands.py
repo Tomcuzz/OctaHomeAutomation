@@ -14,34 +14,38 @@ def command(request):
 		theLight = Lights.objects.get(id=lightId)
 		if theLight.LightState == "Off":
 			if theLight.LightType == "RGBLight":
-				DeviceControl().scrollDeviceRGBState(theLight.IpAddress, theLight.DeviceType, 0, 0, 0, theLight.R, theLight.G, theLight.B, setType="tread")
+				DeviceControl().setDeviceRGBState(theLight.IpAddress, theLight.DeviceType, theLight.R, theLight.G, theLight.B)
 			else:
 				DeviceControl().setOnOffDeviceState(theLight.IpAddress, theLight.DeviceType, True)
 			theLight.LightState = "On"
+			theLight.Scroll = "Off"
 		else:
 			if theLight.LightType == "RGBLight":
-				DeviceControl().scrollDeviceRGBState(theLight.IpAddress, theLight.DeviceType, theLight.R, theLight.G, theLight.B, 0, 0, 0, setType="tread")
+				DeviceControl().setDeviceRGBState(theLight.IpAddress, theLight.DeviceType, 0, 0, 0)
 			else:
 				DeviceControl().setOnOffDeviceState(theLight.IpAddress, theLight.DeviceType, False)
 			theLight.LightState = "Off"
+			theLight.Scroll = "Off"
 		theLight.save()
 		return HttpResponse("Ok")
 	elif request.GET.get('command', 'None') == 'turnOn':
 		theLight = Lights.objects.get(id=lightId)
 		if theLight.LightType == "RGBLight":
-			DeviceControl().scrollDeviceRGBState(theLight.IpAddress, theLight.DeviceType, 0, 0, 0, theLight.R, theLight.G, theLight.B, setType="tread")
+			DeviceControl().setDeviceRGBState(theLight.IpAddress, theLight.DeviceType, theLight.R, theLight.G, theLight.B)
 		else:
 			DeviceControl().setOnOffDeviceState(theLight.IpAddress, theLight.DeviceType, True)
 		theLight.LightState = "On"
+		theLight.Scroll = "Off"
 		theLight.save()
 		return HttpResponse("Ok")
 	elif request.GET.get('command', 'None') == 'turnOff':
 		theLight = Lights.objects.get(id=lightId)
 		if theLight.LightType == "RGBLight":
-			DeviceControl().scrollDeviceRGBState(theLight.IpAddress, theLight.DeviceType, theLight.R, theLight.G, theLight.B, 0, 0, 0, setType="tread")
+			DeviceControl().setDeviceRGBState(theLight.IpAddress, theLight.DeviceType, 0, 0, 0)
 		else:
 			DeviceControl().setOnOffDeviceState(theLight.IpAddress, theLight.DeviceType, False)
 		theLight.LightState = "Off"
+		theLight.Scroll = "Off"
 		theLight.save()
 		return HttpResponse("Ok")
 	elif request.GET.get('command', 'None') == 'setColour':
@@ -69,8 +73,9 @@ def command(request):
 		theLight = Lights.objects.get(id=lightId)
 		newR = request.GET.get('value','')
 		if (0 <= int(newR) < 256):
-			DeviceControl().scrollDeviceRGBState(theLight.IpAddress, theLight.DeviceType, theLight.R, theLight.G, theLight.B, newR, theLight.G, theLight.B, setType="tread")
+			DeviceControl().setDeviceRGBState(theLight.IpAddress, theLight.DeviceType, newR, theLight.G, theLight.B)
 			theLight.R = newR
+			theLight.Scroll = "Off"
 			theLight.save()
 			return HttpResponse()
 		else:
@@ -79,8 +84,9 @@ def command(request):
 		theLight = Lights.objects.get(id=lightId)
 		newG = request.GET.get('value','')
 		if (0 <= int(newG) < 256):
-			DeviceControl().scrollDeviceRGBState(theLight.IpAddress, theLight.DeviceType, theLight.R, theLight.G, theLight.B, theLight.R, newG, theLight.B, setType="tread")
+			DeviceControl().setDeviceRGBState(theLight.IpAddress, theLight.DeviceType, theLight.R, newG, theLight.B)
 			theLight.G = newG
+			theLight.Scroll = "Off"
 			theLight.save()
 			return HttpResponse()
 		else:
@@ -89,8 +95,9 @@ def command(request):
 		theLight = Lights.objects.get(id=lightId)
 		newB = request.GET.get('value','')
 		if (0 <= int(newB) < 256):
-			DeviceControl().scrollDeviceRGBState(theLight.IpAddress, theLight.DeviceType, theLight.R, theLight.G, theLight.B, theLight.R, theLight.G, newB, setType="tread")
+			DeviceControl().setDeviceRGBState(theLight.IpAddress, theLight.DeviceType, theLight.R, theLight.G, newB)
 			theLight.B = newB
+			theLight.Scroll = "Off"
 			theLight.save()
 			return HttpResponse()
 		else:
@@ -101,10 +108,11 @@ def command(request):
 		newG = request.GET.get('value','')
 		newB = request.GET.get('value','')
 		if ((0 <= int(newR) < 256) and (0 <= int(newG) < 256) and (0 <= int(newB) < 256)):
-			DeviceControl().scrollDeviceRGBState(theLight.IpAddress, theLight.DeviceType, theLight.R, theLight.G, theLight.B, newR, newG, newB, setType="tread")
+			DeviceControl().setDeviceRGBState(theLight.IpAddress, theLight.DeviceType, newR, newG, newB)
 			theLight.R = newR
 			theLight.G = newG
 			theLight.B = newB
+			theLight.Scroll = "Off"
 			theLight.save()
 			return HttpResponse()
 		else:

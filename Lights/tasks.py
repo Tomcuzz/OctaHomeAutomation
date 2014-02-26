@@ -26,10 +26,14 @@ def runScrollMode(scrollName):
 		gDestination = int(gValues[randomNum])
 		bDestination = int(bValues[randomNum])
 		
+		deviceControlObject = DeviceControl()
+		
 		for theLight in Lights.objects.filter(Scroll=scrollName):
-			scrollDeviceRGBStateTaskWithTime.delay(theLight.IpAddress, theLight.DeviceType, theLight.R, theLight.G, theLight.B, rDestination, gDestination, bDestination, modeItem.Speed)
+			deviceControlObject.setDeviceRGBState(theLight.IpAddress, theLight.DeviceType, rDestination, gDestination, bDestination, modeItem.Speed)
 			theLight.R = rDestination
 			theLight.G = gDestination
 			theLight.B = bDestination
 			theLight.save()
 		time.sleep(modeItem.Speed)
+		if Lights.objects.filter(Scroll=scrollName).count() < 1:
+			break

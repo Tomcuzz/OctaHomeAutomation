@@ -61,7 +61,7 @@ def triggerAlarm(alarmId):
 			else:
 				newAlarm.delete()
 		
-def performActions(actions, runType="celery"):
+def performActions(actions):
 	taskNames = json.loads(actions)
 	for aTaskName in taskNames:
 		try:
@@ -86,7 +86,7 @@ def performActions(actions, runType="celery"):
 				b = taskAction['b']
 				scrollMode = taskAction['scrollMode']
 				scene = taskAction['scene']
-				alarmActions().setLightToState(lightId=lightId, setType=setType, state=state, r=r, g=g, b=b, scrollMode=scrollMode, scene=scene, runType=runType)
+				alarmActions().setLightToState(lightId=lightId, setType=setType, state=state, r=r, g=g, b=b, scrollMode=scrollMode, scene=scene)
 		except AlarmTaskAction.DoesNotExist:
 			aTask = None
 	
@@ -151,43 +151,52 @@ class alarmActions():
 		message = "command playplaylist " + playlist
 		CommunicationControl().sendTCPMessage(ipAddress, int(targetPort), message)
 	
-	def setLightToState(self, lightId="NS", setType="NS", state="NS", r="NS", g="NS", b="NS", scrollMode="NS", scene="NS", runType="celery"): #NS Stands For Not Set
+	def setLightToState(self, lightId="NS", setType="NS", state="NS", r="NS", g="NS", b="NS", scrollMode="NS", scene="NS"): #NS Stands For Not Set
 		theLight = Lights.objects.get(id=lightId)
 		if setType == "OnOff":
 			if theLight.LightType == "RGBLight":
 				if state == "Toggle":
 					if theLight.LightState == "Off":
-						DeviceControl().scrollDeviceRGBState(theLight.IpAddress, theLight.DeviceType, 0, 0, 0, theLight.R, theLight.G, theLight.B, runType)
+						DeviceControl().setDeviceRGBState(theLight.IpAddress, theLight.DeviceType, theLight.R, theLight.G, theLight.B)
 						theLight.LightState = "On"
+						theLight.Scroll = "Off"
 					else:
-						DeviceControl().scrollDeviceRGBState(theLight.IpAddress, theLight.DeviceType, theLight.R, theLight.G, theLight.B, 0, 0, 0, runType)
+						DeviceControl().setDeviceRGBState(theLight.IpAddress, theLight.DeviceType, 0, 0, 0)
 						theLight.LightState = "Off"
+						theLight.Scroll = "Off"
 				elif state == "On":
-					DeviceControl().scrollDeviceRGBState(theLight.IpAddress, theLight.DeviceType, 0, 0, 0, theLight.R, theLight.G, theLight.B, runType)
+					DeviceControl().setDeviceRGBState(theLight.IpAddress, theLight.DeviceType, theLight.R, theLight.G, theLight.B)
 					theLight.LightState = "On"
+					theLight.Scroll = "Off"
 				else:
-					DeviceControl().scrollDeviceRGBState(theLight.IpAddress, theLight.DeviceType, theLight.R, theLight.G, theLight.B, 0, 0, 0, runType)
+					DeviceControl().setDeviceRGBState(theLight.IpAddress, theLight.DeviceType, 0, 0, 0)
 					theLight.LightState = "Off"
+					theLight.Scroll = "Off"
 			else:
 				if state == "Toggle":
 					if theLight.LightState == "Off":
 						DeviceControl().setOnOffDeviceState(theLight.IpAddress, theLight.DeviceType, True)
 						theLight.LightState = "On"
+						theLight.Scroll = "Off"
 					else:
 						DeviceControl().setOnOffDeviceState(theLight.IpAddress, theLight.DeviceType, False)
 						theLight.LightState = "Off"
+						theLight.Scroll = "Off"
 				elif state == "On":
 					DeviceControl().setOnOffDeviceState(theLight.IpAddress, theLight.DeviceType, True)
 					theLight.LightState = "On"
+					theLight.Scroll = "Off"
 				else:
 					DeviceControl().setOnOffDeviceState(theLight.IpAddress, theLight.DeviceType, False)
 					theLight.LightState = "Off"
+					theLight.Scroll = "Off"
 		elif setType == "RGB":
 			if theLight.LightType == "RGBLight":
-				DeviceControl().scrollDeviceRGBState(theLight.IpAddress, theLight.DeviceType, theLight.R, theLight.G, theLight.B, r, g, b, runType)
+				DeviceControl().setDeviceRGBState(theLight.IpAddress, theLight.DeviceType, r, g, b)
 				theLight.R = str(r)
 				theLight.G = str(g)
 				theLight.B = str(b)
+				theLight.Scroll = "Off"
 		elif setType == "Scroll":
 			test = "TO BE IMPLEMENTED"
 		elif setType == "Scene":
