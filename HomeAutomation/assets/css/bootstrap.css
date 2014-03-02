@@ -267,6 +267,7 @@ table {
     background: #fff !important;
   }
   .navbar {
+    z-index:30;
     display: none;
   }
   .table td,

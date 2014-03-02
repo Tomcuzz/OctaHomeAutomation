@@ -1,0 +1,43 @@
+{% extends 'baseWithNavBar.html' %}
+{% load my_filters %}
+
+{% block title %} DNS Admin {% endblock %}
+
+{% block AccountNavBarActive %} active {% endblock %}
+
+{% block PageArea %}
+	<div class="page-header">
+		<h1>DNS Admin</h1>
+	</div>
+	<h2>Areas:</h2>
+	<table id="buttonTable" class="table table-striped">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Record Type</th>
+				<th>Area</th>
+				<th>Zone</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>1</td>
+				<td>A</td>
+				<td>www</td>
+				<td>10.101.10.1</td>
+				<td><button class="btn btn-danger">Delete</button></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td><a href="/DeviceInput/?page=addButtonDevice"><button class="btn btn-primary">+</button></a></td>
+			</tr>
+		</tbody>
+	</table>
+{% endblock %}
+
+{% block ExtraJavaScript %}
+{% endblock %}
