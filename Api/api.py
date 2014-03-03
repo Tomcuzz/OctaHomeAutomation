@@ -24,7 +24,7 @@ class LightApi():
 				pageContent += "\"" + alight.LightType + "\", "
 				pageContent += "\"State\":"
 				pageContent += "\"" + alight.LightState + "\", "
-				pageContent += "\"r\":"
+				pageContent += "\"r\":" 
 				pageContent += "\"" + str(alight.R) + "\", "
 				pageContent += "\"g\":"
 				pageContent += "\"" + str(alight.G) + "\", "
