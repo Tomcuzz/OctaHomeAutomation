@@ -48,15 +48,15 @@ def LoginMain(request):
 		else:
 			return checkLogin(request)
 
-def returnLogin(request):
+def returnLogin(request, sencondAttempt=False):
 	nextPage = request.GET.get('next', 'Home')
-	return render(request, 'pages/Account/Login.html', {'nextPage': nextPage})
+	return render(request, 'pages/Account/Login.html', {'nextPage': nextPage, 'sencondattempt':sencondAttempt})
 	
-def returnAuthyCheckPage(request):
+def returnAuthyCheckPage(request, sencondAttempt=False):
 	nextPage = request.GET.get('next', 'Home')
 	username = request.POST.get('username', 'None')
 	password = request.POST.get('password', 'None')
-	return render(request, 'pages/Account/AuthyLogin.html', {'nextPage': nextPage, 'username':username, 'password':password})
+	return render(request, 'pages/Account/AuthyLogin.html', {'nextPage': nextPage, 'username':username, 'password':password, 'sencondattempt':sencondAttempt})
 
 def checkLogin(request):
 	username = request.POST.get('username', 'None')
@@ -73,19 +73,19 @@ def checkLogin(request):
 						nextPage = request.POST.get('next', 'Home')
 						return redirect(nextPage)
 					else:
-						return returnAuthyCheckPage(request)
+						return returnAuthyCheckPage(request, sencondAttempt=True)
 				else:
 					return returnAuthyCheckPage(request)
 			else:
 				login(request, user)
 				nextPage = request.POST.get('next', 'Home')
-				return redirect(nextPage)
+				return redirect(nextPage, sencondAttempt=True)
 				#print("User is valid, active and authenticated")
 		else:
-			return returnLogin(request)
+			return returnLogin(request, sencondAttempt=True)
 			#print("The password is valid, but the account has been disabled!")
 	else:
-		return returnLogin(request)
+		return returnLogin(request, sencondAttempt=True)
 		# the authentication system was unable to verify the username and password
 		#print("The username and password were incorrect.")
 
