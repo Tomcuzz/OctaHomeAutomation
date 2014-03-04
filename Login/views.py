@@ -25,7 +25,7 @@ def checkLogin(request):
 		# the password verified for the user
 		if user.is_active:
 			login(request, user)
-			nextPage = request.POST.get('next', 'Account')
+			nextPage = request.POST.get('next', 'Home')
 			return redirect(nextPage)
 			#print("User is valid, active and authenticated")
 		else:
