@@ -6,6 +6,9 @@ from django.shortcuts import redirect
 from django.contrib.auth import logout
 from django.contrib.auth.forms import UserCreationForm
 from django.middleware.csrf import get_token
+from django.conf import settings
+
+from authy.api import AuthyApiClient
 
 from models import *
 from Weather.models import *
@@ -47,19 +50,37 @@ def LoginMain(request):
 
 def returnLogin(request):
 	nextPage = request.GET.get('next', 'Home')
-	return render(request, 'pages/Login.html', {'nextPage': nextPage})
+	return render(request, 'pages/Account/Login.html', {'nextPage': nextPage})
+	
+def returnAuthyCheckPage(request):
+	nextPage = request.GET.get('next', 'Home')
+	username = request.POST.get('username', 'None')
+	password = request.POST.get('password', 'None')
+	return render(request, 'pages/Account/AuthyLogin.html', {'nextPage': nextPage, 'username':username, 'password':password})
 
 def checkLogin(request):
 	username = request.POST.get('username', 'None')
 	password = request.POST.get('password', 'None')
+	authyToken = request.POST.get('authytoken', '')
 	user = authenticate(username=username, password=password)
 	if user is not None:
 		# the password verified for the user
 		if user.is_active:
-			login(request, user)
-			nextPage = request.POST.get('next', 'Home')
-			return redirect(nextPage)
-			#print("User is valid, active and authenticated")
+			if user.authy_id != '':
+				if authyToken != '':
+					if checkAuthy(authyToken, user.authy_id):
+						login(request, user)
+						nextPage = request.POST.get('next', 'Home')
+						return redirect(nextPage)
+					else:
+						return returnAuthyCheckPage(request)
+				else:
+					return returnAuthyCheckPage(request)
+			else:
+				login(request, user)
+				nextPage = request.POST.get('next', 'Home')
+				return redirect(nextPage)
+				#print("User is valid, active and authenticated")
 		else:
 			return returnLogin(request)
 			#print("The password is valid, but the account has been disabled!")
@@ -67,3 +88,11 @@ def checkLogin(request):
 		return returnLogin(request)
 		# the authentication system was unable to verify the username and password
 		#print("The username and password were incorrect.")
+
+def checkAuthy(token, authyId):
+	authy_api = AuthyApiClient(settings.AUTHY_API_KEY)
+	verification = authy_api.tokens.verify(authyId, token)
+	if verification.ok():
+		return True
+	else:
+		return False

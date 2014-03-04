@@ -75,7 +75,7 @@ class CustomUser(AbstractBaseUser):
 	is_active = models.BooleanField(_('active'), default=True)
 	is_superuser = models.BooleanField(_('super user'), default=False)
 	date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
-	authy_token = models.CharField(_('authy token'), max_length=45, default="")
+	authy_id = models.CharField(_('authy id'), max_length=45, default="")
 
 	objects = CustomUserManager()
 
