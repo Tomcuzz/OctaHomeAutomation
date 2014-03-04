@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import 
+from django.contrib.auth.models import *
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, User
 from django.utils.translation import ugettext_lazy as _
 from django.core import validators
@@ -75,6 +75,7 @@ class CustomUser(AbstractBaseUser):
 	is_active = models.BooleanField(_('active'), default=True)
 	is_superuser = models.BooleanField(_('super user'), default=False)
 	date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
+	authy_token = models.CharField(_('authy token'), max_length=45, default="")
 
 	objects = CustomUserManager()
 

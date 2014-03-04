@@ -22,7 +22,7 @@ urlpatterns = patterns('',
     url(r'^Proxmox/', 'Proxmox.views.ProxmoxMain', name='Proxmox'),
     url(r'^DnsAdmin/', 'DnsAdmin.views.DnsAdminMain', name='DnsAdmin'),
     url(r'^account/', 'Account.views.AccountMain', name='Account'),
-    url(r'^Login', 'Login.views.LoginMain', name='Login'),
+    url(r'^Login', 'Account.views.LoginMain', name='Login'),
     url(r'^api', 'Api.views.ApiMain', name='Api'),
     
     # Uncomment the admin/doc line below to enable admin documentation:
