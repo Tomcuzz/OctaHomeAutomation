@@ -12,6 +12,7 @@
       body {
         padding-top: 40px;
         padding-bottom: 40px;
+        background-image:url('../assets/img/background.jpg');
         background-color: rgba(0,0,0,0.125);
       }
 
@@ -39,7 +40,18 @@
         margin-bottom: 15px;
         padding: 7px 9px;
       }
-
+      .no-account {
+      	padding-top: 0px;
+      	margin-top: -5px;
+	  	text-align: center;
+      }
+      .no-account a {
+      	color: inherit;
+      	text-decoration: underline;
+      }
+      .no-account a:hover {
+      	color: #aaaaaa;
+      }
     </style>
     <link href="../assets/css/bootstrap-responsive.css" rel="stylesheet">
 
@@ -55,11 +67,8 @@
                     <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
                                    <link rel="shortcut icon" href="../assets/ico/favicon.png">
   </head>
-
   <body>
-
     <div class="container">
-
       <form class="form-signin" action="{% url 'Login' %}" method="post">{% csrf_token %}
         <h2 class="form-signin-heading">Please sign in</h2>
         {% if sencondattempt %}
@@ -71,11 +80,10 @@
           <input type="checkbox" value="remember-me"> Remember me
         </label>
         <button class="btn btn-large btn-primary" type="submit">Sign in</button>
-	<input type="hidden" name="next" value="{{nextPage|safe}}">
+		<input type="hidden" name="next" value="{{nextPage|safe}}">
       </form>
-
+      <p class="no-account">Don't Have An Account?  <a href="#">Sign Up</a></p>
     </div> <!-- /container -->
-
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->

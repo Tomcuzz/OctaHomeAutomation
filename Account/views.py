@@ -40,6 +40,19 @@ def AccountMain(request):
 
 
 def LoginMain(request):
+	if request.POST.get('command', 'None') == 'sendsms':
+		username = request.POST.get('username', 'None')
+		if username == 'None':
+			aUser = CustomUser.objects.get(username=username)
+			
+			authy_api = AuthyApiClient(settings.AUTHY_API_KEY)
+			sms = authy_api.users.request_sms(aUser.authy_id, {"force": True})
+			if sms.ok():
+				return HttpResponse("Token Sent")
+			else:
+				return HttpResponse(sms.errors())
+		else:
+			return HttpResponse("No Username")
 	if request.POST.get('username', 'None') == 'None':
 		return returnLogin(request)
 	else:
