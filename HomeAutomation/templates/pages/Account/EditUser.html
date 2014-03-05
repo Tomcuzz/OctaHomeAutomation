@@ -9,7 +9,7 @@
                 <h1>Personal Details</h1>
         </div>
 	<label>Username:</label>
-	<s id="CurrentUsernameXeditable" data-type="text" data-pk="1" data-url="/account/?command=changeUsername&editCurrentUser=true" data-original-title="Change Username">{{ username }}</s>
+	<s id="CurrentUsernameXeditable" data-type="text" data-pk="1" data-url="/account/?command=changeUsername&editCurrentUser=true" data-original-title="Change Username">{{ user.username }}</s>
 	<br>
 	<label>Password:</label>
 	<s id="CurrentPasswordXeditable" data-type="password" data-pk="1" data-url="/account/?command=changePassword&editCurrentUser=true" data-original-title="Change Password">
@@ -18,24 +18,42 @@
 	<br>
 	<label>First Name:</label>
 	<s id="CurrentFirstNameXeditable" data-type="text" data-pk="1" data-url="/account/?command=changeFirstName&editCurrentUser=true" data-original-title="Change First Name">
-		{{ firstname }}
+		{{ user.first_name }}
 	</s>
 	<br>
 	<label>Second Name:</label>
 	<s id="CurrentSecondNameXeditable" data-type="text" data-pk="1" data-url="/account/?command=changeSecondName&editCurrentUser=true" data-original-title="Change Second Name">
-		{{ surname }}
+		{{ user.last_name }}
 	</s>
 	<br>
 	<label>Email:</label>
 	<s id="CurrentEmailXeditable" data-type="text" data-pk="1" data-url="/account/?command=changeEmail&editCurrentUser=true" data-original-title="Change Email">
-		{{ email }}
+		{{ user.email }}
 	</s>
 	<br>
 	<label>Weather Location:</label>
-		{{location}}
+		{{ user.home_location }}
+	<br>
+	<label>Theme:</label>
+		{% if user.theme != "" %}
+			{{ user.theme }}
+		{% else %}
+			theme1
+		{% endif %}
+	<br>
+	<label>Two-Factor Authentication Status:</label>
+		{% if user.authy_id != "" %}
+			<span class="text-success">Enabled</span>
+		{% else %}
+			<span class="text-danger" style="position: inline;">Disabled</span>
+		{% endif %}
 	<br>
 	<label>User Permission Level:</label>
-	{{isAdmin}}
+		{% if user.is_superuser %}
+			Admin
+		{% else %}
+			User
+		{% endif %}
 {% endblock %}
 
 {% block ExtraJavaScript %}

@@ -26,7 +26,7 @@ def AccountMain(request):
 		links = getSideBar(page, request)
 		
 		if page == "editPersonalDetails":
-			return render(request, 'pages/Account/EditUser.html', {'csrfToken':get_token(request), 'username':AccountModel().getUserName(request), 'firstname':AccountModel().getName(request), 'surname':AccountModel().getSurName(request), 'email':AccountModel().getEmail(request), 'isAdmin':AccountModel().isAdmin(request), 'location':AccountModel().getWeatherLocation(request), 'links': links})
+			return render(request, 'pages/Account/EditUser.html', {'csrfToken':get_token(request), 'links': links})
 		elif page == "EditUsers":
 			return render(request, 'pages/Account/EditUsers.html', {'csrfToken':get_token(request), 'users':AccountModel().getAllUsers(), 'links': links})
 		elif page == "AddUser":
@@ -92,7 +92,7 @@ def checkLogin(request):
 			else:
 				login(request, user)
 				nextPage = request.POST.get('next', 'Home')
-				return redirect(nextPage, sencondAttempt=True)
+				return redirect(nextPage)
 				#print("User is valid, active and authenticated")
 		else:
 			return returnLogin(request, sencondAttempt=True)

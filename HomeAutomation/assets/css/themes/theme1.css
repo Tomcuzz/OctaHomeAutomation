@@ -1,0 +1,122 @@
+body {
+	padding-top: 40px;
+	padding-bottom: 40px;
+	background-image: url('/assets/img/background.jpg');
+	background-color: rgba(0,0,0,0.125);
+}
+
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus {
+	color: #090909;
+	background-color: #d2d2d2;
+}
+
+.navbar {
+	z-index: 30;
+}
+
+.footer {
+	background-color: #ffffff;
+}
+
+/* First level of nav */
+.bs-sidenav {
+    border-radius: 12.5px;
+}
+
+.btn-outline {
+  color: #4A606D;/*#563d7c;*/
+}
+
+.btn-outline:hover,
+.btn-outline:focus,
+.btn-outline:active {
+  background-color: #4A606D;/*#563d7c;*/
+  border-color: #4A606D;/*#563d7c;*/
+}
+
+.btn-outline-inverse:hover,
+.btn-outline-inverse:focus,
+.btn-outline-inverse:active {
+  color: #4A606D;/*#563d7c;*/
+}
+
+.bs-docs-nav {
+  background-color: #4A606D;/*#563d7c;*/
+  border-color: #27384C;/*#463265;*/
+}
+
+.bs-docs-nav .navbar-toggle {
+  border-color: #4A606D;/*#563d7c;*/
+}
+
+.bs-docs-home,
+.bs-header {
+	color: #7A8F8D;/*#cdbfe3;*/
+	background-color: #4A606D;/*#563d7c;*/
+}
+
+.bs-sidebar .nav > .active > a,
+.bs-sidebar .nav > .active:hover > a,
+.bs-sidebar .nav > .active:focus > a {
+  color: #4A606D;/*#563d7c;*/
+  border-right: 1px solid #4A606D;/*#563d7c;*/
+}
+
+.pageArea {
+	margin-top: 20px;
+	padding-top: 0px;
+	padding-bottom: 12.5px;
+	padding-left: 12.5px;
+	padding-right: 12.5px;
+	background-color: #fff;
+	border: 1px solid #e5e5e5;
+	-webkit-border-radius: 12.5px;
+	   -moz-border-radius: 12.5px;
+			border-radius: 12.5px;
+	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+	   -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+			box-shadow: 0 1px 2px rgba(0,0,0,.05);
+}
+
+.bs-docs-sidebar {
+	position:relative
+}
+
+/* Signin/Authy Form */
+.form-signin {
+	max-width: 300px;
+	padding: 19px 29px 29px;
+	margin: 0 auto 20px;
+	background-color: #fff;
+	border: 1px solid #e5e5e5;
+	-webkit-border-radius: 12.5px;
+	   -moz-border-radius: 12.5px;
+			border-radius: 12.5px;
+	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+	   -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+			box-shadow: 0 1px 2px rgba(0,0,0,.05);
+}
+.form-signin .form-signin-heading,
+.form-signin .checkbox {
+	margin-bottom: 10px;
+}
+.form-signin input[type="text"],
+.form-signin input[type="password"] {
+	font-size: 16px;
+	height: auto;
+	margin-bottom: 15px;
+	padding: 7px 9px;
+}
+.no-account {
+  	padding-top: 0px;
+  	margin-top: -5px;
+  	text-align: center;
+}
+.no-account a {
+  	color: inherit;
+  	text-decoration: underline;
+}
+.no-account a:hover {
+  	color: #aaaaaa;
+}

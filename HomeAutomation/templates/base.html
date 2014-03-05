@@ -13,6 +13,11 @@
 		<link href="{{STATIC_URL}}css/bootstrap.css" rel="stylesheet">
 		<link href="{{STATIC_URL}}css/bootstrap-responsive.css" rel="stylesheet">
 		<link href="{{STATIC_URL}}css/docs.css" rel="stylesheet">
+		{% if user.theme == "" %}
+			<link href="{{STATIC_URL}}css/themes/theme1.css" rel="stylesheet">
+		{% else %}
+			<link href="{{STATIC_URL}}css/themes/{{user.theme}}.css" rel="stylesheet">
+		{% endif %}
 		<link href="{{STATIC_URL}}js/google-code-prettify/prettify.css" rel="stylesheet">
 		<script src="{{STATIC_URL}}js/jquery.js"></script>
 		<script src="{{STATIC_URL}}js/bootstrap.min.js"></script>
@@ -128,21 +133,23 @@
 		{% block PageAreaWithoutSubhead %}
 			<!-- Subhead
 			================================================== -->
-			<header class="jumbotron subhead" id="overview">
+			<!-- <header class="jumbotron subhead" id="overview">
 				<div class="container">
 					<h1>{% block PageHead %}{% endblock %}</h1>
 					<p class="lead">{% block PageSubHead %}{% endblock %}</p>
 				</div>
-			</header>
+			</header> -->
 			
 			<!-- Contents
 			================================================== -->
 			<div class="container">
 				{% block PageContent %}
-					<div class="page-header">
-						<h1>{{PageAreaTitle|safe}}</h1>
+					<div class="pageArea">
+						<div class="page-header">
+							<h1>{{PageAreaTitle|safe}}</h1>
+						</div>
+						{{PageAreaContent|safe}}
 					</div>
-					{{PageAreaContent|safe}}
 				{% endblock %}
 			</div>
 		{% endblock %}
@@ -150,7 +157,7 @@
 		{% block PageAreaWithoutFooter %}
 		<!-- Footer
 		================================================== -->
-		<footer class="footer bs-footer">
+		<!--<footer class="footer bs-footer">
 			<div class="container">
 				<p>Designed and built with all the love in the world by <a href="http://twitter.com/mdo" target="_blank">@mdo</a> and <a href="http://twitter.com/fat" target="_blank">@fat</a>.</p>
 				<p>Code licensed under <a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache License v2.0</a>, documentation under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p>
@@ -163,7 +170,7 @@
 					<li><a href="https://github.com/twitter/bootstrap/blob/master/CHANGELOG.md">Changelog</a></li>
 				</ul>
 			</div>
-		</footer>
+		</footer>-->
 		{% endblock %}
 		<!-- Le javascript
 		================================================== -->
