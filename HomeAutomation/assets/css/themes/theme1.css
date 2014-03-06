@@ -58,6 +58,10 @@ body {
 	background-color: #4A606D;/*#563d7c;*/
 }
 
+.page-header {
+	margin-top: -5px;
+}
+
 .bs-sidebar .nav > .active > a,
 .bs-sidebar .nav > .active:hover > a,
 .bs-sidebar .nav > .active:focus > a {
