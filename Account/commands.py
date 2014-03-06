@@ -5,8 +5,13 @@ from django.shortcuts import redirect
 from django.contrib.auth import logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.conf import settings
+from django.middleware.csrf import get_token
+
+from authy.api import AuthyApiClient
 
 from models import *
+from sideBar import *
 
 def AccountCommand(request):
 	if request.GET.get('command', 'editPersonalDetails') == 'LogOut':
@@ -41,6 +46,32 @@ def AccountCommand(request):
 		else:
 			links = getSideBar(request.GET.get('command', 'editPersonalDetails'), request)
 			return render(request, 'pages/Account.html', {'PageAreaTitle': "Add User", 'PageAreaContent': "Privilege Authentication Failure", 'links': links})
+	elif request.GET.get('command', 'editPersonalDetails') == 'addTwoFactorAuthentication':
+		links = getSideBar('TwoFactorAuthentication', request)
+		if request.user.authy_id == "":
+			email = str(request.POST.get('email', ''))
+			phone = str(request.POST.get('phonenumber', ''))
+			areacode = int(request.POST.get('phonearea', ''))
+			if email != "" and phone != "" and areacode != "":
+				authy_api = AuthyApiClient(settings.AUTHY_API_KEY)
+				user = authy_api.users.create(email, phone, areacode) #email, cellphone, area_code
+				if user.ok():
+					request.user.authy_id = user.id
+					request.user.save()
+					return redirect('/account/?page=TwoFactorAuthentication')
+				else:
+					return render(request, 'pages/Account/AuthyAdmin.html', {'csrfToken':get_token(request), 'error':user.errors(), 'links': links})
+			else:
+				return render(request, 'pages/Account/AuthyAdmin.html', {'csrfToken':get_token(request), 'error':'Please Supply All Details', 'links': links})
+		else:
+			return render(request, 'pages/Account/AuthyAdmin.html', {'csrfToken':get_token(request), 'error':'User Already Has Authy Authentication', 'links': links})
+	elif request.GET.get('command', 'editPersonalDetails') == 'removeTwoFactorAuthentication':
+		authy_api = AuthyApiClient(settings.AUTHY_API_KEY)
+		if request.user.authy_id != "":
+			result = authy_api.users.post("/protected/json/users/delete/" + str(request.user.authy_id), {})
+			request.user.authy_id = ""
+			request.user.save()
+		return redirect('/account/?page=TwoFactorAuthentication')
 	elif request.GET.get('command', 'editPersonalDetails') == 'deleteUser':
 		if request.user.is_superuser:
 			username = request.GET.get('user', '')

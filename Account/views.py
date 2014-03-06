@@ -27,6 +27,8 @@ def AccountMain(request):
 		
 		if page == "editPersonalDetails":
 			return render(request, 'pages/Account/EditUser.html', {'csrfToken':get_token(request), 'links': links})
+		elif page == "TwoFactorAuthentication":
+			return render(request, 'pages/Account/AuthyAdmin.html', {'csrfToken':get_token(request), 'links': links})
 		elif page == "EditUsers":
 			return render(request, 'pages/Account/EditUsers.html', {'csrfToken':get_token(request), 'users':AccountModel().getAllUsers(), 'links': links})
 		elif page == "AddUser":
