@@ -1,10 +1,11 @@
 # Create your views here.
 from django.http import HttpResponse, HttpResponseNotFound
+from celery.task import task
 from models import *
 from Lights.commands import *
 from Account.sideBar import *
 from Alarm.tasks import *
-
+from tasks import *
 import SocketServer
 from wsgiref import handlers
 
@@ -24,7 +25,7 @@ def DeviceInputMain(request):
 				doubleButtonAction(deviceId)
 		return HttpResponse("Ok")
 	elif request.GET.get('DeviceType','None') == 'motionInput':
-		deviceId = request.GET.get('buttonId','None')
+		deviceId = str(request.GET.get('deviceId','None'))
 		if deviceId != "None":
 			motionActivated(deviceId)
 		return HttpResponse("Ok")
@@ -54,11 +55,7 @@ def motionActivated(deviceId):
 	if not motionDevice.Activated:
 		motionDevice.Activated = True
 		motionDevice.save()
-		performActions(motionDevice.TriggerAction)
-		motionTimeOut.apply_async(args=[str(deviceId)], kwargs={}, countdown=motionDevice.WaitTime)
-
-@task
-def motionTimeOut(deviceId):
-	motionDevice = MotionInputDevice.objects.get(id=int(deviceId))
-	motionDevice.Activated = False
-	motionDevice.save()
+		performActions(motionDevice.TriggerAction.actions)
+		delayedAction = motionTimeOut.apply_async(args=[str(deviceId)], kwargs={}, countdown=motionDevice.WaitTime)
+		motionDevice.TimeOutTaskCeleryId = str(delayedAction.id)
+		motionDevice.save()
