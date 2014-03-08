@@ -1,0 +1,17 @@
+{% load my_filters %}
+<CiscoIPPhoneMenu>
+	<Title>Home Automation System</Title>
+	<Prompt>{{Prompt}}</Prompt>
+	{% for Item in Items %}
+		<MenuItem>
+			<Name>{{Item.title}}</Name>
+			<URL>{{ BASE_URL }}{% url 'Api' %}/{{Item.address}}</URL>
+		</MenuItem>
+	{% endfor %}
+	{% if softkey1 %}
+		<SoftKeyItem>
+			<Name>Test</Name>
+			<URL>{{ BASE_URL }}{% url 'Api' %}</URL>
+		</SoftKeyItem>
+	{% endif %}
+</CiscoIPPhoneMenu>
