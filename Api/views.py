@@ -1,14 +1,13 @@
 from django.http import HttpResponse
-
+from ciscophone import *
 from api import *
 
 def ApiMain(request):
 	if request.GET.get('page', 'None') == 'api':
 		return LightApi().webRequest(request)
-	elif request.GET.get('page', 'None') == 'phone':
+	elif request.GET.get('page', 'None') == 'ciscophone':
 		return HandlePhoneRequest(request)
+	elif request.get_full_path().split("/")[2].split(".")[0] == 'ciscophone':
+		return HandlePhoneRequest(request)
+	return HttpResponse("404")
 
-def HandlePhoneRequest(request):
-	toReturn = "<?xml version=\"1.0\"?><CiscoIPPhoneMenu><Title>Cisco Phones Are Great, Right?</Title><Prompt>What do you want to do today?</Prompt><MenuItem><Name>Yahoo</Name><URL>http://www.yahoo.com/index.html</URL></MenuItem><DefaultValue></DefaultValue></CiscoIPPhoneMenu>"
-	response = HttpResponse(toReturn, content_type="text/xml")
-	return response
