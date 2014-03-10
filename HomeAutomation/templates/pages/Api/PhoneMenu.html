@@ -8,10 +8,4 @@
 			<URL>{{ BASE_URL }}{% url 'Api' %}/{{Item.address}}</URL>
 		</MenuItem>
 	{% endfor %}
-	{% if softkey1 %}
-		<SoftKeyItem>
-			<Name>Test</Name>
-			<URL>{{ BASE_URL }}{% url 'Api' %}</URL>
-		</SoftKeyItem>
-	{% endif %}
 </CiscoIPPhoneMenu>

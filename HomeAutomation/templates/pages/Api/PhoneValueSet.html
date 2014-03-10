@@ -1,0 +1,14 @@
+{% load my_filters %}
+<CiscoIPPhoneInput>
+	<Title>Home Automation System</Title>
+	<Prompt>{{Prompt}}</Prompt>
+	{% for Item in Items %}
+		<InputItem>
+			<DisplayName>{{Item.DisplayName}}</DisplayName>
+			<QueryStringParam>{{Item.QueryStringParam}}</QueryStringParam>
+			<DefaultValue>{{Item.DefaultValue}}</DefaultValue>
+			<InputFlags>{{Item.InputFlag}}</InputFlags>
+		</InputItem>
+	{% endfor %}
+	<URL>{{ BASE_URL }}{% url 'Api' %}/{{Url}}</URL>
+</CiscoIPPhoneInput>
