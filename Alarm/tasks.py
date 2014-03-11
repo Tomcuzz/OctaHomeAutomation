@@ -87,7 +87,7 @@ def performActions(actions):
 				scrollMode = taskAction['scrollMode']
 				scene = taskAction['scene']
 				alarmActions().setLightToState(lightId=lightId, setType=setType, state=state, r=r, g=g, b=b, scrollMode=scrollMode, scene=scene)
-		except AlarmTaskAction.DoesNotExist:
+		except:
 			aTask = None
 	
 	
