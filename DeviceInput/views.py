@@ -31,6 +31,28 @@ def DeviceInputMain(request):
 		return HttpResponse("Ok")
 	elif not request.user.is_authenticated():
 		return redirect('/Login?next=%s' % request.path)
+	elif request.GET.get('command', 'None') == 'buttonActionChanged':
+		deviceId = request.GET.get('deviceId', 'None')
+		inputType = request.GET.get('inputType', '1')
+		selectedActionId = request.GET.get('selectedActionId', 'None')
+		
+		if deviceId != 'None' and selectedActionId != 'None':
+			try:
+				selectedDevice = ButtonInputDevice.objects.get(id=int(deviceId))
+				newTask = Tasks.objects.get(id=int(selectedActionId))
+				
+				if inputType == "1":
+					selectedDevice.ButtonOneAction = newTask
+				else:
+					selectedDevice.ButtonTwoAction = newTask
+				
+				selectedDevice.save()
+			except:
+				return HttpResponse("DB Get Error", status=400)
+		else:
+			return HttpResponse("Input veriable Error", status=400)
+	elif request.GET.get('command', 'None') == 'motionActionChanged':
+		return HttpResponse("Not Implemented", status=400)
 	else:
 		links = getSideBar("DeviceInput", request)
 		buttonDevices = ButtonInputDevice.objects.all()
