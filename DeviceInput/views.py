@@ -45,6 +45,7 @@ def DeviceInputMain(request):
 					selectedDevice.ButtonOneAction = newTask
 				else:
 					selectedDevice.ButtonTwoAction = newTask
+				
 				selectedDevice.save()
 			except:
 				return HttpResponse("DB Get Error", status=400)
