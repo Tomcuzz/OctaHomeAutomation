@@ -16,8 +16,8 @@
 				<th>#</th>
 				<th>Room</th>
 				<th>Device Name</th>
-				<th>Single Press Action</th>
-				<th>Double Press Action</th>
+				<th>Button One Action</th>
+				<th>Button Two Action</th>
 				<th>Actions</th>
 			</tr>
 		</thead>
@@ -28,23 +28,23 @@
 				<td>{{ButtonDevice.Room.Name|replaceUnderscores}}</td>
 				<td>{{ButtonDevice.Name|replaceUnderscores}}</td>
 				<td>
-					<select class="form-control">
+					<select class="form-control" id="{{ButtonDevice.id}}buttonOneSelect" onchange="buttonActionChanged('{{ButtonDevice.id}}', '1')">
 						{% for aTask in Tasks %}
 							{% if aTask.name == ButtonDevice.ButtonOneAction.name %}
-								<option selected>{{aTask.name|replaceUnderscores}}</option>
+								<option value="{{aTask.id}}" selected>{{aTask.name|replaceUnderscores}}</option>
 							{% else %}
-								<option>{{aTask.name|replaceUnderscores}}</option>
+								<option value="{{aTask.id}}">{{aTask.name|replaceUnderscores}}</option>
 							{% endif %}
 						{% endfor %}
 					</select>
 				</td>
 				<td>
-					<select class="form-control">
+					<select class="form-control" id="{{ButtonDevice.id}}buttonTwoSelect" onchange="buttonActionChanged('{{ButtonDevice.id}}', '2')">
 						{% for aTask in Tasks %}
 							{% if aTask.name == ButtonDevice.ButtonTwoAction.name %}
-								<option selected>{{aTask.name|replaceUnderscores}}</option>
+								<option value="{{aTask.id}}" selected>{{aTask.name|replaceUnderscores}}</option>
 							{% else %}
-								<option>{{aTask.name|replaceUnderscores}}</option>
+								<option value="{{aTask.id}}">{{aTask.name|replaceUnderscores}}</option>
 							{% endif %}
 						{% endfor %}
 					</select>
@@ -130,4 +130,17 @@
 {% endblock %}
 
 {% block ExtraJavaScript %}
+	<script>
+		function buttonActionChanged(deviceId, buttonId) {
+			if (buttonId == '1') {
+				var selectedTask = ''
+				var url = '{% url 'DeviceInput' %}?command=buttonActionChanged&deviceId=' + deviceId + '&inputType=' + buttonId + '&selectedActionId=' + selectedTask
+				$.get(url, function(data){}
+			} else if (buttonId == '2') {
+				var selectedTask = ''
+				var url = '{% url 'DeviceInput' %}?command=buttonActionChanged&deviceId=' + deviceId + '&inputType=' + buttonId + '&selectedActionId=' + selectedTask
+				$.get(url, function(data){}
+			}
+		}
+	</script>
 {% endblock %}
