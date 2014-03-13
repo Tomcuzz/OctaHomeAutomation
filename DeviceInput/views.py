@@ -47,12 +47,32 @@ def DeviceInputMain(request):
 					selectedDevice.ButtonTwoAction = newTask
 				
 				selectedDevice.save()
+				return HttpResponse("Ok")
 			except:
 				return HttpResponse("DB Get Error", status=400)
 		else:
 			return HttpResponse("Input veriable Error", status=400)
 	elif request.GET.get('command', 'None') == 'motionActionChanged':
-		return HttpResponse("Not Implemented", status=400)
+		deviceId = request.GET.get('deviceId', 'None')
+		inputType = request.GET.get('inputType', 'trigger')
+		selectedActionId = request.GET.get('selectedActionId', 'None')
+		
+		if deviceId != 'None' and selectedActionId != 'None':
+			try:
+				selectedDevice = MotionInputDevice.objects.get(id=int(deviceId))
+				newTask = Tasks.objects.get(id=int(selectedActionId))
+				
+				if inputType == "trigger":
+					selectedDevice.TriggerAction = newTask
+				else:
+					selectedDevice.TimeOutAction = newTask
+				
+				selectedDevice.save()
+				return HttpResponse("Ok")
+			except:
+				return HttpResponse("DB Get Error", status=400)
+		else:
+			return HttpResponse("Input veriable Error", status=400)
 	else:
 		links = getSideBar("DeviceInput", request)
 		buttonDevices = ButtonInputDevice.objects.all()

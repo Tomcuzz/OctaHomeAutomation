@@ -28,7 +28,7 @@
 				<td>{{ButtonDevice.Room.Name|replaceUnderscores}}</td>
 				<td>{{ButtonDevice.Name|replaceUnderscores}}</td>
 				<td>
-					<select class="form-control" name="{{ButtonDevice.id}}buttonOneSelect" onchange="buttonActionChanged('{{ButtonDevice.id}}', '1')">
+					<select class="form-control" name="{{ButtonDevice.id}}buttonOneSelect" onchange="actionChanged('{{ButtonDevice.id}}', 'button', '1')">
 						{% for aTask in Tasks %}
 							{% if aTask.name == ButtonDevice.ButtonOneAction.name %}
 								<option value="{{aTask.id}}" selected>{{aTask.name|replaceUnderscores}}</option>
@@ -39,7 +39,7 @@
 					</select>
 				</td>
 				<td>
-					<select class="form-control" name="{{ButtonDevice.id}}buttonTwoSelect" onchange="buttonActionChanged('{{ButtonDevice.id}}', '2')">
+					<select class="form-control" name="{{ButtonDevice.id}}buttonTwoSelect" onchange="actionChanged('{{ButtonDevice.id}}', 'button', '2')">
 						{% for aTask in Tasks %}
 							{% if aTask.name == ButtonDevice.ButtonTwoAction.name %}
 								<option value="{{aTask.id}}" selected>{{aTask.name|replaceUnderscores}}</option>
@@ -90,23 +90,23 @@
 						{% endif %}
 					</td>
 					<td>
-						<select class="form-control">
+						<select class="form-control" name="{{MotionDevice.id}}motionTriggerSelect" onchange="actionChanged('{{MotionDevice.id}}', 'motion', 'trigger')">
 							{% for aTask in Tasks %}
 								{% if aTask.name == MotionDevice.TriggerAction.name %}
-									<option selected>{{aTask.name|replaceUnderscores}}</option>
+									<option value="{{aTask.id}}" selected>{{aTask.name|replaceUnderscores}}</option>
 								{% else %}
-									<option>{{aTask.name|replaceUnderscores}}</option>
+									<option value="{{aTask.id}}">{{aTask.name|replaceUnderscores}}</option>
 								{% endif %}
 							{% endfor %}
 						</select>
 					</td>
 					<td>
-						<select class="form-control">
+						<select class="form-control" name="{{MotionDevice.id}}motionTimeoutSelect" onchange="actionChanged('{{MotionDevice.id}}', 'motion', 'timeout')">
 							{% for aTask in Tasks %}
 								{% if aTask.name == MotionDevice.TimeOutAction.name %}
-									<option selected>{{aTask.name|replaceUnderscores}}</option>
+									<option value="{{aTask.id}}" selected>{{aTask.name|replaceUnderscores}}</option>
 								{% else %}
-									<option>{{aTask.name|replaceUnderscores}}</option>
+									<option value="{{aTask.id}}">{{aTask.name|replaceUnderscores}}</option>
 								{% endif %}
 							{% endfor %}
 						</select>
@@ -131,17 +131,31 @@
 
 {% block ExtraJavaScript %}
 	<script>
-		function buttonActionChanged(deviceId, buttonId) {
-			if (buttonId == '1') {
-				var selectItemId = deviceId + "buttonOneSelect";
-				var selectedTask = document.getElementsByName(selectItemId)[0].value;
-				var url = '{% url 'DeviceInput' %}?command=buttonActionChanged&deviceId=' + deviceId + '&inputType=' + buttonId + '&selectedActionId=' + selectedTask;
-				$.get(url, function(data){});
-			} else if (buttonId == '2') {
-				var selectItemId = deviceId + "buttonTwoSelect"
-				var selectedTask = document.getElementsByName(selectItemId)[0].value;
-				var url = '{% url 'DeviceInput' %}?command=buttonActionChanged&deviceId=' + deviceId + '&inputType=' + buttonId + '&selectedActionId=' + selectedTask;
-				$.get(url, function(data){});
+		function actionChanged(deviceId, deviceType, inputId) {
+			if (deviceType == 'button') {
+				if (inputId == '1') {
+					var selectItemId = deviceId + "buttonOneSelect";
+					var selectedTask = document.getElementsByName(selectItemId)[0].value;
+					var url = '{% url 'DeviceInput' %}?command=buttonActionChanged&deviceId=' + deviceId + '&inputType=' + inputId + '&selectedActionId=' + selectedTask;
+					$.get(url, function(data){});
+				} else if (inputId == '2') {
+					var selectItemId = deviceId + "buttonTwoSelect"
+					var selectedTask = document.getElementsByName(selectItemId)[0].value;
+					var url = '{% url 'DeviceInput' %}?command=buttonActionChanged&deviceId=' + deviceId + '&inputType=' + inputId + '&selectedActionId=' + selectedTask;
+					$.get(url, function(data){});
+				}
+			} else if (deviceType == 'motion') {
+				if (inputId == 'trigger') {
+					var selectItemId = deviceId + "motionTriggerSelect";
+					var selectedTask = document.getElementsByName(selectItemId)[0].value;
+					var url = '{% url 'DeviceInput' %}?command=motionActionChanged&deviceId=' + deviceId + '&inputType=' + inputId + '&selectedActionId=' + selectedTask;
+					$.get(url, function(data){});
+				} else if (inputId == 'timeout') {
+					var selectItemId = deviceId + "motionTimeoutSelect";
+					var selectedTask = document.getElementsByName(selectItemId)[0].value;
+					var url = '{% url 'DeviceInput' %}?command=motionActionChanged&deviceId=' + deviceId + '&inputType=' + inputId + '&selectedActionId=' + selectedTask;
+					$.get(url, function(data){});
+				}
 			}
 		}
 	</script>
