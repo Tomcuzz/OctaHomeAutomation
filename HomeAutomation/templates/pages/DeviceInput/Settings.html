@@ -69,6 +69,7 @@
 				<th>#</th>
 				<th>Room</th>
 				<th>Device Name</th>
+				<th>Armed</th>
 				<th>Triggered State</th>
 				<th>Trigger Action</th>
 				<th>Time Out Action</th>
@@ -83,10 +84,17 @@
 					<td>{{MotionDevice.Room.Name|replaceUnderscores}}</td>
 					<td>{{MotionDevice.Name|replaceUnderscores}}</td>
 					<td>
-						{% if MotionDevice.Activated %}
+						{% if MotionDevice.Armed %}
 							<p class="text-danger">Triggered</p>
 						{% else %}
 							<p class="text-success">Untriggered</p>
+						{% endif %}
+					</td>
+					<td>
+						{% if MotionDevice.Armed %}
+							<p class="text-danger">Armed</p>
+						{% else %}
+							<p class="text-success">Unarmed§</p>
 						{% endif %}
 					</td>
 					<td>
@@ -133,29 +141,24 @@
 	<script>
 		function actionChanged(deviceId, deviceType, inputId) {
 			if (deviceType == 'button') {
+				var command = "buttonActionChanged";
 				if (inputId == '1') {
 					var selectItemId = deviceId + "buttonOneSelect";
-					var selectedTask = document.getElementsByName(selectItemId)[0].value;
-					var url = '{% url 'DeviceInput' %}?command=buttonActionChanged&deviceId=' + deviceId + '&inputType=' + inputId + '&selectedActionId=' + selectedTask;
-					$.get(url, function(data){});
 				} else if (inputId == '2') {
-					var selectItemId = deviceId + "buttonTwoSelect"
-					var selectedTask = document.getElementsByName(selectItemId)[0].value;
-					var url = '{% url 'DeviceInput' %}?command=buttonActionChanged&deviceId=' + deviceId + '&inputType=' + inputId + '&selectedActionId=' + selectedTask;
-					$.get(url, function(data){});
+					var selectItemId = deviceId + "buttonTwoSelect";
 				}
 			} else if (deviceType == 'motion') {
+				var command = "motionActionChanged";
 				if (inputId == 'trigger') {
 					var selectItemId = deviceId + "motionTriggerSelect";
-					var selectedTask = document.getElementsByName(selectItemId)[0].value;
-					var url = '{% url 'DeviceInput' %}?command=motionActionChanged&deviceId=' + deviceId + '&inputType=' + inputId + '&selectedActionId=' + selectedTask;
-					$.get(url, function(data){});
 				} else if (inputId == 'timeout') {
 					var selectItemId = deviceId + "motionTimeoutSelect";
-					var selectedTask = document.getElementsByName(selectItemId)[0].value;
-					var url = '{% url 'DeviceInput' %}?command=motionActionChanged&deviceId=' + deviceId + '&inputType=' + inputId + '&selectedActionId=' + selectedTask;
-					$.get(url, function(data){});
 				}
+			}
+			if (selectItemId != "") {
+				var selectedTask = document.getElementsByName(selectItemId)[0].value;
+				var url = '{% url 'DeviceInput' %}?command=' + command + '&deviceId=' + deviceId + '&inputType=' + inputId + '&selectedActionId=' + selectedTask;
+				$.get(url, function(data){});
 			}
 		}
 	</script>

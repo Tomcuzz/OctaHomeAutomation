@@ -94,7 +94,7 @@ def doubleButtonAction(buttonId):
 
 def motionActivated(deviceId):
 	motionDevice = MotionInputDevice.objects.get(id=int(deviceId))
-	if not motionDevice.Activated:
+	if not motionDevice.Activated and motionDevice.Armed:
 		motionDevice.Activated = True
 		motionDevice.save()
 		performActions(motionDevice.TriggerAction.actions)
