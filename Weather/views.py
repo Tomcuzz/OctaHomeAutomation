@@ -2,6 +2,7 @@ from django.http import HttpResponse, HttpResponseNotFound, Http404
 from django.middleware.csrf import get_token
 from django.shortcuts import render, redirect
 from django.utils.timezone import utc
+from django.conf import settings
 from models import *
 import urllib
 import json
@@ -11,7 +12,7 @@ def WeatherMain(request):
 	raise Http404
 
 def updateLocations():
-	apiKey = "c07dabd7-a7b1-4136-8f4c-0afd4716bcfd"
+	apiKey = settings.MET_OFFICE_API_KEY
 	url = "http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/sitelist?key=" + apiKey
 	page = urllib.urlopen(url).read()
 	jsonResult = json.loads(page)
@@ -62,7 +63,7 @@ def return5DayWeatherItem(location):
 	return json.loads(localWeatherObject.FiveDayWeatherString)
 
 def updateWeather(location):
-	apiKey = "c07dabd7-a7b1-4136-8f4c-0afd4716bcfd"
+	apiKey = settings.MET_OFFICE_API_KEY
 	fivedayurl = "http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/" + location + "?res=daily&key=" + apiKey
 	fivedaypage = urllib.urlopen(fivedayurl).read()
 	
