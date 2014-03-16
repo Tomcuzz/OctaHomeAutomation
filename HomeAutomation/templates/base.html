@@ -143,14 +143,16 @@
 			<!-- Contents
 			================================================== -->
 			<div class="container">
-				<div class="pageArea">
-					{% block PageContent %}
-						<div class="page-header">
-							<h1>{{PageAreaTitle|safe}}</h1>
-						</div>
-						{{PageAreaContent|safe}}
-					{% endblock %}
-				</div>
+				{% block PageContent %}
+					<div class="pageArea">
+						{% block PageArea %}
+							<div class="page-header">
+								<h1>{{PageAreaTitle|safe}}</h1>
+							</div>
+							{{PageAreaContent|safe}}
+						{% endblock %}
+					</div>
+				{% endblock %}
 			</div>
 		{% endblock %}
 		
