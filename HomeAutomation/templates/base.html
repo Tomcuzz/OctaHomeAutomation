@@ -70,7 +70,7 @@
 							{% else %}
 								<p class="navbar-text"><a href="{% url 'Login' %}" class="navbar-link">You are not currently logged</a></p>
 							{% endif %}
-							<a class="navbar-brand" href="{% url 'Home' %}">DecadeDev</a>
+							<a class="navbar-brand" href="{% url 'Home' %}">J.A.R.V.I.S.</a>
 						</ul>
 						<ul class="nav navbar-nav navbar-left">
 							<li class="{% block HomeNavBarActive %}{% endblock %}">
@@ -143,14 +143,14 @@
 			<!-- Contents
 			================================================== -->
 			<div class="container">
-				{% block PageContent %}
-					<div class="pageArea">
+				<div class="pageArea">
+					{% block PageContent %}
 						<div class="page-header">
 							<h1>{{PageAreaTitle|safe}}</h1>
 						</div>
 						{{PageAreaContent|safe}}
-					</div>
-				{% endblock %}
+					{% endblock %}
+				</div>
 			</div>
 		{% endblock %}
 		
