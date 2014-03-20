@@ -144,15 +144,16 @@
 			================================================== -->
 			<div class="container">
 				{% block PageContent %}
-					<div class="pageArea">
-						{% block PageArea %}
-							<div class="page-header">
-								<h1>{{PageAreaTitle|safe}}</h1>
-							</div>
-							{{PageAreaContent|safe}}
-						{% endblock %}
-					</div>
-				{% endblock %}
+						<div class="pageArea">
+							{% block PageArea %}
+								<div class="page-header">
+									<h1>{{PageAreaTitle|safe}}</h1>
+								</div>
+								{{PageAreaContent|safe}}
+							{% endblock %}
+						</div>
+					{% endblock %}
+				</section>
 			</div>
 		{% endblock %}
 		

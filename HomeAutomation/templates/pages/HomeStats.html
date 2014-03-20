@@ -11,32 +11,93 @@
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="#summary" data-toggle="tab">Summary</a></li>
 		<li><a href="#lights" data-toggle="tab">Lights</a></li>
+		<li><a href="#deviceinput" data-toggle="tab">Device Inputs</a></li>
 		<li><a href="#proxmox" data-toggle="tab">Proxmox</a></li>
 		<li><a href="#system" data-toggle="tab">System</a></li>
 	</ul>
 	<div class="tab-content">
 		<div class="tab-pane active" id="summary">
-			<p>This Page Is Currently Under Construction</p>
-		</div>
-		<div class="tab-pane" id="lights">
-			<div class="row">
-				<div class="col-md-4">
-					<h4></h4>
-				</div>
-				<div class="col-md-4">
-					<h4></h4>
-				</div>
-				<div class="col-md-4">
-					<h4></h4>
+			<div class="container-fluid container">
+				<div class="row">
+					<div class="col-md-4">
+						<h4>Lights Currently On:</h4>
+						<h4 class="text-success">{{Stats.lightsOn}}</h4>
+					</div>
+					<div class="col-md-4">
+						<h4>Row 2</h4>
+					</div>
+					<div class="col-md-4">
+						<h4>Row 3</h4>
+					</div>
 				</div>
 			</div>
-			<p>This Page Is Currently Under Construction</p>
+		</div>
+		<div class="tab-pane" id="lights">
+			<div class="container-fluid container">
+				<div class="row">
+					<div class="col-md-4">
+						<h4>Lights Currently On:</h4>
+						<h4 class="text-success">{{Stats.lightsOn}}</h4>
+					</div>
+					<div class="col-md-4">
+						<h4>Number Of Lights:</h4>
+						<h4 class="text-success">{{Lights.count}}</h4>
+					</div>
+					<div class="col-md-4">
+						<h4>Row 3</h4>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="tab-pane" id="deviceinput">
+			<div class="container-fluid container">
+				<div class="row">
+					<div class="col-md-4">
+						<h4>Motion Device Armed:</h4>
+						<h4 class="text-success">{{Stats.motionDevicesArmed}}</h4>
+						<h4>Motion Device Activated:</h4>
+						<h4 class="text-success">{{Stats.motionDevicesActivated}}</h4>
+					</div>
+					<div class="col-md-4">
+						<h4>Row 2</h4>
+					</div>
+					<div class="col-md-4">
+						<h4>Row 3</h4>
+					</div>
+				</div>
+			</div>
 		</div>
 		<div class="tab-pane" id="proxmox">
-			<p>This Page Is Currently Under Construction</p>
+			<div class="container-fluid container">
+				<div class="row">
+					<div class="col-md-4">
+						<h4>Lights Currently On:</h4>
+						<p class="text-success">12</p>
+					</div>
+					<div class="col-md-4">
+						<h4>Row 2</h4>
+					</div>
+					<div class="col-md-4">
+						<h4>Row 3</h4>
+					</div>
+				</div>
+			</div>
 		</div>
 		<div class="tab-pane" id="system">
-			<p>This Page Is Currently Under Construction</p>
+			<div class="container-fluid container">
+				<div class="row">
+					<div class="col-md-4">
+						<h4>Lights Currently On:</h4>
+						<p class="text-success">12</p>
+					</div>
+					<div class="col-md-4">
+						<h4>Row 2</h4>
+					</div>
+					<div class="col-md-4">
+						<h4>Row 3</h4>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 {% endblock %}
