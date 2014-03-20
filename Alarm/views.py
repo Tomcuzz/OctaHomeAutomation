@@ -9,6 +9,7 @@ from Alarm.tasks import *
 from Alarm.commands import *
 from models import *
 from Lights.models import *
+from DeviceInput.models import *
 import datetime
 
 def AlarmMain(request):
@@ -52,7 +53,8 @@ def AlarmMain(request):
 		lights = Lights.objects.all()
 		lightScrolls = ScrollModes.objects.all()
 		lightScenes = LightScenes.objects.all()
-		return render(request, 'pages/Alarm/AddTaskAction.html', {'links': getSideBar(request), 'csrfmiddlewaretoken':get_token(request), 'lights':lights, 'lightScrolls':lightScrolls, 'lightScenes':lightScenes})
+		motionDevices = MotionInputDevice.objects.all()
+		return render(request, 'pages/Alarm/AddTaskAction.html', {'links': getSideBar(request), 'csrfmiddlewaretoken':get_token(request), 'lights':lights, 'lightScrolls':lightScrolls, 'lightScenes':lightScenes, 'motionDevices': motionDevices})
 	elif request.GET.get('page', 'Alarm') == "AddTask":
 		return render(request, 'pages/Alarm/AddTask.html', {'links': getSideBar(request), 'csrfmiddlewaretoken':get_token(request), 'tasksAction':TaskAction.objects.all()})
 	else:

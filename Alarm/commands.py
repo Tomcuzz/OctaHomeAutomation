@@ -115,14 +115,12 @@ class alarm():
 			speachScript = request.POST.get('speachscript', '').replace(" ", "_")
 			speachpostcode = request.POST.get('speachpostcode', '').replace(" ", "").lower()
 			actionVeriables = {'targetIpAddress':targetIpAddress, 'targetPort':targetPort, 'speachScript':speachScript, 'location':speachpostcode}
-			newAlarmTaskAction.actionVeriables = json.dumps(actionVeriables, sort_keys=False, separators=(',',':'))
 		elif request.POST.get('actiontasktype', '') == "Play Music":
 			targetIpAddress = request.POST.get('musicdeviceipaddress', '')
 			targetPort = request.POST.get('musicdeviceport', '')
 			playType = "playlist"
 			playListName = request.POST.get('playlistname', '').replace("_", "\_").replace(" ", "_")
 			actionVeriables = {'targetIpAddress':targetIpAddress, 'targetPort':targetPort, 'playType':playType, 'playListName':playListName}
-			newAlarmTaskAction.actionVeriables = json.dumps(actionVeriables, sort_keys=False, separators=(',',':'))
 		elif request.POST.get('actiontasktype', '') == "Set Lights":
 			lightId = request.POST.get('lightid', '')
 			setType = request.POST.get('settype', '').replace("/", "")
@@ -133,7 +131,11 @@ class alarm():
 			setLightScroll = request.POST.get('setlightscroll', '').replace(" ", "_")
 			setLightScene = request.POST.get('setlightscene', '').replace(" ", "_")
 			actionVeriables = {'lightId':lightId, 'setType':setType, 'state':onOffStateToSet, 'r':rToSet, 'g':gToSet, 'b':bToSet, 'scrollMode':setLightScroll, 'scene':setLightScene}
-			newAlarmTaskAction.actionVeriables = json.dumps(actionVeriables, sort_keys=False, separators=(',',':'))
+		elif request.POST.get('actiontasktype', '') == "Arm/Disarm Motion Device":
+			motionDeviceId = request.POST.get('motiondevice', '')
+			armState = request.POST.get('motionarm', '')
+			actionVeriables = {'MotionDevice':motionDeviceId, 'Arm':armState}
+		newAlarmTaskAction.actionVeriables = json.dumps(actionVeriables, sort_keys=False, separators=(',',':'))
 		newAlarmTaskAction.save()
 		
 		

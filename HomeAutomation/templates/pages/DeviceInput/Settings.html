@@ -84,7 +84,7 @@
 					<td>{{MotionDevice.Room.Name|replaceUnderscores}}</td>
 					<td>{{MotionDevice.Name|replaceUnderscores}}</td>
 					<td>
-						{% if MotionDevice.Armed %}
+						{% if MotionDevice.Activated %}
 							<p class="text-danger">Triggered</p>
 						{% else %}
 							<p class="text-success">Untriggered</p>
@@ -94,7 +94,7 @@
 						{% if MotionDevice.Armed %}
 							<p class="text-danger">Armed</p>
 						{% else %}
-							<p class="text-success">Unarmed§</p>
+							<p class="text-success">Unarmed</p>
 						{% endif %}
 					</td>
 					<td>

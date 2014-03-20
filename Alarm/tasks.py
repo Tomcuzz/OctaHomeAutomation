@@ -2,6 +2,7 @@ from celery.task import task
 from Alarm.models import *
 from Weather.views import *
 from Lights.models import *
+from DeviceInput.models import *
 import json
 import time
 import datetime
@@ -87,11 +88,12 @@ def performActions(actions):
 				scrollMode = taskAction['scrollMode']
 				scene = taskAction['scene']
 				alarmActions().setLightToState(lightId=lightId, setType=setType, state=state, r=r, g=g, b=b, scrollMode=scrollMode, scene=scene)
+			elif aTask.actionType == "Arm/Disarm_Motion_Device":
+				motionDeviceId = taskAction['MotionDevice']
+				arm = taskAction['Arm']
+				alarmActions().setArmed(arm, motionDeviceId)
 		except:
 			aTask = None
-	
-	
-	
 
 class alarmActions():
 	def makeDevicePlaySpeach(self, ipAddress="NS", speach="NS", location=""):
@@ -202,3 +204,18 @@ class alarmActions():
 		elif setType == "Scene":
 			test = "TO BE IMPLEMENTED"
 		theLight.save()
+	
+	def setArmed(self, setState, lightId):
+		motionDevice = MotionInputDevice.objects.get(id=int(lightId))
+		if setState == "Toggle":
+			if motionDevice.Armed == True:
+				arm = False
+			else:
+				arm = True
+		elif setState == "True":
+			arm = True
+		else:
+			arm = False
+		motionDevice.Armed = arm
+		motionDevice.save()
+	
