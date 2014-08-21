@@ -28,7 +28,9 @@ def updateLocations():
 			weatherLocationObject = WeatherLocations(locationId=location['id'])
 		
 		weatherLocationObject.name = location['name']
-		weatherLocationObject.region = location['region']
+		if location.has_key("region"):
+			weatherLocationObject.region = location['region']
+		
 		try:
 			weatherLocationObject.unitaryAuthArea = location['unitaryAuthArea']
 		except KeyError:
