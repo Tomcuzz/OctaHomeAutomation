@@ -6,13 +6,19 @@ from django.db import models
 class World(models.Model):
 	name = models.CharField(max_length=30)
 	homes = models.ManyToManyField(Home)
+	class Meta:
+		db_table = u'Worlds'
 	
 class Home(models.Model):
 	name = models.CharField(max_length=30)
 	rooms = models.ManyToManyField(Room)
+	class Meta:
+		db_table = u'Homes'
 
 class Room(models.Model):
 	name = models.CharField(max_length=30)
+	class Meta:
+		db_table = u'Rooms'
 
 ##
 # Device Types
