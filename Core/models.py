@@ -5,18 +5,25 @@ from django.db import models
 ##
 class World(models.Model):
 	name = models.CharField(max_length=30)
-	homes = models.ManyToManyField(Home)
 	class Meta:
 		db_table = u'Worlds'
-	
+
+class Country(models.Model):
+	name = models.CharField(max_length=30)
+	world = models.ForeignKey(World, related_name="countrys")
+	class Meta:
+		db_table = u'Country'
+
+
 class Home(models.Model):
 	name = models.CharField(max_length=30)
-	rooms = models.ManyToManyField(Room)
+	country = models.ForeignKey(World, related_name="homes")
 	class Meta:
 		db_table = u'Homes'
 
 class Room(models.Model):
 	name = models.CharField(max_length=30)
+	home = models.ForeignKey(Home, related_name="rooms")
 	class Meta:
 		db_table = u'Rooms'
 
@@ -25,19 +32,17 @@ class Room(models.Model):
 ##
 class Device(models.Model):
 	name = models.CharField(max_length=30)
+	room = models.ManyToManyField(Room, related_name="devices")
 	
 	class Meta:
 		abstract = True
 
 class OutputDevice(Device):
-	actions = models.ManyToManyField(Action)
-	
 	class Meta:
 	 	abstract = True
 
 class InputDevice(Device):
-	events = models.ManyToManyField(Event)
-	
+	events = models.ManyToManyField(Event, related_name="inputDevice")
 	class Meta:
 		abstract = True	
 
@@ -48,8 +53,11 @@ class InputDevice(Device):
 ##
 class Action(models.Model):
 	name = models.CharField(max_length=30)
+	device = models.ManyToManyField(Action, related_name="actions")
 	
-	def run()
+	@abstractmethod
+	def run():
+		pass
 	
 	class Meta:
 		abstract = True
@@ -57,7 +65,7 @@ class Action(models.Model):
 
 class Event(models.Model):
 	name = models.CharField(max_length=30)
-	actions = models.ManyToMany(Action)
+	actions = models.ManyToMany(Action, related_name="events")
 	
 	def call():
 		for (action in self.actions):
