@@ -1,77 +1,78 @@
-from django.http import HttpResponse, HttpResponseNotFound, Http404
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseForbidden, Http404
 from django.shortcuts import render, redirect
 from django.middleware.csrf import get_token
 from models import *
 
-class view():
+class requestHandler():
 	request = ''
-	template = ''
 	isSecuredArea = True
 	isUserAuthenticated = False
 	
 	
 	#Normal Overridable methods
 	@abstractmethod
-	def getView():
+	def handleRequest(self, request):
 		pass
 	
-	@abstractmethod
-	def getTemplate():
-		pass
-	
-	def isPageSecured():			#Override to unsecure page
+	def isPageSecured(self):			#Override to unsecure page
 		self.isSecuredArea = True
 	
-	
-	
+	@abstractmethod
+	def handleAuthenticationFailue(self):
+		pass
 	
 	#Request Life Cycle Methods
-	def handleRequest(request):
-		self.setUpView(request)
-		
-		if securityFails():
-			return self.handleAuthenticationFailue()
-		
-		self.getTemplate()
-		
-		content = getView()
-		return returnView(content)
-	
-	
-	def setUpView(request):
+	def setUpHandler(self, request):
 		self.request = request
 		self.isSecuredArea = isPageSecured()
 		self.isUserAuthenticated = request.user.is_authenticated()
 	
-	def returnView(parameters={}):
+	#Security Methods
+	def securityFails(self):
+		if not self.isUserAuthenticated and self.isSecuredArea:
+			return True
+		else:
+			return False
+
+
+class viewRequestHandler(requestHandler):
+	template = ''
+	
+	#Normal Overridable methods
+	@abstractmethod
+	def getView(self):
+		pass
+	
+	@abstractmethod
+	def getTemplate(self):
+		pass
+	
+	#Subclass methods
+	def handleRequest(self, request):
+		self.setUpHandler(request)
+		
+		if securityFails():
+			return self.handleAuthenticationFailue()
+		
+		self.template = self.getTemplate()
+		
+		content = self.getView()
+		return self.returnView(content)
+	
+	def returnView(self, parameters={}):
 		if self.template != '':
 			return render(self.request, self.template, {'csrfmiddlewaretoken':get_token(request), 'room':room, 'links': links})
 		else :
 			raise Http404
 	
-	
-	#Security Methods
-	def securityFails():
-		if not self.isUserAuthenticated and self.isSecuredArea:
-			return True
-		else:
-			return False
-	
-	def handleAuthenticationFailue():
+	def handleAuthenticationFailue(self):
 		return redirect('/Login?next=%s' % request.path)
-	
-	#Get Room Method
-	def getCurrentRoom():
-		roomString = self.request.GET.get('room', 'All')
-		if roomString != 'All':
-			return Rooms.object.filter(id=roomString)
-		else return null;
 	
 	#Sidebar Methods
 	def getSideBar():
-		currentRoom = getCurrentRoom()
+		currentRoom = self.getCurrentRoom()
 		
-		links = [{'title': 'All Rooms', 'address': '?', 'active': getSideBarActiveState(null, currentRoom)}]
+		links = [{'title': 'All Rooms', 'address': '?', 'active': getSideBarActiveState(None, currentRoom)}]
 		
 		for room in Rooms.objects.all():
 			address = '?room=' + room.Name
@@ -85,3 +86,35 @@ class view():
 			return 'active'
 		else:
 			return ''
+	
+	#Get Room Method
+	def getCurrentRoom():
+		roomString = self.request.GET.get('room', 'All')
+		if roomString != 'All':
+			return Rooms.object.filter(id=roomString)
+		else:
+			return None
+
+class commandRequestHandler(requestHandler):
+	#Normal Overridable methods
+	@abstractmethod
+	def runCommand(self, command):
+		pass
+	
+	#Subclass methods
+	def handleRequest(self, request):
+		self.setUpHandler(request)
+		
+		if securityFails():
+			return self.handleAuthenticationFailue()
+		
+		return self.runCommand()
+	
+	def returnOk(self):
+		return HttpResponse()
+	
+	def handleUserError(self, errorMessage=''):
+		return HttpResponse(errorMessage, status=400)
+	
+	def handleAuthenticationFailue(self):
+		return HttpResponseForbidden()
