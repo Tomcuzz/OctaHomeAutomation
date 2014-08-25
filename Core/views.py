@@ -108,7 +108,7 @@ class commandRequestHandler(requestHandler):
 		if securityFails():
 			return self.handleAuthenticationFailue()
 		
-		return self.runCommand()
+		return self.runCommand(getCommand(self))
 	
 	def returnOk(self):
 		return HttpResponse()
@@ -118,3 +118,7 @@ class commandRequestHandler(requestHandler):
 	
 	def handleAuthenticationFailue(self):
 		return HttpResponseForbidden()
+		
+	#supporting functions
+	def getCommand(self):
+		return self.request.GET.get('command', 'None')
