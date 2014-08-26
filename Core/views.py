@@ -34,8 +34,8 @@ class requestHandler():
 		else:
 			return False
 
-
 class viewRequestHandler(requestHandler):
+	protocal = 'html'
 	template = ''
 	
 	#Normal Overridable methods
@@ -48,13 +48,15 @@ class viewRequestHandler(requestHandler):
 		pass
 	
 	#Subclass methods
-	def handleRequest(self, request):
+	def handleRequest(self, request, protocal="html"):
 		self.setUpHandler(request)
 		
 		if securityFails():
 			return self.handleAuthenticationFailue()
 		
 		self.template = self.getTemplate()
+		if self.template != "":
+			self.template = self.template + "." + protocal
 		
 		content = self.getView()
 		return self.returnView(content)

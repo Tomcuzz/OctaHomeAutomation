@@ -5,13 +5,15 @@ from django.conf.urls import patterns, include, url
 # admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'HomeAutomation.views.home', name='home'),
-    # url(r'^HomeAutomation/', include('HomeAutomation.foo.urls')),
+	
+	
     url(r'^$', 'Home.views.HomeMain', name='Home'),
     url(r'^HomeStats/', 'HomeStats.views.HomeStatsMain', name='HomeStats'),
     url(r'^Security/', 'Security.views.SecurityMain', name='Security'),
     url(r'^Lights/', 'Lights.views.LightsMain', name='Lights'),
+    
+    url(r'^Lights/(?P<protocal>(html|xml|json|cisco)+)/', 'Lights.views.LightsMain', name='Lights'),
+    
     url(r'^Alarm/', 'Alarm.views.AlarmMain', name='Alarm'),
     url(r'^Curtains/', 'Curtains.views.CurtainsMain', name='Curtains'),
     url(r'^TempControl/', 'TempControl.views.TempControlMain', name='TempControl'),
@@ -34,3 +36,6 @@ urlpatterns = patterns('',
 )
 
 handler404 = 'ErrorPages.views.Error404'
+
+
+html|xml|json
