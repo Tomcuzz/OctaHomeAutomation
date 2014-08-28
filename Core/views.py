@@ -63,7 +63,9 @@ class viewRequestHandler(requestHandler):
 	
 	def returnView(self, parameters={}):
 		if self.template != '':
-			return render(self.request, self.template, {'csrfmiddlewaretoken':get_token(request), 'room':room, 'links': links})
+			standardParams = {'csrfmiddlewaretoken':get_token(request), 'room':self.request.GET.get('room', 'All'), 'links': getSideBar()}
+			parameters = dict(standardParams.items() + parameters.items())
+			return render(self.request, self.template, parameters)
 		else :
 			raise Http404
 	

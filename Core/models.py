@@ -33,6 +33,8 @@ class Room(models.Model):
 class Device(models.Model):
 	name = models.CharField(max_length=30)
 	room = models.ManyToManyField(Room, related_name="devices")
+	ipAddress = models.TextField()
+	port = models.IntegerField()
 	
 	class Meta:
 		abstract = True
