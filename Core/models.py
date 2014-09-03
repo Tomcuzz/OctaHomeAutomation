@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.contenttypes.generic import *
 import json
 
 ##
