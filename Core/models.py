@@ -74,10 +74,10 @@ class Action(models.Model):
 		self.parameters = json.dumps(array)
 	
 	def run():
-		for (device in self.actions):
+		for device in self.actions:
 			functionName = parameters[device.name]['name']
 			functionParameters = parameters[device.name]['parameters']
-			if (functionName != ''):
+			if functionName != '':
 				device.handleAction(functionName, functionParameters)
 	
 	class Meta:
@@ -89,7 +89,7 @@ class Event(models.Model):
 	actions = models.ManyToMany(Action, related_name="events")
 	
 	def call():
-		for (action in self.actions):
+		for action in self.actions:
 			action.run()
 	
 	class Meta:
