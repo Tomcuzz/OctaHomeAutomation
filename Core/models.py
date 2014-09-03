@@ -53,7 +53,7 @@ class OutputDevice(Device):
 	 	abstract = True
 
 class InputDevice(Device):
-	events = models.ManyToManyField(Event, related_name="inputDevice")
+	#events = models.ManyToManyField(Event, related_name="inputDevice")
 	class Meta:
 		abstract = True	
 
