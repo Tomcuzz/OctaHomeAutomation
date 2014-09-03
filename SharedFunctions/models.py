@@ -4,4 +4,4 @@ class Rooms(models.Model):
 	Name = models.TextField()
 	
 	class Meta:
-		db_table = u'Rooms'
+		db_table = u'OldRooms'

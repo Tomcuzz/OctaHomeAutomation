@@ -34,13 +34,13 @@ class requestHandler():
 		else:
 			return False
 
-
 class viewRequestHandler(requestHandler):
+	protocal = 'html'
 	template = ''
 	
 	#Normal Overridable methods
 	@abstractmethod
-	def getView(self):
+	def getViewParameters(self):
 		pass
 	
 	@abstractmethod
@@ -48,20 +48,24 @@ class viewRequestHandler(requestHandler):
 		pass
 	
 	#Subclass methods
-	def handleRequest(self, request):
+	def handleRequest(self, request, protocal="html"):
 		self.setUpHandler(request)
 		
 		if securityFails():
 			return self.handleAuthenticationFailue()
 		
 		self.template = self.getTemplate()
+		if self.template != "":
+			self.template = self.template + "." + protocal
 		
-		content = self.getView()
+		content = self.getViewParameters()
 		return self.returnView(content)
 	
 	def returnView(self, parameters={}):
 		if self.template != '':
-			return render(self.request, self.template, {'csrfmiddlewaretoken':get_token(request), 'room':room, 'links': links})
+			standardParams = {'csrfmiddlewaretoken':get_token(request), 'room':self.request.GET.get('room', 'All'), 'links': getSideBar()}
+			parameters = dict(standardParams.items() + parameters.items())
+			return render(self.request, self.template, parameters)
 		else :
 			raise Http404
 	
