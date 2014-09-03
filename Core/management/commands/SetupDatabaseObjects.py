@@ -1,17 +1,16 @@
-from django.core.management.base import NoArgsCommand, make_option
+from django.core.management.base import BaseCommand, CommandError
 
 from Account.models import *
 from Weather.views import * 
 
-class SetUpDatabase(NoArgsCommand):
+class SetUpDatabase(BaseCommand):
 
     help = "This initialises a user account and weather locations"
 
-    option_list = NoArgsCommand.option_list + (
-        make_option('--verbose', action='store_true'),
-    )
+    def add_arguments(self, parser):
+        parser.add_argument('Setup', nargs='+', type=int)
 
-    def handle_noargs(self, **options):
+    def handle(self, *args, **options):
 		updateLocations()
 		
 		user = CustomUser.objects.create_user('admin@admin.com', 'N/A', 'N/A', 'Fish01')
