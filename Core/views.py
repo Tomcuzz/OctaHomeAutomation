@@ -10,14 +10,14 @@ class requestHandler():
 	
 	
 	#Normal Overridable methods
-	@abstractmethod
+	
 	def handleRequest(self, request):
 		pass
 	
 	def isPageSecured(self):			#Override to unsecure page
 		self.isSecuredArea = True
 	
-	@abstractmethod
+	
 	def handleAuthenticationFailue(self):
 		pass
 	
@@ -39,11 +39,11 @@ class viewRequestHandler(requestHandler):
 	template = ''
 	
 	#Normal Overridable methods
-	@abstractmethod
+	
 	def getViewParameters(self):
 		pass
 	
-	@abstractmethod
+	
 	def getTemplate(self):
 		pass
 	
@@ -101,7 +101,7 @@ class viewRequestHandler(requestHandler):
 
 class commandRequestHandler(requestHandler):
 	#Normal Overridable methods
-	@abstractmethod
+	
 	def runCommand(self, command):
 		pass
 	

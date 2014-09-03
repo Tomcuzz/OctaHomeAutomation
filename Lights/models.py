@@ -17,7 +17,7 @@ class ScrollModes(models.Model):
 class LightDevice(OutputDevice):
 	isOn = models.BooleanField()
 	
-	@abstractmethod
+	
 	def setOnOff(setOn):
 		pass
 	
@@ -64,7 +64,7 @@ class RGBLights(LightDevice):
 		self.Scroll = ScrollModes.objects.get(name=scrollModeName)
 		self.save()
 	
-	@abstractmethod
+	
 	def setRGB(r, g, b):
 		pass
 	

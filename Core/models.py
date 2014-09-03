@@ -41,11 +41,11 @@ class Device(models.Model):
 		abstract = True
 
 class OutputDevice(Device):
-	@abstractmethod
+	
 	def listActions(self):
 		pass
 	
-	@abstractmethod
+	
 	def	handleAction(self, function, parameters):
 		pass
 	
