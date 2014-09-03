@@ -40,7 +40,7 @@ class viewRequestHandler(requestHandler):
 	
 	#Normal Overridable methods
 	@abstractmethod
-	def getView(self):
+	def getViewParameters(self):
 		pass
 	
 	@abstractmethod
@@ -58,7 +58,7 @@ class viewRequestHandler(requestHandler):
 		if self.template != "":
 			self.template = self.template + "." + protocal
 		
-		content = self.getView()
+		content = self.getViewParameters()
 		return self.returnView(content)
 	
 	def returnView(self, parameters={}):

@@ -1,4 +1,5 @@
 from django.db import models
+import json
 
 ##
 # Location Types
@@ -40,6 +41,14 @@ class Device(models.Model):
 		abstract = True
 
 class OutputDevice(Device):
+	@abstractmethod
+	def listActions(self):
+		pass
+	
+	@abstractmethod
+	def	handleAction(self, function, parameters):
+		pass
+	
 	class Meta:
 	 	abstract = True
 
@@ -55,11 +64,21 @@ class InputDevice(Device):
 ##
 class Action(models.Model):
 	name = models.CharField(max_length=30)
-	device = models.ManyToManyField(Action, related_name="actions")
+	device = models.ManyToManyField(OutputDevice, related_name="actions")
+	parameters = models.TextField()
 	
-	@abstractmethod
+	def getParameters(self):
+		return json.loads(self.parameters)
+	
+	def setParameters(self, array):
+		self.parameters = json.dumps(array)
+	
 	def run():
-		pass
+		for (device in self.actions):
+			functionName = parameters[device.name]['name']
+			functionParameters = parameters[device.name]['parameters']
+			if (functionName != ''):
+				device.handleAction(functionName, functionParameters)
 	
 	class Meta:
 		abstract = True

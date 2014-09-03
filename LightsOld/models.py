@@ -14,7 +14,7 @@ class Lights(models.Model):
 	BeingSetId = models.IntegerField()
 	
 	class Meta:
-		db_table = u'Lights'
+		db_table = u'OldLights'
 
 class ScrollModes(models.Model):
 	Name = models.TextField()
@@ -25,7 +25,7 @@ class ScrollModes(models.Model):
 	ChangeMode = models.TextField()
 	
 	class Meta:
-		db_table = u'ScrollModes'
+		db_table = u'OldScrollModes'
 
 class LightScenes(models.Model):
 	Name = models.TextField()
@@ -34,4 +34,4 @@ class LightScenes(models.Model):
 	BValue = models.TextField()
 	
 	class Meta:
-		db_table = u'LightScenes'
+		db_table = u'OldLightScenes'

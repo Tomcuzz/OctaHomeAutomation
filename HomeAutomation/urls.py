@@ -12,7 +12,7 @@ urlpatterns = patterns('',
     url(r'^Security/', 'Security.views.SecurityMain', name='Security'),
     url(r'^Lights/', 'Lights.views.LightsMain', name='Lights'),
     
-    url(r'^Lights/(?P<protocal>(html|xml|json|cisco)+)/', 'Lights.views.LightsMain', name='Lights'),
+    url(r'^(?P<protocal>(html|xml|json|cisco)+)/Lights/', include('Lights.urls')),
     
     url(r'^Alarm/', 'Alarm.views.AlarmMain', name='Alarm'),
     url(r'^Curtains/', 'Curtains.views.CurtainsMain', name='Curtains'),
@@ -36,6 +36,3 @@ urlpatterns = patterns('',
 )
 
 handler404 = 'ErrorPages.views.Error404'
-
-
-html|xml|json
