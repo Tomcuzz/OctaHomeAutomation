@@ -64,7 +64,7 @@ class InputDevice(Device):
 ##
 class Action(models.Model):
 	name = models.CharField(max_length=30)
-	device = models.ManyToManyField(OutputDevice, related_name="actions")
+	device = models.GenericRelation(OutputDevice, related_query_name="actions")
 	parameters = models.TextField()
 	
 	def getParameters(self):
@@ -86,7 +86,7 @@ class Action(models.Model):
 
 class Event(models.Model):
 	name = models.CharField(max_length=30)
-	actions = models.ManyToMany(Action, related_name="events")
+	actions = models.GenericRelation(Action, related_query_name="events")
 	
 	def call():
 		for action in self.actions:
