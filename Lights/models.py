@@ -73,7 +73,7 @@ class RGBLights(LightDevice):
 
 class ArduinoRGBLight(RGBLights):
 	def setRGB(r, g, b):
-		if (!(r=0 and g=0 and b=0)):
+		if r!=0 and g!=0 and b!=0:
 			self.R = r
 			self.G = g
 			self.B = b
