@@ -1,8 +1,8 @@
 from django.conf.urls import url
-from . import views
+from views import *
 
 urlpatterns = [
-	url(r'^$', views.requestHandler, name='Lights'),
-	url(r'^(?P<page>\w+)/$', views.requestHandler, name='LightsPage'),
-	url(r'^command/', views.CurtainsMain, name='LightCommand'),
+	url(r'^$', handleLightView.as_view(), name='Lights'),
+	url(r'^(?P<page>\w+)/$', requestHandler.as_view(), name='LightsPage'),
+	#url(r'^command/', views.CurtainsMain, name='LightCommand'),
 ]

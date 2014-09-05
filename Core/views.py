@@ -1,13 +1,18 @@
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseForbidden, Http404
+from django.views.generic import View
 from django.shortcuts import render, redirect
 from django.middleware.csrf import get_token
 from models import *
 
-class requestHandler():
+class requestHandler(View):
 	request = ''
 	isSecuredArea = True
 	isUserAuthenticated = False
 	
+	def get(self, request, *args, **kwargs):
+		protocal='html'
+		page='home'
+		return self.handleRequest(request)
 	
 	#Normal Overridable methods
 	
@@ -24,7 +29,7 @@ class requestHandler():
 	#Request Life Cycle Methods
 	def setUpHandler(self, request):
 		self.request = request
-		self.isSecuredArea = isPageSecured()
+		self.isSecuredArea = self.isPageSecured()
 		self.isUserAuthenticated = request.user.is_authenticated()
 	
 	#Security Methods
@@ -51,7 +56,7 @@ class viewRequestHandler(requestHandler):
 	def handleRequest(self, request, protocal="html"):
 		self.setUpHandler(request)
 		
-		if securityFails():
+		if self.securityFails():
 			return self.handleAuthenticationFailue()
 		
 		self.template = self.getTemplate()
@@ -63,7 +68,7 @@ class viewRequestHandler(requestHandler):
 	
 	def returnView(self, parameters={}):
 		if self.template != '':
-			standardParams = {'csrfmiddlewaretoken':get_token(request), 'room':self.request.GET.get('room', 'All'), 'links': getSideBar()}
+			standardParams = {'csrfmiddlewaretoken':get_token(self.request), 'room':self.request.GET.get('room', 'All'), 'links': self.getSideBar()}
 			parameters = dict(standardParams.items() + parameters.items())
 			return render(self.request, self.template, parameters)
 		else :
@@ -73,26 +78,26 @@ class viewRequestHandler(requestHandler):
 		return redirect('/Login?next=%s' % request.path)
 	
 	#Sidebar Methods
-	def getSideBar():
+	def getSideBar(self):
 		currentRoom = self.getCurrentRoom()
 		
-		links = [{'title': 'All Rooms', 'address': '?', 'active': getSideBarActiveState(None, currentRoom)}]
+		links = [{'title': 'All Rooms', 'address': '?', 'active': self.getSideBarActiveState(None, currentRoom)}]
 		
-		for room in Rooms.objects.all():
+		for room in []:#Rooms.objects.all():
 			address = '?room=' + room.Name
 			sidebarItem = {'title': room.Name.replace("_", " ") , 'address': address , 'active':getSideBarActiveState(room, currentRoom)}
 			links.append(sidebarItem)
 		
 		return links
 	
-	def getSideBarActiveState(sidebarItem, currentPage):
+	def getSideBarActiveState(self, sidebarItem, currentPage):
 		if sidebarItem == currentPage:
 			return 'active'
 		else:
 			return ''
 	
 	#Get Room Method
-	def getCurrentRoom():
+	def getCurrentRoom(self):
 		roomString = self.request.GET.get('room', 'All')
 		if roomString != 'All':
 			return Rooms.object.filter(id=roomString)
@@ -109,7 +114,7 @@ class commandRequestHandler(requestHandler):
 	def handleRequest(self, request):
 		self.setUpHandler(request)
 		
-		if securityFails():
+		if self.securityFails():
 			return self.handleAuthenticationFailue()
 		
 		return self.runCommand(getCommand(self))

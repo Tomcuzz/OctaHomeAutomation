@@ -129,7 +129,7 @@
 				document.getElementsByName(lightState)[0].innerHTML = "Off";
 				document.getElementsByName(lightState)[0].className = "text-error";
 			}
-			url = "{% url 'Lights' %}?command=turnOff&lightId=" + id;
+			url = "{% url 'Lights' protocal='html' %}?command=turnOff&lightId=" + id;
 			httpGet(url);
 		}
 		
@@ -141,11 +141,11 @@
 			lightGreenLevel = "light" + id + "Green";
 			lightBlueLevel = "light" + id + "Blue";
 			
-			rUrl = "{% url 'Lights' %}?command=getR&lightId=" + id;
-			gUrl = "{% url 'Lights' %}?command=getG&lightId=" + id;
-			bUrl = "{% url 'Lights' %}?command=getB&lightId=" + id;
+			rUrl = "{% url 'Lights' protocal='html' %}?command=getR&lightId=" + id;
+			gUrl = "{% url 'Lights' protocal='html' %}?command=getG&lightId=" + id;
+			bUrl = "{% url 'Lights' protocal='html' %}?command=getB&lightId=" + id;
 			
-			url = "{% url 'Lights' %}?command=turnOn&lightId=" + id;
+			url = "{% url 'Lights' protocal='html' %}?command=turnOn&lightId=" + id;
 			httpGet(url);
 			
 			R = httpGet(rUrl);
@@ -175,7 +175,7 @@
 			else document.getElementsByName(scrollMenu{{scrollMode.Name}}Item)[0].className = "pull-right";
 		{% endfor %}
 			
-			url = "{% url 'Lights' %}?command=setScroll&lightId=" + lightId + "&ScrollMode=" + ScrollState;
+			url = "{% url 'Lights' protocal='html' %}?command=setScroll&lightId=" + lightId + "&ScrollMode=" + ScrollState;
 			httpGet(url);
 		}
 		var currentPickerColour;
