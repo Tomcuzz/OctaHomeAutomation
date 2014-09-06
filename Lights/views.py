@@ -15,3 +15,10 @@ class handleLightView(viewRequestHandler):
 			return 'pages/Lights/AddLight'
 		else:
 			return 'pages/Lights/Main'
+	
+	def getSidebarUrlName(self):
+		return 'Lights'
+
+class handleLightCommand(commandRequestHandler):
+	def runCommand(self):
+		return ''

@@ -1,5 +1,6 @@
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseForbidden, Http404
 from django.views.generic import View
+from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
 from django.middleware.csrf import get_token
 from models import *
@@ -8,14 +9,20 @@ class requestHandler(View):
 	request = ''
 	isSecuredArea = True
 	isUserAuthenticated = False
+	arguments = []
+	kwarguments = []
 	
 	def get(self, request, *args, **kwargs):
-		protocal='html'
-		page='home'
+		self.arguments = args
+		self.kearguments = kwargs
+		return self.handleRequest(request)
+	
+	def post(self, request, *args, **kwargs):
+		self.arguments = args
+		self.kearguments = kwargs
 		return self.handleRequest(request)
 	
 	#Normal Overridable methods
-	
 	def handleRequest(self, request):
 		pass
 	
@@ -40,16 +47,17 @@ class requestHandler(View):
 			return False
 
 class viewRequestHandler(requestHandler):
-	protocal = 'html'
+	Protocal = 'html'
 	template = ''
 	
 	#Normal Overridable methods
-	
 	def getViewParameters(self):
 		pass
 	
-	
 	def getTemplate(self):
+		pass
+	
+	def getSidebarUrlName(self):
 		pass
 	
 	#Subclass methods
@@ -81,11 +89,20 @@ class viewRequestHandler(requestHandler):
 	def getSideBar(self):
 		currentRoom = self.getCurrentRoom()
 		
-		links = [{'title': 'All Rooms', 'address': '?', 'active': self.getSideBarActiveState(None, currentRoom)}]
+		linkName = self.getSidebarUrlName()
 		
-		for room in []:#Rooms.objects.all():
-			address = '?room=' + room.Name
-			sidebarItem = {'title': room.Name.replace("_", " ") , 'address': address , 'active':getSideBarActiveState(room, currentRoom)}
+		address = reverse(linkName)
+		links = [{'title': 'All Rooms', 'address': address, 'active': self.getSideBarActiveState(None, currentRoom)}]
+		
+		for house in Home.objects.all():
+			roomItems = []
+			for room in house.rooms.all():
+				address = reverse(linkName, kwargs={'house':house.id, 'room':room.id})
+				sidebarSubItem = {'title': room.name.replace("_", " ") , 'address': address , 'active':self.getSideBarActiveState(room, currentRoom)}
+				roomItems.append(sidebarSubItem)
+			
+			address = reverse(linkName, kwargs={'house':house.id})
+			sidebarItem = {'title': house.name.replace("_", " ") , 'address': address , 'active':self.getSideBarActiveState(house, currentRoom), 'sublinks':roomItems}
 			links.append(sidebarItem)
 		
 		return links
@@ -120,7 +137,7 @@ class commandRequestHandler(requestHandler):
 		return self.runCommand(getCommand(self))
 	
 	def returnOk(self):
-		return HttpResponse()
+		return HttpResponse('Ok')
 	
 	def handleUserError(self, errorMessage=''):
 		return HttpResponse(errorMessage, status=400)
