@@ -7,42 +7,43 @@ from models import *
 import json
 
 class requestHandler(View):
-	request = ''
+	Request = {}
 	isSecuredArea = True
 	isUserAuthenticated = False
 	Arguments = []
 	Kwarguments = {}
 	
 	def get(self, request, *args, **kwargs):
+		self.Request = request
 		self.Arguments = args
 		self.Kearguments = kwargs
-		return self.handleRequest(request)
+		self.isSecuredArea = self.isPageSecured()
+		self.isUserAuthenticated = self.Request.user.is_authenticated()
+		return self.handleRequest()
 	
 	def post(self, request, *args, **kwargs):
+		self.Request = request
 		self.arguments = args
 		self.kearguments = kwargs
-		return self.handleRequest(request)
+		self.isSecuredArea = self.isPageSecured()
+		self.isUserAuthenticated = self.Request.user.is_authenticated()
+		return self.handleRequest()
 	
 	#Normal Overridable methods
-	def handleRequest(self, request):
+	def handleRequest(self):
 		pass
 	
 	def isPageSecured(self):			#Override to unsecure page
-		self.isSecuredArea = True
+		return True
+		
 	
 	
 	def handleAuthenticationFailue(self):
 		pass
 	
-	#Request Life Cycle Methods
-	def setUpHandler(self, request):
-		self.request = request
-		self.isSecuredArea = self.isPageSecured()
-		self.isUserAuthenticated = request.user.is_authenticated()
-	
 	#Security Methods
 	def securityFails(self):
-		if not self.isUserAuthenticated and self.isSecuredArea:
+		if self.isSecuredArea and not self.isUserAuthenticated:
 			return True
 		else:
 			return False
@@ -62,9 +63,7 @@ class viewRequestHandler(requestHandler):
 		pass
 	
 	#Subclass methods
-	def handleRequest(self, request, protocal="html"):
-		self.setUpHandler(request)
-		
+	def handleRequest(self, protocal="html"):
 		if self.securityFails():
 			return self.handleAuthenticationFailue()
 		
@@ -77,14 +76,14 @@ class viewRequestHandler(requestHandler):
 	
 	def returnView(self, parameters={}):
 		if self.template != '':
-			standardParams = {'csrfmiddlewaretoken':get_token(self.request), 'room':self.request.GET.get('room', 'All'), 'links': self.getSideBar()}
+			standardParams = {'csrfmiddlewaretoken':get_token(self.Request), 'room':self.Request.GET.get('room', 'All'), 'links': self.getSideBar()}
 			parameters = dict(standardParams.items() + parameters.items())
-			return render(self.request, self.template, parameters)
+			return render(self.Request, self.template, parameters)
 		else :
 			raise Http404
 	
 	def handleAuthenticationFailue(self):
-		return redirect('/Login?next=%s' % request.path)
+		return redirect('/Login?next=%s' % self.Request.path)
 	
 	#Sidebar Methods
 	def getSideBar(self):
@@ -116,7 +115,7 @@ class viewRequestHandler(requestHandler):
 	
 	#Get Room Method
 	def getCurrentRoom(self):
-		roomString = self.request.GET.get('room', 'All')
+		roomString = self.Request.GET.get('room', 'All')
 		if roomString != 'All':
 			return Rooms.object.filter(id=roomString)
 		else:
@@ -129,9 +128,7 @@ class commandRequestHandler(requestHandler):
 		pass
 	
 	#Subclass methods
-	def handleRequest(self, request):
-		self.setUpHandler(request)
-		
+	def handleRequest(self):
 		if self.securityFails():
 			return self.handleAuthenticationFailue()
 		
@@ -148,4 +145,4 @@ class commandRequestHandler(requestHandler):
 		
 	#supporting functions
 	def getCommand(self):
-		return self.request.GET.get('command', 'None')
+		return self.Request.GET.get('command', 'None')
