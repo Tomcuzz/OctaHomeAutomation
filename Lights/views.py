@@ -2,22 +2,12 @@ from Core.views import *
 from Core.models import *
 from models import *
 
-class lightFactory():
-	def getAllLights(self):
-		lights = []
-		rooms = Room.objects.all()
-		for room in rooms.all():
-			devices = room.Devices.all()
-			for device in devices:
-				lights.append(device)
-		
-		return lights
-	
-
-
 class handleLightView(viewRequestHandler):
 	def getViewParameters(self):
-		lights = lightFactory().getAllLights()
+		#lights = lightFactory().getAllLights(self.Kearguments)
+		
+		lights = LightDevice.getDevices(self.Kearguments)
+		
 		parameters = {'lights':lights, 'scrollModes':ScrollModes.objects.all()}
 		
 		kwargs = self.Kearguments

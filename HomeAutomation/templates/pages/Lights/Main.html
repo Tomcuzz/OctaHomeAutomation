@@ -25,7 +25,7 @@
 				<td>{{alight.id}}</td>
 				<td>{{alight.Name | replaceUnderscores}}</td>
 				<td>{{alight.Room.Name | replaceUnderscores}}</td>
-				{% if alight.LightType == "RGBLight" %}
+				{% if "RGBLightDevice" in alight.getObjectType %}
 					<td>
 						<p class="text-danger">R= 
 						<s id="rgbR{{alight.id}}" name="light{{alight.id}}Red" data-type="text" data-pk="1" data-url="/Lights/?command=setR&lightId={{alight.id}}" data-original-title="Set Red Level">{{alight.R}}</s>, </p>
@@ -42,9 +42,9 @@
 					{% endif %}
 				{% endif %}
 			<td>
-				{% if alight.LightType == "RGBLight" %}
+				{% if "RGBLightDevice" in alight.getObjectType %}
 					<div class="btn-group">
-						{% if alight.LightState == "Off" %}
+						{% if alight.IsOn != True %}
 							<button class="btn btn-success" name="light{{alight.id}}OnOff" onClick="switchState('{{alight.id}}')">Turn On</button>
 						{% else %}
 							<button class="btn btn-danger" name="light{{alight.id}}OnOff" onClick="switchState('{{alight.id}}')">Turn Off</button>
