@@ -38,6 +38,28 @@ class Device(models.Model):
 	IpAddress = models.TextField()
 	Port = models.IntegerField()
 	
+	@staticmethod
+	def getDevices(kwargs={}, deviceType=''):
+		devices = []
+		
+		if kwargs.has_key('house'):
+			if kwargs.has_key('room'):
+				rooms = Room.objects.filter(id=kwargs['room'])
+			else:
+				house = Home.objects.filter(id=kwargs['house'])
+				rooms = Room.objects.filter(Home=house)
+		else:
+			rooms = Room.objects.all()
+		
+		for room in rooms:
+			for device in room.Devices.all():
+				if deviceType != '' and deviceType in device.getObjectType():
+					devices.append(device)
+				else:
+					devices.append(device)
+		
+		return devices
+	
 	def getObjectType(self):
 		return ['Device']
 	
@@ -50,6 +72,10 @@ class OutputDevice(Device):
 	
 	def	handleAction(self, function, parameters):
 		pass
+	
+	@staticmethod
+	def getDevices(kwargs={}):
+		return Device.getDevices(kwargs, 'OutputDevice')
 	
 	def getObjectType(self):
 		supersType = super(OutputDevice, self).getObjectType()
@@ -64,7 +90,10 @@ class InputDevice(Device):
 	def getObjectType(self):
 		supersType = super(InputDevice, self).getObjectType()
 		return supersType + ["InputDevice"]
-		
+	
+	@staticmethod
+	def getDevices(kwargs={}):
+		return Device.getDevices(kwargs, 'InputDevice')
 	
 	class Meta:
 		abstract = True	

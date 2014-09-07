@@ -24,6 +24,10 @@ class LightDevice(OutputDevice):
 		supersType = super(LightDevice, self).getObjectType()
 		return supersType + ["LightDevice"]
 	
+	@staticmethod
+	def getDevices(kwargs={}):
+		return Device.getDevices(kwargs, 'LightDevice')
+	
 	class Meta:
 		abstract = True
 
@@ -67,9 +71,12 @@ class RGBLights(LightDevice):
 		self.Scroll = ScrollModes.objects.get(name=scrollModeName)
 		self.save()
 	
-	
 	def setRGB(r, g, b):
 		pass
+	
+	@staticmethod
+	def getDevices(kwargs={}):
+		return Device.getDevices(kwargs, 'RGBLightDevice')
 	
 	def getObjectType(self):
 		supersType = super(RGBLights, self).getObjectType()
@@ -88,6 +95,10 @@ class ArduinoRGBLight(RGBLights):
 		message = "r=" + r + ",g=" + g + ",b=" + b + ","
 		CommunicationControl().sendTCPMessage(self.ipAddress, self.port, message)
 		self.save()
+	
+	@staticmethod
+	def getDevices(kwargs={}):
+		return Device.getDevices(kwargs, 'ArduinoRGBLightDevice')
 	
 	def getObjectType(self):
 		supersType = super(ArduinoRGBLight, self).getObjectType()
