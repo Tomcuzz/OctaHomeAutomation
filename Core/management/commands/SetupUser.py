@@ -12,7 +12,7 @@ class Command(BaseCommand):
 	isSuperUser = False
 	homeLocation = ''
 
-	help = "This initialises a user account and weather locations"
+	help = "This initialises a user account"
 
 	def handle(self, *args, **options):
 		while True:
