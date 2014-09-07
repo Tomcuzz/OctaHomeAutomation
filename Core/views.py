@@ -4,17 +4,18 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
 from django.middleware.csrf import get_token
 from models import *
+import json
 
 class requestHandler(View):
 	request = ''
 	isSecuredArea = True
 	isUserAuthenticated = False
-	arguments = []
-	kwarguments = []
+	Arguments = []
+	Kwarguments = {}
 	
 	def get(self, request, *args, **kwargs):
-		self.arguments = args
-		self.kearguments = kwargs
+		self.Arguments = args
+		self.Kearguments = kwargs
 		return self.handleRequest(request)
 	
 	def post(self, request, *args, **kwargs):

@@ -15,8 +15,7 @@ class ScrollModes(models.Model):
 
 
 class LightDevice(OutputDevice):
-	isOn = models.BooleanField()
-	
+	isOn = models.BooleanField(default=False)
 	
 	def setOnOff(setOn):
 		pass
@@ -29,7 +28,7 @@ class RGBLights(LightDevice):
 	R = models.IntegerField()
 	G = models.IntegerField()
 	B = models.IntegerField()
-	Scroll = models.ForeignKey(ScrollModes, related_name="RGBLights")
+	Scroll = models.ForeignKey(ScrollModes, blank=True, null=True, related_name="RGBLights")
 	
 	def listActions(self):
 		return ["turnOn", "setRGB", "setSroll"];

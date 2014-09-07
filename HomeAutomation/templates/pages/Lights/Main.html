@@ -85,7 +85,13 @@
 				<td></td>
 				<td></td>
 				<td></td>
-				<td><a href="/Lights?page=addLightPage&room={{room}}"><button class="btn btn-primary">+</button></a></td>
+				{% if house and room %}
+					<td><a href="{% url 'LightPage' page='AddLight' house=house room=room %}"><button class="btn btn-primary">+</button></a></td>
+				{% elif house %}
+					<td><a href="{% url 'LightPage' page='AddLight' house=house %}"><button class="btn btn-primary">+</button></a></td>
+				{% else %}
+					<td><a href="{% url 'LightPage' page='AddLight' %}"><button class="btn btn-primary">+</button></a></td>
+				{% endif %}
 			</tr>
 		</tbody>
 	</table>

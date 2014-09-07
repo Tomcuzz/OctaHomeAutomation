@@ -1,18 +1,40 @@
 from Core.views import *
+from Core.models import *
 from models import *
 
-class handleLightView(viewRequestHandler):
-	page = 'home'
+class lightFactory():
+	def getAllLights(self):
+		lights = []
+		rooms = Room.objects.all()
+		for room in rooms.all():
+			devices = room.devices.all()
+			for device in devices:
+				lights.append(device)
+		
+		return lights
 	
+
+
+class handleLightView(viewRequestHandler):
 	def getViewParameters(self):
-		#LightDevice.objects.all()
-		return {'lights':[], 'scrollModes':ScrollModes.objects.all()}
+		lights = lightFactory().getAllLights()
+		parameters = {'lights':lights, 'scrollModes':ScrollModes.objects.all()}
+		
+		kwargs = self.Kearguments
+		if kwargs.has_key('house'):
+			parameters.update({'house':kwargs['house']})
+		if kwargs.has_key('room'):
+			parameters.update({'room':kwargs['room']})
+		
+		return parameters
 	
 	def getTemplate(self):
-		if self.page == 'home':
-			return 'pages/Lights/Main'
-		elif self.page == 'addLightPage':
-			return 'pages/Lights/AddLight'
+		items = self.Kearguments
+		if items.has_key('page'):
+			if items['page'] == 'AddLight':
+				return 'pages/Lights/AddLight'
+			else:
+				return 'pages/Lights/Main'
 		else:
 			return 'pages/Lights/Main'
 	
