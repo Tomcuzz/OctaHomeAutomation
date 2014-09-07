@@ -97,7 +97,7 @@ class viewRequestHandler(requestHandler):
 		
 		for house in Home.objects.all():
 			roomItems = []
-			for room in house.rooms.all():
+			for room in house.Rooms.all():
 				address = reverse(linkName, kwargs={'house':house.id, 'room':room.id})
 				sidebarSubItem = {'title': room.name.replace("_", " ") , 'address': address , 'active':self.getSideBarActiveState(room, currentRoom)}
 				roomItems.append(sidebarSubItem)

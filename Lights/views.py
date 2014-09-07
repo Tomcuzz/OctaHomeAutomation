@@ -7,7 +7,7 @@ class lightFactory():
 		lights = []
 		rooms = Room.objects.all()
 		for room in rooms.all():
-			devices = room.devices.all()
+			devices = room.Devices.all()
 			for device in devices:
 				lights.append(device)
 		

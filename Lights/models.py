@@ -3,7 +3,7 @@ from Core.models import *
 from Core.communication_controller import *
 
 class ScrollModes(models.Model):
-	name = models.TextField()
+	Name = models.TextField()
 	RValues = models.TextField()
 	GValues = models.TextField()
 	BValues = models.TextField()
@@ -15,7 +15,7 @@ class ScrollModes(models.Model):
 
 
 class LightDevice(OutputDevice):
-	isOn = models.BooleanField(default=False)
+	IsOn = models.BooleanField(default=False)
 	
 	def setOnOff(setOn):
 		pass

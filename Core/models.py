@@ -6,26 +6,26 @@ import json
 # Location Types
 ##
 class World(models.Model):
-	name = models.CharField(max_length=30)
+	Name = models.CharField(max_length=30)
 	class Meta:
 		db_table = u'Worlds'
 
 class Country(models.Model):
-	name = models.CharField(max_length=30)
-	world = models.ForeignKey(World, related_name="countrys")
+	Name = models.CharField(max_length=30)
+	World = models.ForeignKey(World, related_name="Countrys")
 	class Meta:
 		db_table = u'Country'
 
 
 class Home(models.Model):
-	name = models.CharField(max_length=30)
-	country = models.ForeignKey(World, related_name="homes")
+	Name = models.CharField(max_length=30)
+	Country = models.ForeignKey(World, related_name="Homes")
 	class Meta:
 		db_table = u'Homes'
 
 class Room(models.Model):
-	name = models.CharField(max_length=30)
-	home = models.ForeignKey(Home, related_name="rooms")
+	Name = models.CharField(max_length=30)
+	Home = models.ForeignKey(Home, related_name="Rooms")
 	class Meta:
 		db_table = u'Rooms'
 
@@ -33,16 +33,15 @@ class Room(models.Model):
 # Device Types
 ##
 class Device(models.Model):
-	name = models.CharField(max_length=30)
-	room = models.ManyToManyField(Room, related_name="devices")
-	ipAddress = models.TextField()
-	port = models.IntegerField()
+	Name = models.CharField(max_length=30)
+	Room = models.ManyToManyField(Room, related_name="Devices")
+	IpAddress = models.TextField()
+	Port = models.IntegerField()
 	
 	class Meta:
 		abstract = True
 
 class OutputDevice(Device):
-	
 	def listActions(self):
 		pass
 	
@@ -64,9 +63,9 @@ class InputDevice(Device):
 # Input/Output
 ##
 class Action(models.Model):
-	name = models.CharField(max_length=30)
-	device = GenericRelation(OutputDevice, related_query_name="actions")
-	parameters = models.TextField()
+	Name = models.CharField(max_length=30)
+	Devices = GenericRelation(OutputDevice, related_query_name="Actions")
+	Parameters = models.TextField()
 	
 	def getParameters(self):
 		return json.loads(self.parameters)
@@ -75,9 +74,9 @@ class Action(models.Model):
 		self.parameters = json.dumps(array)
 	
 	def run():
-		for device in self.actions:
-			functionName = parameters[device.name]['name']
-			functionParameters = parameters[device.name]['parameters']
+		for device in self.Devices:
+			functionName = parameters[device.Name]['name']
+			functionParameters = parameters[device.Name]['parameters']
 			if functionName != '':
 				device.handleAction(functionName, functionParameters)
 	
@@ -86,8 +85,8 @@ class Action(models.Model):
 
 
 class Event(models.Model):
-	name = models.CharField(max_length=30)
-	actions = GenericRelation(Action, related_query_name="events")
+	Name = models.CharField(max_length=30)
+	Actions = GenericRelation(Action, related_query_name="Events")
 	
 	def call():
 		for action in self.actions:
