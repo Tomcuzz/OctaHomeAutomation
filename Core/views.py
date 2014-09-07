@@ -122,6 +122,7 @@ class viewRequestHandler(requestHandler):
 			return None
 
 class commandRequestHandler(requestHandler):
+	Command = ''
 	#Normal Overridable methods
 	
 	def runCommand(self, command):
@@ -132,7 +133,12 @@ class commandRequestHandler(requestHandler):
 		if self.securityFails():
 			return self.handleAuthenticationFailue()
 		
-		return self.runCommand(getCommand(self))
+		if items.has_key('command'):
+			self.Command = items['command']
+		else:
+			return self.handleUserError('No Command Given')
+		
+		return self.runCommand()
 	
 	def returnOk(self):
 		return HttpResponse('Ok')
@@ -142,7 +148,3 @@ class commandRequestHandler(requestHandler):
 	
 	def handleAuthenticationFailue(self):
 		return HttpResponseForbidden()
-		
-	#supporting functions
-	def getCommand(self):
-		return self.Request.GET.get('command', 'None')

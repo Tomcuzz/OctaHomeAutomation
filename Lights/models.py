@@ -50,29 +50,52 @@ class RGBLights(LightDevice):
 			self.setScroll(parameters[0])
 		self.save()
 	
-	def setOnOff(setOn):
+	def getScroll(self):
+		if self.Scroll:
+			return self.Scroll.Name
+		else:
+			return "Off"
+	
+	def setOnOff(self, setOn):
 		self.isOn = setOn
 		if setOn:
 			self.setRGB(self.R, self.G, self.B)
 		else:
 			self.setRGB(0, 0, 0)
 		self.save()
+		return True
 	
-	def setR(r):
-		self.setRGB(r, self.G, self.B)
+	def setR(self, r):
+		if self.checkColourInt(r):
+			return self.setRGB(r, self.G, self.B)
+		else:
+			return False
 	
-	def setG(g):
-		self.setRGB(self.R, g, self.B)
+	def setG(self, g):
+		if self.checkColourInt(g):
+			return self.setRGB(self.R, g, self.B)
+		else:
+			return False
 	
-	def setB(b):
-		self.setRGB(self.R, self.G, b)
+	def setB(self, b):
+		if self.checkColourInt(b):
+			return self.setRGB(self.R, self.G, b)
+		else:
+			return False
 	
-	def setScroll(scrollModeName):
+	def setScroll(self, scrollModeName):
 		self.Scroll = ScrollModes.objects.get(name=scrollModeName)
 		self.save()
 	
-	def setRGB(r, g, b):
+	def setRGB(self, r, g, b):
 		pass
+	
+	def checkColourInt(self, colour):
+		colour = int(colour)
+		if 0 <= colour <= 255:
+			return True
+		else:
+			return False
 	
 	@staticmethod
 	def getDevices(kwargs={}):
@@ -86,15 +109,22 @@ class RGBLights(LightDevice):
 		abstract = True
 
 class ArduinoRGBLight(RGBLights):
-	def setRGB(r, g, b):
-		if r!=0 and g!=0 and b!=0:
-			self.R = r
-			self.G = g
-			self.B = b
-		
-		message = "r=" + r + ",g=" + g + ",b=" + b + ","
-		CommunicationControl().sendTCPMessage(self.ipAddress, self.port, message)
-		self.save()
+	def setRGB(self, r, g, b):
+		if self.checkColourInt(r) and self.checkColourInt(g) and self.checkColourInt(b):
+			r = int(r)
+			g = int(g)
+			b = int(b)
+			if r!=0 and g!=0 and b!=0:
+				self.R = r
+				self.G = g
+				self.B = b
+			
+			message = "r=" + r + ",g=" + g + ",b=" + b + ","
+			CommunicationControl().sendTCPMessage(self.ipAddress, self.port, message)
+			self.save()
+			return True
+		else:
+			return False
 	
 	@staticmethod
 	def getDevices(kwargs={}):
