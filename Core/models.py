@@ -12,20 +12,20 @@ class World(models.Model):
 
 class Country(models.Model):
 	Name = models.CharField(max_length=30)
-	World = models.ForeignKey(World, related_name="Countrys")
+	World = models.ForeignKey(World, blank=True, null=True, related_name="Countrys")
 	class Meta:
 		db_table = u'Country'
 
 
 class Home(models.Model):
 	Name = models.CharField(max_length=30)
-	Country = models.ForeignKey(World, related_name="Homes")
+	Country = models.ForeignKey(Country, blank=True, null=True, related_name="Homes")
 	class Meta:
 		db_table = u'Homes'
 
 class Room(models.Model):
 	Name = models.CharField(max_length=30)
-	Home = models.ForeignKey(Home, related_name="Rooms")
+	Home = models.ForeignKey(Home, blank=True, null=True, related_name="Rooms")
 	class Meta:
 		db_table = u'Rooms'
 
@@ -34,7 +34,7 @@ class Room(models.Model):
 ##
 class Device(models.Model):
 	Name = models.CharField(max_length=30)
-	Room = models.ManyToManyField(Room, related_name="Devices")
+	Room = models.ManyToManyField(Room, blank=True, null=True, related_name="Devices")
 	IpAddress = models.TextField()
 	Port = models.IntegerField()
 	
