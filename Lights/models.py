@@ -20,6 +20,10 @@ class LightDevice(OutputDevice):
 	def setOnOff(setOn):
 		pass
 	
+	def getObjectType(self):
+		supersType = super(LightDevice, self).getObjectType()
+		return supersType + ["LightDevice"]
+	
 	class Meta:
 		abstract = True
 
@@ -67,6 +71,10 @@ class RGBLights(LightDevice):
 	def setRGB(r, g, b):
 		pass
 	
+	def getObjectType(self):
+		supersType = super(RGBLights, self).getObjectType()
+		return supersType + ["RGBLightDevice"]
+	
 	class Meta:
 		abstract = True
 
@@ -80,6 +88,10 @@ class ArduinoRGBLight(RGBLights):
 		message = "r=" + r + ",g=" + g + ",b=" + b + ","
 		CommunicationControl().sendTCPMessage(self.ipAddress, self.port, message)
 		self.save()
+	
+	def getObjectType(self):
+		supersType = super(ArduinoRGBLight, self).getObjectType()
+		return supersType + ['ArduinoRGBLightDevice']
 	
 	class Meta:
 		db_table = u'ArdinoRGBLights'

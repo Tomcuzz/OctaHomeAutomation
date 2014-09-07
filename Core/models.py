@@ -34,9 +34,12 @@ class Room(models.Model):
 ##
 class Device(models.Model):
 	Name = models.CharField(max_length=30)
-	Room = models.ManyToManyField(Room, blank=True, null=True, related_name="Devices")
+	Room = models.ForeignKey(Room, blank=True, null=True, related_name="Devices")
 	IpAddress = models.TextField()
 	Port = models.IntegerField()
+	
+	def getObjectType(self):
+		return ['Device']
 	
 	class Meta:
 		abstract = True
@@ -45,15 +48,24 @@ class OutputDevice(Device):
 	def listActions(self):
 		pass
 	
-	
 	def	handleAction(self, function, parameters):
 		pass
+	
+	def getObjectType(self):
+		supersType = super(OutputDevice, self).getObjectType()
+		return supersType + ["OutputDevice"]
 	
 	class Meta:
 	 	abstract = True
 
 class InputDevice(Device):
 	#events = models.ManyToManyField(Event, related_name="inputDevice")
+	
+	def getObjectType(self):
+		supersType = super(InputDevice, self).getObjectType()
+		return supersType + ["InputDevice"]
+		
+	
 	class Meta:
 		abstract = True	
 
