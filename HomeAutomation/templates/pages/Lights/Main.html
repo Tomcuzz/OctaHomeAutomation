@@ -23,8 +23,8 @@
 		{% for alight in lights %}
 			<tr>
 				<td>{{alight.id}}</td>
-				<td>{{alight.LightName | replaceUnderscores}}</td>
-				<td>{{alight.RoomName | replaceUnderscores}}</td>
+				<td>{{alight.Name | replaceUnderscores}}</td>
+				<td>{{alight.Room.Name | replaceUnderscores}}</td>
 				{% if alight.LightType == "RGBLight" %}
 					<td>
 						<p class="text-danger">R= 
