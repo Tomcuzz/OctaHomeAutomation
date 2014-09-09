@@ -24,7 +24,7 @@ class requestHandler(View):
 	def post(self, request, *args, **kwargs):
 		self.Request = request
 		self.arguments = args
-		self.kearguments = kwargs
+		self.Kwarguments = kwargs
 		self.isSecuredArea = self.isPageSecured()
 		self.isUserAuthenticated = self.Request.user.is_authenticated()
 		return self.handleRequest()
@@ -133,8 +133,8 @@ class commandRequestHandler(requestHandler):
 		if self.securityFails():
 			return self.handleAuthenticationFailue()
 		
-		if items.has_key('command'):
-			self.Command = items['command']
+		if self.Kwarguments.has_key('command'):
+			self.Command = self.Kwarguments['command']
 		else:
 			return self.handleUserError('No Command Given')
 		

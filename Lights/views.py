@@ -34,8 +34,8 @@ class handleLightView(viewRequestHandler):
 
 class handleLightCommand(commandRequestHandler):
 	def runCommand(self):
-		if items.has_key('lightName'):
-			light = items['lightName']
+		light = self.getLight()
+		if light:
 			if self.Command == 'toggleLightState':
 				if light.IsOn:
 					light.setOnOff(False)
@@ -49,29 +49,31 @@ class handleLightCommand(commandRequestHandler):
 				light.setOnOff(False)
 				return self.returnOk()
 			elif self.Command == 'setR':
-				return setColout('R')
+				return self.setColour('R', light)
 			elif self.Command == 'setB':
-				return setColout('B')
+				return self.setColour('B', light)
 			elif self.Command == 'setG':
-				return setColout('G')
+				return self.setColour('G', light)
 			elif self.Command == 'setRGB':
-				return setColout('RGB')
+				return self.setColour('RGB', light)
 			elif self.Command == 'getState':
 				return HttpResponse(json.dumps({"R":light.R, "G":light.G, "B":light.B, "Scroll":light.getScroll()}))
 			else:
-				self.handleUserError('Command Not Recognised')
+				return self.handleUserError('Command Not Recognised')
+		else:
+			return self.handleUserError('Light Not Found')
 	
-	def setColout(self, colour):
+	def setColour(self, colour, light):
 		if colour == 'R':
-			result = light.setR(self.request.POST.get('value','-1'))
+			result = light.setR(int(self.request.POST.get('value','-1')))
 		elif colour == 'G':
-			result = light.setG(self.request.POST.get('value','-1'))
+			result = light.setG(int(self.request.POST.get('value','-1')))
 		elif colour == 'B':
-			result = light.setB(self.request.POST.get('value','-1'))
+			result = light.setB(int(self.request.POST.get('value','-1')))
 		elif colour == 'RGB':
-			r = self.request.POST.get('r','-1')
-			g = self.request.POST.get('g','-1')
-			b = self.request.POST.get('b','-1')
+			r = int(self.request.POST.get('r','-1'))
+			g = int(self.request.POST.get('g','-1'))
+			b = int(self.request.POST.get('b','-1'))
 			result = light.setRGB(r, g, b)
 		else:
 			result = False
@@ -82,4 +84,21 @@ class handleLightCommand(commandRequestHandler):
 			self.handleUserError('Please Enter A Value Between 0 and 255')
 	
 	def getLight(self):
-		return []
+		light = None
+		if self.Kwarguments.has_key('lightType') and self.Kwarguments.has_key('lightId'):
+			for aLight in Device.getDevices(self.Kwarguments, self.Kwarguments['lightType']):
+				if str(aLight.id) == str(self.Kwarguments['lightId']):
+					light = aLight
+		return light
+
+
+
+
+
+
+
+
+
+
+
+

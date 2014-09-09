@@ -119,8 +119,12 @@ class ArduinoRGBLight(RGBLights):
 				self.G = g
 				self.B = b
 			
-			message = "r=" + r + ",g=" + g + ",b=" + b + ","
-			CommunicationControl().sendTCPMessage(self.ipAddress, self.port, message)
+			if self.IpAddress and self.Port:
+				message = "r=" + str(r) + ",g=" + str(g) + ",b=" + str(b) + ","
+				try:
+					CommunicationControl().sendTCPMessage(self.IpAddress, self.Port, message)
+				except :
+					pass
 			self.save()
 			return True
 		else:
