@@ -1,5 +1,4 @@
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseForbidden, Http404
-from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from django.views.generic import View
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
@@ -22,7 +21,6 @@ class requestHandler(View):
 		self.isUserAuthenticated = self.Request.user.is_authenticated()
 		return self.handleRequest()
 	
-	@ensure_csrf_cookie
 	def post(self, request, *args, **kwargs):
 		self.Request = request
 		self.arguments = args

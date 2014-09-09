@@ -107,7 +107,11 @@
 		$(document).ready(function() {
 			$.fn.editable.defaults.ajaxOptions = {type: "POST"};
 			$.fn.editable.defaults.mode = 'inline';
-			$('#lightTable s').editable();
+			$('#lightTable s').editable({
+				params: {
+					csrfmiddlewaretoken: '{{csrfmiddlewaretoken}}'
+				}
+			});
 		});
 		
 		function switchState(id) {
