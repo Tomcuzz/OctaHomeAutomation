@@ -63,15 +63,15 @@ class handleLightCommand(commandRequestHandler):
 	
 	def setColout(self, colour):
 		if colour == 'R':
-			result = light.setR(self.request.GET.get('value','-1')):
+			result = light.setR(self.request.POST.get('value','-1'))
 		elif colour == 'G':
-			result = light.setG(self.request.GET.get('value','-1')):
+			result = light.setG(self.request.POST.get('value','-1'))
 		elif colour == 'B':
-			result = light.setB(self.request.GET.get('value','-1')):
+			result = light.setB(self.request.POST.get('value','-1'))
 		elif colour == 'RGB':
-			r = self.request.GET.get('r','-1')
-			g = self.request.GET.get('g','-1')
-			b = self.request.GET.get('b','-1')
+			r = self.request.POST.get('r','-1')
+			g = self.request.POST.get('g','-1')
+			b = self.request.POST.get('b','-1')
 			result = light.setRGB(r, g, b)
 		else:
 			result = False

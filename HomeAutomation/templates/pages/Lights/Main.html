@@ -28,7 +28,7 @@
 				{% if "RGBLightDevice" in alight.getObjectType %}
 					<td>
 						<p class="text-danger">R= 
-						<s id="rgbR{{alight.id}}" name="light{{alight.id}}Red" data-type="text" data-pk="1" data-url="/Lights/?command=setR&lightId={{alight.id}}" data-original-title="Set Red Level">{{alight.R}}</s>, </p>
+						<s id="rgbR{{alight.id}}" name="light{{alight.id}}Red" data-type="text" data-pk="1" data-url="{% url 'LightCommand' command='setR' lightType=alight.getObjectType|last lightId=alight.id %}" data-original-title="Set Red Level">{{alight.R}}</s>, </p>
 						<p class="text-success">G= 
 						<s id="rgbG{{alight.id}}" name="light{{alight.id}}Green" data-type="text" data-pk="1" data-url="/Lights/?command=setG&lightId={{alight.id}}" data-original-title="Set Green Level">{{alight.G}}</s>, </p>
 						<p class="text-info">B= 
@@ -105,7 +105,7 @@
 	
 	<script>
 		$(document).ready(function() {
-			$.fn.editable.defaults.ajaxOptions = {type: "GET"};
+			$.fn.editable.defaults.ajaxOptions = {type: "POST"};
 			$.fn.editable.defaults.mode = 'inline';
 			$('#lightTable s').editable();
 		});
