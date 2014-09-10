@@ -57,11 +57,11 @@ class RGBLights(LightDevice):
 			return "Off"
 	
 	def setOnOff(self, setOn):
-		self.isOn = setOn
 		if setOn:
 			self.setRGB(self.R, self.G, self.B)
 		else:
 			self.setRGB(0, 0, 0)
+		self.isOn = setOn
 		self.save()
 		return True
 	
@@ -118,6 +118,9 @@ class ArduinoRGBLight(RGBLights):
 				self.R = r
 				self.G = g
 				self.B = b
+				self.IsOn = True
+			else:
+				self.IsOn = False
 			
 			if self.IpAddress and self.Port:
 				message = "r=" + str(r) + ",g=" + str(g) + ",b=" + str(b) + ","

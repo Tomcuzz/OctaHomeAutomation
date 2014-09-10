@@ -5,24 +5,20 @@ import json
 
 class handleLightView(viewRequestHandler):
 	def getViewParameters(self):
-		#lights = lightFactory().getAllLights(self.Kearguments)
-		
-		lights = LightDevice.getDevices(self.Kearguments)
+		lights = LightDevice.getDevices(self.Kwarguments)
 		
 		parameters = {'lights':lights, 'scrollModes':ScrollModes.objects.all()}
 		
-		kwargs = self.Kearguments
-		if kwargs.has_key('house'):
-			parameters.update({'house':kwargs['house']})
-		if kwargs.has_key('room'):
-			parameters.update({'room':kwargs['room']})
+		if self.Kwarguments.has_key('house'):
+			parameters.update({'house':self.Kwarguments['house']})
+		if self.Kwarguments.has_key('room'):
+			parameters.update({'room':self.Kwarguments['room']})
 		
 		return parameters
 	
 	def getTemplate(self):
-		items = self.Kearguments
-		if items.has_key('page'):
-			if items['page'] == 'AddLight':
+		if self.Kwarguments.has_key('page'):
+			if self.Kwarguments['page'] == 'AddLight':
 				return 'pages/Lights/AddLight'
 			else:
 				return 'pages/Lights/Main'
@@ -54,6 +50,12 @@ class handleLightCommand(commandRequestHandler):
 				return self.setColour('B', light)
 			elif self.Command == 'setG':
 				return self.setColour('G', light)
+			elif self.Command == 'getR':
+				return HttpResponse(light.R)
+			elif self.Command == 'getG':
+				return HttpResponse(light.G)
+			elif self.Command == 'getB':
+				return HttpResponse(light.B)
 			elif self.Command == 'setRGB':
 				return self.setColour('RGB', light)
 			elif self.Command == 'getState':

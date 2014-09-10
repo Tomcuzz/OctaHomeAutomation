@@ -151,11 +151,11 @@
 			lightGreenLevel = "light" + id + "Green";
 			lightBlueLevel = "light" + id + "Blue";
 			
-			rUrl = "{% url 'Lights' protocal='html' %}?command=getR&lightId=" + id;
-			gUrl = "{% url 'Lights' protocal='html' %}?command=getG&lightId=" + id;
-			bUrl = "{% url 'Lights' protocal='html' %}?command=getB&lightId=" + id;
+			rUrl = "{% url 'LightCommandWithOutLight' command='getR' %}" + type + "/" + id + "/";
+			gUrl = "{% url 'LightCommandWithOutLight' command='getG' %}" + type + "/" + id + "/";
+			bUrl = "{% url 'LightCommandWithOutLight' command='getB' %}" + type + "/" + id + "/";
 			
-			url = "{% url 'Lights' protocal='html' %}?command=turnOn&lightId=" + id;
+			url = "{% url 'LightCommandWithOutLight' command='turnOn' %}" + type + "/" + id + "/";
 			httpGet(url);
 			
 			R = httpGet(rUrl);

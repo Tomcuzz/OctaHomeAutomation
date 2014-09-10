@@ -16,7 +16,7 @@ class requestHandler(View):
 	def get(self, request, *args, **kwargs):
 		self.Request = request
 		self.Arguments = args
-		self.Kearguments = kwargs
+		self.Kwarguments = kwargs
 		self.isSecuredArea = self.isPageSecured()
 		self.isUserAuthenticated = self.Request.user.is_authenticated()
 		return self.handleRequest()
