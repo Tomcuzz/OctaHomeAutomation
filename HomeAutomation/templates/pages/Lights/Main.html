@@ -35,19 +35,19 @@
 						<s id="rgbB{{alight.id}}" name="light{{alight.id}}Blue" data-type="text" data-pk="1" data-url="{% url 'LightCommand' command='setB' lightType=alight.getObjectType|last lightId=alight.id %}" data-original-title="Set Blue Level">{{alight.B}}</s></p>
 					</td>
 				{% else %}
-					{% if alight.LightState == "On" %}
+					{% if alight.IsOn %}
 						<td name="light{{alight.id}}State" class="text-success">{{alight.LightState}}</td>
 					{% else %}
-						<td name="light{{alight.id}}State" class="text-danger"> {{alight.LightState}}</td>
+						<td name="light{{alight.id}}State" class="text-danger">{{alight.LightState}}</td>
 					{% endif %}
 				{% endif %}
 			<td>
 				{% if "RGBLightDevice" in alight.getObjectType %}
 					<div class="btn-group">
 						{% if alight.IsOn != True %}
-							<button class="btn btn-success" name="light{{alight.id}}OnOff" onClick="switchState('{{alight.id}}')">Turn On</button>
+							<button class="btn btn-success" name="light{{alight.id}}OnOff" onClick="switchState('{{alight.id}}', '{{alight.getObjectType|last}}')">Turn On</button>
 						{% else %}
-							<button class="btn btn-danger" name="light{{alight.id}}OnOff" onClick="switchState('{{alight.id}}')">Turn Off</button>
+							<button class="btn btn-danger" name="light{{alight.id}}OnOff" onClick="switchState('{{alight.id}}', '{{alight.getObjectType|last}}')">Turn Off</button>
 						{% endif %}
 						<a class="btn btn-primary" onClick="changeColour('{{alight.id}}')" rel="drevil"> Set Colour </a>
 						<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">
@@ -71,10 +71,10 @@
 					</div>
 					
 					{% else %}
-						{% if alight.LightState == "Off" %}
-							<button class="btn btn-success" name="light{{alight.id}}OnOff" onClick="switchState('{{alight.id}}')">Turn On</button>
+						{% if alight.IsOn %}
+							<button class="btn btn-danger" name="light{{alight.id}}OnOff" onClick="switchState('{{alight.id}}', '{{alight.getObjectType|last}}')">Turn Off</button>
 						{% else %}
-							<button class="btn btn-danger" name="light{{alight.id}}OnOff" onClick="switchState('{{alight.id}}')">Turn Off</button>
+							<button class="btn btn-success" name="light{{alight.id}}OnOff" onClick="switchState('{{alight.id}}', '{{alight.getObjectType|last}}')">Turn On</button>
 						{% endif %}
 					{% endif %}
 				</td>
@@ -114,16 +114,16 @@
 			});
 		});
 		
-		function switchState(id) {
+		function switchState(id, type) {
 			lightObject = "light" + id + "OnOff";
 			if (document.getElementsByName(lightObject)[0].innerHTML == "Turn On") {
-				turnOn(id)
+				turnOn(id, type)
 			} else {
-				turnOff(id)
+				turnOff(id, type)
 			}
 		}
 		
-		function turnOff(id) {
+		function turnOff(id, type) {
 			lightObject = "light" + id + "OnOff";
 			lightState = "light" + id + "State";
 			lightRedLevel = "light" + id + "Red";
@@ -139,11 +139,11 @@
 				document.getElementsByName(lightState)[0].innerHTML = "Off";
 				document.getElementsByName(lightState)[0].className = "text-error";
 			}
-			url = "{% url 'Lights' protocal='html' %}?command=turnOff&lightId=" + id;
+			url = "{% url 'LightCommandWithOutLight' command='turnOff' %}" + type + "/" +  id + "/";
 			httpGet(url);
 		}
 		
-		function turnOn(id) {
+		function turnOn(id, type) {
 			lightObject = "light" + id + "OnOff";
 			lightDropDown = "light" + id + "DropDown";
 			lightState = "light" + id + "State";
