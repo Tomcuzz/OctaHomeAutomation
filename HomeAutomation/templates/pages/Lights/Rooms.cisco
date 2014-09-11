@@ -1,0 +1,18 @@
+{% load my_filters %}
+<CiscoIPPhoneMenu>
+	<Title>Home Automation System</Title>
+	<Prompt>Please Select A Room</Prompt>
+	
+	<MenuItem>
+		<Name>All</Name>
+		<URL>http://192.168.1.101{% url 'Lights' protocal='cisco' house='all' %}</URL>
+	</MenuItem>
+	{% for room in rooms %}
+		{% if room == 'all' or room == room.Home.id %}
+		<MenuItem>
+			<Name>{{ room.Name }}</Name>
+			<URL>http://192.168.1.101{% url 'Lights' protocal='cisco' house=house.id room=room.id %}</URL>
+		</MenuItem>
+		{% endif %}
+	{% endfor %}
+</CiscoIPPhoneMenu>
