@@ -42,8 +42,8 @@ class Device(models.Model):
 	def getDevices(kwargs={}, deviceType=''):
 		devices = []
 		
-		if kwargs.has_key('house'):
-			if kwargs.has_key('room'):
+		if kwargs.has_key('house') and kwargs['house'] != 'all':
+			if kwargs.has_key('room') and kwargs['room'] != 'all':
 				rooms = Room.objects.filter(id=kwargs['room'])
 			else:
 				house = Home.objects.filter(id=kwargs['house'])

@@ -11,12 +11,24 @@ class handleLightView(viewRequestHandler):
 		
 		if self.Kwarguments.has_key('house'):
 			parameters.update({'house':self.Kwarguments['house']})
+		else:
+			parameters.update({'houses':Home.objects.all()})
+			
 		if self.Kwarguments.has_key('room'):
 			parameters.update({'room':self.Kwarguments['room']})
+		else:
+			parameters.update({'rooms':Room.objects.all()})
 		
 		return parameters
 	
 	def getTemplate(self):
+		if self.Kwarguments.has_key('protocal'):
+			if self.Kwarguments['protocal'] == 'cisco':
+				if not self.Kwarguments.has_key('house'):
+					return 'pages/Lights/Houses'
+				elif not self.Kwarguments.has_key('room'):
+					return 'pages/Lights/Rooms'
+		
 		if self.Kwarguments.has_key('page'):
 			if self.Kwarguments['page'] == 'AddLight':
 				return 'pages/Lights/AddLight'
@@ -92,15 +104,3 @@ class handleLightCommand(commandRequestHandler):
 				if str(aLight.id) == str(self.Kwarguments['lightId']):
 					light = aLight
 		return light
-
-
-
-
-
-
-
-
-
-
-
-

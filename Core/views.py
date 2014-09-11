@@ -34,6 +34,10 @@ class requestHandler(View):
 		pass
 	
 	def isPageSecured(self):			#Override to unsecure page
+		if self.Kwarguments.has_key('protocal'):
+			if self.Kwarguments['protocal'] == 'cisco':
+				return False
+		
 		return True
 		
 	
@@ -49,7 +53,6 @@ class requestHandler(View):
 			return False
 
 class viewRequestHandler(requestHandler):
-	Protocal = 'html'
 	template = ''
 	
 	#Normal Overridable methods
@@ -62,23 +65,35 @@ class viewRequestHandler(requestHandler):
 	def getSidebarUrlName(self):
 		pass
 	
+	def getContentType(self):
+		return None
+	
 	#Subclass methods
-	def handleRequest(self, protocal="html"):
+	def handleRequest(self):
 		if self.securityFails():
 			return self.handleAuthenticationFailue()
+			
+		if self.Kwarguments.has_key('protocal'):
+			templateExtension = self.Kwarguments['protocal']
+		else:
+			templateExtension = 'html'
 		
 		self.template = self.getTemplate()
 		if self.template != "":
-			self.template = self.template + "." + protocal
+			self.template = self.template + "." + templateExtension
 		
 		content = self.getViewParameters()
-		return self.returnView(content)
+		contentType = self.getContentType()
+		return self.returnView(content, contentType)
 	
-	def returnView(self, parameters={}):
+	def returnView(self, parameters={}, contentType=None):
 		if self.template != '':
 			standardParams = {'csrfmiddlewaretoken':get_token(self.Request), 'room':self.Request.GET.get('room', 'All'), 'links': self.getSideBar()}
 			parameters = dict(standardParams.items() + parameters.items())
-			return render(self.Request, self.template, parameters)
+			if contentType == None:
+				return render(self.Request, self.template, parameters)
+			else:
+				return render(self.Request, self.template, parameters, content_type=contentType)
 		else :
 			raise Http404
 	
