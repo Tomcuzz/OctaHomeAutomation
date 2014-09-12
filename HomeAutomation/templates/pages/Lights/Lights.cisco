@@ -6,7 +6,7 @@
 		<Name>All</Name>
 		<URL>http://192.168.1.101{% url 'Lights' protocal='cisco' house='all' %}</URL>
 	</MenuItem>
-	{% for room in rooms %}
+	{% for light in lights %}
 		{% if house == 'all' or house == room.Home.id %}
 		<MenuItem>
 			<Name>{{ room.Name }}</Name>

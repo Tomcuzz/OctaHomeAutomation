@@ -10,12 +10,16 @@ class handleLightView(viewRequestHandler):
 		parameters = {'lights':lights, 'scrollModes':ScrollModes.objects.all()}
 		
 		if self.Kwarguments.has_key('house'):
-			parameters.update({'house':self.Kwarguments['house']})
+			if self.Kwarguments['house'] == 'all':
+				houseId = 'all'
+			else:
+				houseId = int(self.Kwarguments['house'])
+			parameters.update({'house':houseId})
 		else:
 			parameters.update({'houses':Home.objects.all()})
 			
 		if self.Kwarguments.has_key('room'):
-			parameters.update({'room':self.Kwarguments['room']})
+			parameters.update({'rooms':self.Kwarguments['room']})
 		else:
 			parameters.update({'rooms':Room.objects.all()})
 		
@@ -28,6 +32,8 @@ class handleLightView(viewRequestHandler):
 					return 'pages/Lights/Houses'
 				elif not self.Kwarguments.has_key('room'):
 					return 'pages/Lights/Rooms'
+				elif not self.Kwarguments.has_key('page'):
+					return 'pages/Lights/Lights'
 		
 		if self.Kwarguments.has_key('page'):
 			if self.Kwarguments['page'] == 'AddLight':
