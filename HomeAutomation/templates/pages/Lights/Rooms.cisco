@@ -4,7 +4,7 @@
 	<Prompt>Please Select A Room</Prompt>
 	<MenuItem>
 		<Name>All</Name>
-		<URL>http://192.168.1.101{% url 'Lights' protocal='cisco' house='all' %}</URL>
+		<URL>http://192.168.1.101{% url 'Lights' protocal='cisco' house='all' room='all' %}</URL>
 	</MenuItem>
 	{% for room in rooms %}
 		{% if house == 'all' or house == room.Home.id %}

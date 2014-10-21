@@ -39,7 +39,6 @@ class requestHandler(View):
 				return False
 		
 		return True
-		
 	
 	
 	def handleAuthenticationFailue(self):

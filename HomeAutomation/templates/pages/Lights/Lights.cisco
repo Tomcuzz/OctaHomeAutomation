@@ -2,16 +2,10 @@
 <CiscoIPPhoneMenu>
 	<Title>Home Automation System</Title>
 	<Prompt>Please Select A Room</Prompt>
-	<MenuItem>
-		<Name>All</Name>
-		<URL>http://192.168.1.101{% url 'Lights' protocal='cisco' house='all' %}</URL>
-	</MenuItem>
 	{% for light in lights %}
-		{% if house == 'all' or house == room.Home.id %}
 		<MenuItem>
-			<Name>{{ room.Name }}</Name>
-			<URL>http://192.168.1.101{% url 'Lights' protocal='cisco' house=room.Home.id room=room.id %}</URL>
+			<Name>{{ light.Name }}</Name>
+			<URL>http://192.168.1.101{% url 'Lights' protocal='cisco' house=light.Room.Home.id room=light.Room.id lightType=light.getObjectType|last lightId=light.id %}</URL>
 		</MenuItem>
-		{% endif %}
 	{% endfor %}
 </CiscoIPPhoneMenu>
