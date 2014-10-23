@@ -5,7 +5,6 @@ from django.conf.urls import patterns, include, url
 # admin.autodiscover()
 
 modulePatterns = [
-    url(r'^HomeStats/', include('HomeStats.urls')),
     #url(r'^Security/', 'Security.views.SecurityMain', name='Security'),
     #url(r'^Lights/', 'Lights.views.LightsMain', name='Lights'),
 	url(r'^Lights/', include('Lights.urls')),
@@ -24,16 +23,17 @@ modulePatterns = [
     #url(r'^api', 'Api.views.ApiMain', name='Api'),
     
     #Old Holders
-    url(r'^Security$', 'Alarm.views.AlarmMain', name='Security'),
-    url(r'^Alarm$', 'Alarm.views.AlarmMain', name='Alarm'),
-    url(r'^Curtains$', 'Alarm.views.AlarmMain', name='Curtains'),
-    url(r'^TempControl$', 'Alarm.views.AlarmMain', name='TempControl'),
-    url(r'^AudioVisual$', 'Alarm.views.AlarmMain', name='AudioVisual'),
-    url(r'^Meals$', 'Alarm.views.AlarmMain', name='Meals'),
-    url(r'^Recipes$', 'Alarm.views.AlarmMain', name='Recipes'),
-    url(r'^Fridge$', 'Alarm.views.AlarmMain', name='Fridge'),
-    url(r'^DeviceInput$', 'Alarm.views.AlarmMain', name='DeviceInput'),
-    url(r'^api$', 'Alarm.views.AlarmMain', name='Api'),
+    url(r'^HomeStats/', include('HomeStats.urls')),
+    url(r'^Security$', 'Proxmox.views.ProxmoxMain', name='Security'),
+    url(r'^Alarm$', 'Proxmox.views.ProxmoxMain', name='Alarm'),
+    url(r'^Curtains$', 'Proxmox.views.ProxmoxMain', name='Curtains'),
+    url(r'^TempControl$', include('TempControl.urls')),
+    url(r'^AudioVisual$', 'Proxmox.views.ProxmoxMain', name='AudioVisual'),
+    url(r'^Meals$', 'Proxmox.views.ProxmoxMain', name='Meals'),
+    url(r'^Recipes$', 'Proxmox.views.ProxmoxMain', name='Recipes'),
+    url(r'^Fridge$', 'Proxmox.views.ProxmoxMain', name='Fridge'),
+    url(r'^DeviceInput$', 'Proxmox.views.ProxmoxMain', name='DeviceInput'),
+    url(r'^api$', 'Proxmox.views.ProxmoxMain', name='Api'),
     
     url(r'^', include('Home.urls')),
 ]

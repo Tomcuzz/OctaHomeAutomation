@@ -39,7 +39,6 @@ class requestHandler(View):
 				return False
 		
 		return True
-		
 	
 	
 	def handleAuthenticationFailue(self):
@@ -66,6 +65,10 @@ class viewRequestHandler(requestHandler):
 		pass
 	
 	def getContentType(self):
+		if self.Kwarguments.has_key('protocal'):
+			if self.Kwarguments['protocal'] == 'cisco':
+				return "text/xml"
+		
 		return None
 	
 	#Subclass methods
