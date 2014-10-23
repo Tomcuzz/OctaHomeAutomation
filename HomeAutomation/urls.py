@@ -5,7 +5,7 @@ from django.conf.urls import patterns, include, url
 # admin.autodiscover()
 
 modulePatterns = [
-	#url(r'^HomeStats/', 'HomeStats.views.HomeStatsMain', name='HomeStats'),
+    url(r'^HomeStats/', include('HomeStats.urls')),
     #url(r'^Security/', 'Security.views.SecurityMain', name='Security'),
     #url(r'^Lights/', 'Lights.views.LightsMain', name='Lights'),
 	url(r'^Lights/', include('Lights.urls')),
@@ -24,17 +24,16 @@ modulePatterns = [
     #url(r'^api', 'Api.views.ApiMain', name='Api'),
     
     #Old Holders
-    url(r'^HomeStats$', 'HomeStats.views.HomeStatsMain', name='HomeStats'),
-    url(r'^Security$', 'HomeStats.views.HomeStatsMain', name='Security'),
-    url(r'^Alarm$', 'HomeStats.views.HomeStatsMain', name='Alarm'),
-    url(r'^Curtains$', 'HomeStats.views.HomeStatsMain', name='Curtains'),
-    url(r'^TempControl$', 'HomeStats.views.HomeStatsMain', name='TempControl'),
-    url(r'^AudioVisual$', 'HomeStats.views.HomeStatsMain', name='AudioVisual'),
-    url(r'^Meals$', 'HomeStats.views.HomeStatsMain', name='Meals'),
-    url(r'^Recipes$', 'HomeStats.views.HomeStatsMain', name='Recipes'),
-    url(r'^Fridge$', 'HomeStats.views.HomeStatsMain', name='Fridge'),
-    url(r'^DeviceInput$', 'HomeStats.views.HomeStatsMain', name='DeviceInput'),
-    url(r'^api$', 'HomeStats.views.HomeStatsMain', name='Api'),
+    url(r'^Security$', 'Alarm.views.AlarmMain', name='Security'),
+    url(r'^Alarm$', 'Alarm.views.AlarmMain', name='Alarm'),
+    url(r'^Curtains$', 'Alarm.views.AlarmMain', name='Curtains'),
+    url(r'^TempControl$', 'Alarm.views.AlarmMain', name='TempControl'),
+    url(r'^AudioVisual$', 'Alarm.views.AlarmMain', name='AudioVisual'),
+    url(r'^Meals$', 'Alarm.views.AlarmMain', name='Meals'),
+    url(r'^Recipes$', 'Alarm.views.AlarmMain', name='Recipes'),
+    url(r'^Fridge$', 'Alarm.views.AlarmMain', name='Fridge'),
+    url(r'^DeviceInput$', 'Alarm.views.AlarmMain', name='DeviceInput'),
+    url(r'^api$', 'Alarm.views.AlarmMain', name='Api'),
     
     url(r'^', include('Home.urls')),
 ]

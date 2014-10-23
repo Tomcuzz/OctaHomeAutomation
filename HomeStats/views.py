@@ -5,17 +5,26 @@ from django.shortcuts import redirect
 
 from Lights.models import *
 from DeviceInput.models import *
+from Core.views import *
+from Core.models import *
 
-def HomeStatsMain(request):
-	if not request.user.is_authenticated():
-		return redirect('/Login?next=%s' % request.path)
+class handleHomeStatsView(viewRequestHandler):
+	def getViewParameters(self):
+		lights = LightDevice.getDevices()
+		
+		paramerters = {'Lights':lights}
+		
+		return paramerters
 	
-	stats = {'lightsOn':str(Lights.objects.filter(LightState='On').count()),
-		'motionDevicesArmed':str(MotionInputDevice.objects.filter(Armed=True).count()),
-		'motionDevicesActivated':str(MotionInputDevice.objects.filter(Activated=True).count())
-		}
+	def getContentType(self):
+		if self.Kwarguments.has_key('protocal'):
+			if self.Kwarguments['protocal'] == 'cisco':
+				return "text/xml"
+		
+		return None
 	
-	lights = Lights.objects.all()
-	motionDevices = MotionInputDevice.objects.all()
+	def getTemplate(self):
+		return 'pages/HomeStats/HomeStats'
 	
-	return render(request, 'pages/HomeStats.html', {'Lights':lights, 'Stats':stats})
+	def getSidebarUrlName(self):
+		return 'Home'
