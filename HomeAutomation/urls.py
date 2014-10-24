@@ -27,7 +27,7 @@ modulePatterns = [
     url(r'^Security$', 'Proxmox.views.ProxmoxMain', name='Security'),
     url(r'^Alarm$', 'Proxmox.views.ProxmoxMain', name='Alarm'),
     url(r'^Curtains$', 'Proxmox.views.ProxmoxMain', name='Curtains'),
-    url(r'^TempControl$', include('TempControl.urls')),
+    url(r'^TempControl/', include('TempControl.urls')),
     url(r'^AudioVisual$', 'Proxmox.views.ProxmoxMain', name='AudioVisual'),
     url(r'^Meals$', 'Proxmox.views.ProxmoxMain', name='Meals'),
     url(r'^Recipes$', 'Proxmox.views.ProxmoxMain', name='Recipes'),

@@ -34,7 +34,7 @@ class Room(models.Model):
 ##
 class Device(models.Model):
 	Name = models.CharField(max_length=30)
-	Room = models.ForeignKey(Room, blank=True, null=True, related_name="Devices")
+	Room = models.ManyToManyField(Room, blank=True, null=True, related_name="%(app_label)s_%(class)s_Devices")
 	IpAddress = models.TextField()
 	Port = models.IntegerField()
 	
