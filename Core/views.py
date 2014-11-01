@@ -8,6 +8,7 @@ import json
 
 class requestHandler(View):
 	Request = {}
+	Protocal = 'html'
 	isSecuredArea = True
 	isUserAuthenticated = False
 	Arguments = []
@@ -17,6 +18,7 @@ class requestHandler(View):
 		self.Request = request
 		self.Arguments = args
 		self.Kwarguments = kwargs
+		self.Protocal = self.getProtocol()
 		self.isSecuredArea = self.isPageSecured()
 		self.isUserAuthenticated = self.Request.user.is_authenticated()
 		return self.handleRequest()
@@ -25,6 +27,7 @@ class requestHandler(View):
 		self.Request = request
 		self.arguments = args
 		self.Kwarguments = kwargs
+		self.Protocal = self.getProtocol()
 		self.isSecuredArea = self.isPageSecured()
 		self.isUserAuthenticated = self.Request.user.is_authenticated()
 		return self.handleRequest()
@@ -34,12 +37,16 @@ class requestHandler(View):
 		pass
 	
 	def isPageSecured(self):			#Override to unsecure page
-		if self.Kwarguments.has_key('protocal'):
-			if self.Kwarguments['protocal'] == 'cisco':
-				return False
-		
-		return True
+		if self.Protocal == 'cisco':
+			return False
+		else:
+			return True
 	
+	def getProtocol(self):
+		if self.Kwarguments.has_key('protocal'):
+			return self.Kwarguments['protocal']
+		else:
+			return 'html'
 	
 	def handleAuthenticationFailue(self):
 		pass
@@ -53,6 +60,7 @@ class requestHandler(View):
 
 class viewRequestHandler(requestHandler):
 	template = ''
+	Page = 'None'
 	
 	#Normal Overridable methods
 	def getViewParameters(self):
@@ -65,21 +73,20 @@ class viewRequestHandler(requestHandler):
 		pass
 	
 	def getContentType(self):
-		if self.Kwarguments.has_key('protocal'):
-			if self.Kwarguments['protocal'] == 'cisco':
-				return "text/xml"
-		
-		return None
+		if self.Protocal == 'cisco':
+			return "text/xml"
+		else:
+			return None
 	
 	#Subclass methods
 	def handleRequest(self):
 		if self.securityFails():
 			return self.handleAuthenticationFailue()
 			
-		if self.Kwarguments.has_key('protocal'):
-			templateExtension = self.Kwarguments['protocal']
-		else:
-			templateExtension = 'html'
+		templateExtension = self.Protocal
+		
+		if self.Kwarguments.has_key('page'):
+			self.Page = self.Kwarguments['page']
 		
 		self.template = self.getTemplate()
 		if self.template != "":
@@ -141,6 +148,7 @@ class viewRequestHandler(requestHandler):
 
 class commandRequestHandler(requestHandler):
 	Command = ''
+	Post = {}
 	#Normal Overridable methods
 	
 	def runCommand(self, command):
@@ -148,6 +156,7 @@ class commandRequestHandler(requestHandler):
 	
 	#Subclass methods
 	def handleRequest(self):
+		self.Post = dict(zip(self.Request.POST.keys(), self.Request.POST.values()))
 		if self.securityFails():
 			return self.handleAuthenticationFailue()
 		
@@ -160,6 +169,9 @@ class commandRequestHandler(requestHandler):
 	
 	def returnOk(self):
 		return HttpResponse('Ok')
+	
+	def redirect(self, path):
+		return redirect(path)
 	
 	def handleUserError(self, errorMessage=''):
 		return HttpResponse(errorMessage, status=400)

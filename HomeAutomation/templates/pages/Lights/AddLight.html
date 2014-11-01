@@ -17,33 +17,30 @@
 			}
 		}
 	</script>
-	<form action="/Lights/?command=addLightComplete" method="POST" onsubmit="return validateForm()" name="CreateLightForm">
+	<form action="{% url 'LightCommandWithOutLight' command='AddLight' %}" method="POST" onsubmit="return validateForm()" name="CreateLightForm">
 		<fieldset>
 			<input type="hidden" name="csrfmiddlewaretoken" value="{{csrfmiddlewaretoken|safe}}"/>
 			<label>Light Name:</label>
-			<input type="text" name="lightname" class="form-control" style="width: 200px;" placeholder="Light Name..." maxlength="30" required pattern="[^]{3,30}">
+			<input type="text" name="name" class="form-control" style="width: 200px;" placeholder="Light Name..." maxlength="30" required pattern="[^]{3,30}">
 			<br>
-			<label>Room Name:</label>
-			{% if room == "All" %}
-				<input type="text" name="roomname" class="form-control" style="width: 200px;" placeholder="Room Name..." maxlength="30" required pattern="[^]{3,30}">
-			{% else %}
-				<input type="text" name="roomname" class="form-control" style="width: 200px;" placeholder="Room Name..." value="{{room | replaceUnderscores}}" maxlength="30" required pattern="[^]{3,30}">
-			{% endif %}
+			<label>Room:</label>
+			<select name="room" class="form-control" style="width: 200px;">
+				{% for room in rooms %}
+					<option name="{{ room.Name }}" value="{{ room.id }}">{{ room.Name }}</option>
+				{% endfor %}
+			</select>
 			<br>
 			<label>Ip Address:</label>
 			<input type="text" name="ipaddress" class="form-control" style="width: 200px;" placeholder="Ip Address..." maxlength="30" required pattern="((^|\.)((25[0-5])|(2[0-4]\d)|(1\d\d)|([1-9]?\d))){4}$">
 			<br>
+			<label>Port:</label>
+			<input type="text" name="port" class="form-control" style="width: 200px;" placeholder="Port..." maxlength="30" required pattern="[^]{2,6}">
+			<br>
 			<label>Device Type:</label>
 			<select name="devicetype" class="form-control" style="width: 200px;">
-				<option name="Arduino" value="Arduino">ArduinoV1</option>
-				<option name="ArduinoV2" value="Arduino">ArduinoV2</option>
-				<option name="MaxPi" value="MaxPi">Max's Pi</option>
-			</select>
-			<br>
-			<label>Light Type:</label>
-			<select name="lightype" class="form-control" style="width: 200px;">
-				<option name="RGBLight" value="RGBLight">RGB</option>
-				<option name="OnOff" value="OnOff">On/Off</option>
+				{% for device in deviceName %}
+					<option name="{{ device }}" value="{{ device }}">{{ device }}</option>
+				{% endfor %}
 			</select>
 			<br>
 			<button type="submit" class="btn btn-default">Add User</button>

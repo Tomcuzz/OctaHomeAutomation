@@ -3,6 +3,9 @@ from Core.models import *
 from Core.communication_controller import *
 
 class ScrollModes(models.Model):
+	##############
+	# Parameters #
+	##############
 	Name = models.TextField()
 	RValues = models.TextField()
 	GValues = models.TextField()
@@ -10,46 +13,78 @@ class ScrollModes(models.Model):
 	Speed = models.IntegerField()
 	ChangeMode = models.TextField()
 	
+	########
+	# Meta #
+	########
 	class Meta:
 		db_table = u'ScrollModes'
 
 
 class LightDevice(OutputDevice):
+	##############
+	# Parameters #
+	##############
 	IsOn = models.BooleanField(default=False)
 	
+	#################
+	# Class Methods #
+	#################
+	def listActions(self):
+		return super(LightDevice, self).listActions().append(["setOnOff"])
+	
+	def	handleAction(self, function, parameters):
+		if function == "setOnOff":
+			self.setOnOff(parameters[0])
+		else:
+			super(LightDevice, self).handleAction(function, parameters)
+		self.save()
+	
+	def getState(self):
+		return super(LightDevice, self).getState().update({"IsOn":self.IsOn})
+	
+	##################
+	# Object Methods #
+	##################
 	def setOnOff(setOn):
 		pass
 	
-	def getObjectType(self):
-		supersType = super(LightDevice, self).getObjectType()
-		return supersType + ["LightDevice"]
-	
-	@staticmethod
-	def getDevices(kwargs={}):
-		return Device.getDevices(kwargs, 'LightDevice')
-	
+	########
+	# Meta #
+	########
 	class Meta:
 		abstract = True
 
 
-class RGBLights(LightDevice):
+class RGBLight(LightDevice):
+	##############
+	# Parameters #
+	##############
 	R = models.IntegerField()
 	G = models.IntegerField()
 	B = models.IntegerField()
 	Scroll = models.ForeignKey(ScrollModes, blank=True, null=True, related_name="RGBLights")
 	
+	#################
+	# Class Methods #
+	#################
 	def listActions(self):
-		return ["turnOn", "setRGB", "setSroll"];
+		return super(RGBLight, self).listActions().append(["setRGB", "setScroll"])
 	
 	def	handleAction(self, function, parameters):
-		if function == "turnOn":
-			self.setOnOff(parameters[0])
-		elif function == "setRGB":
+		if function == "setRGB":
 			self.setRGB(parameters[0], parameters[1], parameters[2])
 		elif function == "setSroll":
 			self.setScroll(parameters[0])
+		else:
+			super(RGBLight, self).handleAction(function, parameters)
 		self.save()
 	
+	def getState(self):
+		return super(RGBLight, self).getState().update({"R":self.R, "G":self.G, "B":self.B, "Scroll":self.getScroll()})
+		
+	##################
+	# Object Methods #
+	##################
 	def getScroll(self):
 		if self.Scroll:
 			return self.Scroll.Name
@@ -97,18 +132,16 @@ class RGBLights(LightDevice):
 		else:
 			return False
 	
-	@staticmethod
-	def getDevices(kwargs={}):
-		return Device.getDevices(kwargs, 'RGBLightDevice')
-	
-	def getObjectType(self):
-		supersType = super(RGBLights, self).getObjectType()
-		return supersType + ["RGBLightDevice"]
-	
+	########
+	# Meta #
+	########
 	class Meta:
 		abstract = True
 
-class ArduinoRGBLight(RGBLights):
+class ArduinoRGBLight(RGBLight):
+	##################
+	# Object Methods #
+	##################
 	def setRGB(self, r, g, b):
 		if self.checkColourInt(r) and self.checkColourInt(g) and self.checkColourInt(b):
 			r = int(r)
@@ -124,23 +157,18 @@ class ArduinoRGBLight(RGBLights):
 			
 			if self.IpAddress and self.Port:
 				message = "r=" + str(r) + ",g=" + str(g) + ",b=" + str(b) + ","
-				try:
-					CommunicationControl().sendTCPMessage(self.IpAddress, self.Port, message)
-				except :
-					pass
+			#	try:
+			#		CommunicationControl().sendTCPMessage(self.IpAddress, self.Port, message)
+			#	except :
+			#		pass
 			self.save()
 			return True
 		else:
 			return False
 	
-	@staticmethod
-	def getDevices(kwargs={}):
-		return Device.getDevices(kwargs, 'ArduinoRGBLightDevice')
-	
-	def getObjectType(self):
-		supersType = super(ArduinoRGBLight, self).getObjectType()
-		return supersType + ['ArduinoRGBLightDevice']
-	
+	########
+	# Meta #
+	########
 	class Meta:
 		db_table = u'ArdinoRGBLights'
 

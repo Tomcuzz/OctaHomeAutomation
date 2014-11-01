@@ -1,30 +1,31 @@
 from django.db import models
+from Core.models import *
+from Account.models import *
 
-class Alarms(models.Model):
-	time = models.TextField(default="")
-	date = models.TextField(default="")
-	recurrence = models.TextField(default="")
-	user = models.TextField(default="")
-	task = models.ForeignKey('Tasks', blank=True, null=True, on_delete=models.SET_NULL)
-	state = models.TextField(default="")
-	celeryTaskId = models.TextField(default="")
+import time
+import datetime
+from dateutil.relativedelta import *
+
+
+class Alarm(Event):
+	Enabled = models.BooleanField(default=False)
+	Date = models.DateTimeField()
+	Recurrence = models.TextField(default="")
+	CeleryTaskId = models.TextField(default="")
+	User = models.ForeignKey(CustomUser, blank=True, null=True, on_delete=models.SET_NULL)
+	
+	def call():
+		try:
+			super(Alarm, self).call()
+		
+		if newAlarm.recurrence == "Once A Hour":
+			self.Date = self.Date + datetime.timedelta(hours=1)
+		elif newAlarm.recurrence == "Once A Day":
+			self.Date = self.Date + datetime.timedelta(days=1)
+		elif newAlarm.recurrence == "Once A Week":
+			self.Date = self.Date + datetime.timedelta(days=7)
+		elif newAlarm.recurrence == "Once A Month":
+			self.Date = self.Date + relativedelta(months=1)
 	
 	class Meta:
 		db_table = u'Alarms'
-
-class Tasks(models.Model):
-	name = models.TextField(default="")
-	actions = models.TextField(default="")
-	Room = models.ForeignKey('SharedFunctions.Rooms', blank=True, null=True, on_delete=models.SET_NULL)
-	
-	class Meta:
-		db_table = u'Tasks'
-
-class TaskAction(models.Model):
-	name = models.TextField(default="")
-	actionType = models.TextField(default="")
-	actionVeriables = models.TextField(default="")
-	syncAsyncRunType = models.TextField(default="")
-	
-	class Meta:
-		db_table = u'TaskActions'

@@ -13,14 +13,6 @@ class TempMonitorDevice(InputDevice):
 		self.LastTemp = temp
 		self.LastUpdate = datetime.datetime.now()
 	
-	def getObjectType(self):
-		supersType = super(TempMonitorDevice, self).getObjectType()
-		return supersType + ["TempMonitorDevice"]
-	
-	@staticmethod
-	def getDevices(kwargs={}):
-		return Device.getDevices(kwargs, 'TempMonitorDevice')
-	
 	class Meta:
 		abstract = True
 	
@@ -28,14 +20,6 @@ class TempMonitorDevice(InputDevice):
 class TempControlDevice(OutputDevice):
 	TargetTemp = models.IntegerField()
 	AutoTempControl = models.BooleanField(default=False)
-	
-	def getObjectType(self):
-		supersType = super(TempControlDevice, self).getObjectType()
-		return supersType + ["TempControlDevice"]
-	
-	@staticmethod
-	def getDevices(kwargs={}):
-		return Device.getDevices(kwargs, 'TempControlDevice')
 	
 	class Meta:
 		abstract = True
@@ -49,14 +33,6 @@ class CenturalHeating(TempControlDevice):
 	def getTimeStatuses(self, x):
 		return json.loads(self.TimeStatuses)
 	
-	def getObjectType(self):
-		supersType = super(CenturalHeating, self).getObjectType()
-		return supersType + ["CenturalHeating"]
-	
-	@staticmethod
-	def getDevices(kwargs={}):
-		return Device.getDevices(kwargs, 'CenturalHeating')
-	
 	class Meta:
 		abstract = True
 
@@ -65,14 +41,6 @@ class Fan(TempControlDevice):
 	FanSpeed = models.IntegerField()
 	TwistState = models.BooleanField(default=False)
 	
-	def getObjectType(self):
-		supersType = super(Fan, self).getObjectType()
-		return supersType + ["Fan"]
-	
-	@staticmethod
-	def getDevices(kwargs={}):
-		return Device.getDevices(kwargs, 'Fan')
-	
 	class Meta:
 		abstract = True
 
@@ -80,26 +48,10 @@ class Fan(TempControlDevice):
 
 #Arduino devices	
 class ArduinoCenturalHeating(CenturalHeating):
-	def getObjectType(self):
-		supersType = super(ArduinoCenturalHeating, self).getObjectType()
-		return supersType + ["ArduinoCenturalHeating"]
-	
-	@staticmethod
-	def getDevices(kwargs={}):
-		return Device.getDevices(kwargs, 'ArduinoCenturalHeating')
-	
 	class Meta:
 		db_table = u'ArduinoCenturalHeating'
 
 class ArduinoFan(Fan):
-	def getObjectType(self):
-		supersType = super(ArduinoFan, self).getObjectType()
-		return supersType + ["ArduinoFan"]
-	
-	@staticmethod
-	def getDevices(kwargs={}):
-		return Device.getDevices(kwargs, 'ArduinoFan')
-	
 	class Meta:
 		db_table = u'ArduinoFan'
 
