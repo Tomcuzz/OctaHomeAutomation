@@ -1,0 +1,52 @@
+{% extends 'baseWithNavBar.html' %}
+
+{% block title %} Settings - Account {% endblock %}
+
+{% block AccountNavBarActive %} active {% endblock %}
+
+{% block PageArea %}
+	<div class="page-header">
+		<h1>Events</h1>
+	</div>
+	<div>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>id</th>
+					<th>Name</th>
+					<th>Actions</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for event in events %}
+					<tr>
+						<td>{{ event.id }}</td>
+						<td>{{ event.Name }}</td>
+						<td>
+							<ul style="padding-left: 20px;">
+								{% for action in event.Actions.all %}
+									<li>{{ action.Name }}</li>
+								{% endfor %}
+							</ul>
+						</td>
+						<td>
+							<button class="btn btn-success">Trigger</button>
+							<button class="btn btn-primary" style="margin-left:5px;">Edit</button>
+							<button class="btn btn-danger" style="margin-left:5px;">Delete</button>
+						</td>
+					</tr>
+				{% endfor %}
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td><button class="btn btn-primary">+</button></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+{% endblock %}
+
+{% block ExtraJavaScript %}
+{% endblock %}

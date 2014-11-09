@@ -3,7 +3,10 @@ body {
 	padding-bottom: 40px;
 	background-image: url('/assets/img/background.jpg');
 	background-color: rgba(0,0,0,0.125);
-	min-height: 2000px;
+}
+
+.container {
+	width: 80%;
 }
 
 
@@ -89,6 +92,10 @@ body {
 
 .bs-docs-sidebar {
 	position:relative
+}
+
+.row {
+	
 }
 
 /* Signin/Authy Form */

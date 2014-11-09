@@ -1,4 +1,4 @@
-from Core.views import *
+from Core.baseviews import *
 from Core.models import *
 from models import *
 import json

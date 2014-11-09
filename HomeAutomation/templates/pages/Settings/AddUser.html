@@ -46,9 +46,9 @@
 			}
 		}
 	</script>
-		<form action="/account/?command=addUserComplete" method="POST" onsubmit="return validateForm()" name="CreateUserForm">
+		<form action="{% url 'SettingsCommand' command='addUserComplete' %}" method="POST" onsubmit="return validateForm()" name="CreateUserForm">
 			<fieldset>
-				<input type="hidden" name="csrfmiddlewaretoken" value="{{csrfToken}}">
+				<input type="hidden" name="csrfmiddlewaretoken" value="{{csrfmiddlewaretoken}}">
 				<label>Username:</label>
 				<input type="text" name="username" class="form-control" style="width: 200px;" placeholder="Username..." maxlength="30" required pattern="[^]{3,30}">
 				<br>

@@ -29,14 +29,13 @@
 	  <body>
 	    <div class="container">
 	      <form class="form-signin" action="{% url 'Login' %}" method="post">
-	      	{% csrf_token %}
+	      	<input type="hidden" name="csrfmiddlewaretoken" value="{{csrfmiddlewaretoken|safe}}"/>
 	        <h2 class="form-signin-heading">Two-Factor Authentication:</h2>
 	        {% if sencondattempt %}
 	        	<div class="alert alert-danger">Token Error</div>
 	        {% endif %}
 	        <p></p>
 	        <input type="hidden" name="username" value="{{username|safe}}">
-	        <input type="hidden" name="password" value="{{password|safe}}">
 	        <p>SMS Authentication can be sent by <a href="#" onclick="sendSmsRequest();" style="display: inline;">Clicking Here</a></p>
 	        <input id="authy-token" type="text" class="form-control" name="authytoken" placeholder="Authy Token">
 	        <button class="btn btn-large btn-primary" type="submit">Sign in</button>

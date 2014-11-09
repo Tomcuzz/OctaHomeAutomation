@@ -3,16 +3,48 @@ from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render
 from django.shortcuts import redirect
 
-from Lights.models import *
 from DeviceInput.models import *
-from Core.views import *
+from Core.baseviews import *
 from Core.models import *
+
+from Lights.models import *
+from TempControl.models import *
 
 class handleHomeStatsView(viewRequestHandler):
 	def getViewParameters(self):
+		allDevices = Device.getDevices()
 		lights = LightDevice.getDevices()
+		fans = Fan.getDevices()
 		
-		paramerters = {'Lights':lights}
+		numDevices = len(allDevices)
+		numLights = len(lights)
+		numFans = len(fans)
+		
+		devicesOn = 0
+		
+		lightsOn = 0
+		for light in lights:
+			if light.IsOn:
+				lightsOn = lightsOn + 1
+				devicesOn = devicesOn + 1
+		
+		fansOn = 0
+		for fan in fans:
+			if fan.MaxFanSpeed > 0:
+				fansOn = fansOn + 1
+				devicesOn = devicesOn + 1
+		
+		stats = {
+				'numDevices':numDevices,
+				'numLights':numLights,
+				'numFans':numFans,
+				
+				'devicesOn':devicesOn,
+				'lightsOn':lightsOn,
+				'fansOn':fansOn,
+			}
+		
+		paramerters = {'Stats':stats}
 		
 		return paramerters
 	

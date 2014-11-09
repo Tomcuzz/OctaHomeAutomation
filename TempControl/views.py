@@ -2,7 +2,7 @@ from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render
 from django.shortcuts import redirect
 
-from Core.views import *
+from Core.baseviews import *
 from models import *
 
 class handleTempView(viewRequestHandler):
