@@ -30,6 +30,7 @@
 	    <div class="container">
 	      <form class="form-signin" action="{% url 'Login' %}" method="post">
 	      	<input type="hidden" name="csrfmiddlewaretoken" value="{{csrfmiddlewaretoken|safe}}"/>
+	      	<input type="hidden" name="logintoken" value="{{logintoken|safe}}"/>
 	        <h2 class="form-signin-heading">Two-Factor Authentication:</h2>
 	        {% if sencondattempt %}
 	        	<div class="alert alert-danger">Token Error</div>

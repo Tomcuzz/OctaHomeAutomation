@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 import getpass
-from Account.models import *
+from Core.models import *
 from django.contrib.auth import *
 
 class Command(BaseCommand):

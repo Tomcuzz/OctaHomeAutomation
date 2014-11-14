@@ -1,12 +1,16 @@
 from django.db import models
 from django.contrib.contenttypes.generic import *
 from django.contrib.auth.models import *
+from django.contrib.auth.backends import ModelBackend
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings as djsetting
 from django.core import validators
 from django.utils import timezone
 
 import json
+
+import string
+import random
 
 from authy.api import AuthyApiClient
 
@@ -36,6 +40,46 @@ class CustomUserManager(BaseUserManager):
 
 		return u
 
+class CustomBeckends(ModelBackend):
+	def authenticate(self, username=None, password=None, authy_token=None, login_token=None, force_single_step=False):
+		if not username:
+			return None
+		
+		if force_single_step:
+			return super(CustomBeckends, self).authenticate(username, password)
+		
+		if authy_token and login_token:
+			try:
+				user = CustomUser.objects.get(username=username)
+			except User.DoesNotExist:
+				return None
+			
+			if login_token == user.authy_step_token and user.handle_authy_token(authy_token):
+				return user
+			else:
+				return None
+		
+		if password:
+			user = super(CustomBeckends, self).authenticate(username, password)
+			if user:
+				if user.authy_id == '':
+					return user
+				else:
+					return None
+			else:
+				return None
+		
+		return None
+			
+		
+	def first_step(self, username=None, password=None):
+		user = super(CustomBeckends, self).authenticate(username, password)
+		if user is None:
+			return None
+		user.authy_step_token = ''.join(random.choice(string.ascii_uppercase) for i in range(45))
+		user.save()
+		return user.authy_step_token
+
 class CustomUser(AbstractBaseUser):
 	email = models.EmailField(_('email'), max_length=254, unique=True, validators=[validators.validate_email])
 	username = models.CharField(_('username'), max_length=30, blank=True)
@@ -46,15 +90,15 @@ class CustomUser(AbstractBaseUser):
 	is_active = models.BooleanField(_('active'), default=True)
 	is_superuser = models.BooleanField(_('super user'), default=False)
 	date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
-	authy_id = models.CharField(_('authy id'), max_length=45, default="")
 	theme = models.CharField(_('theme'), max_length=45, default="")
+	authy_id = models.CharField(_('authy id'), max_length=45, default="")
+	authy_step_token = models.CharField(_('authy step token'), max_length=45, default="")
 
 	objects = CustomUserManager()
 
 	USERNAME_FIELD = 'email'
 	REQUIRED_FIELDS = ['first_name', 'last_name']
 	
-	authy_passed = False
 	def handle_authy_token(self, authy_token):
 		authy_api = AuthyApiClient(djsetting.AUTHY_API_KEY)
 		if authy_token == 'sms':
@@ -63,18 +107,14 @@ class CustomUser(AbstractBaseUser):
 		
 		verification = authy_api.tokens.verify(self.authy_id, authy_token)
 		if verification.ok():
-			self.authy_passed = True
-		else:
-			self.authy_passed = True
-	
-	def is_authenticated(self):
-		if self.authy_id == '':
+			self.authy_step_token = ''
+			self.save()
 			return True
 		else:
-			if self.authy_passed:
-				return True
-			else:
-				return False
+			return False
+	
+	def is_authenticated(self):
+		return True
 	
 	def get_full_name(self):
 		full_name = "%s %s" % (self.first_name, self.last_name)
