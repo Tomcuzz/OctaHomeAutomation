@@ -4,7 +4,7 @@
 
 Octa is an open source home automation panel that is currently under active development.
 
-With all the new devices that are coming out with all thier own control pannels and apps, this was made to centralise them all and put them all together in one location so you can have full control of your home in one location and easily link events in one system with actions in another.
+With all the new devices that are coming out with all thier own control pannels and apps, this was made to centralise them all and put them all together in one location so you can have full control of your home in one location, and easily link events in one system with actions in another.
 
 <br/>
 
