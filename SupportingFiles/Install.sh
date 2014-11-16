@@ -25,6 +25,17 @@ if [[ "$server" == "nginx" ]]; then
 	service nginx restart
 elif [[ "$server" == "apache2" ]]; then
 	apt-get install apache2 libapache2-mod-proxy-html libxml2-dev mysql-server gcc python python-pip python-mysqldb
+	cp ApacheConfig.txt /etc/apache2/sites-enabled/homeautomation
+	a2enmod proxy
+	a2enmod proxy_http
+	a2enmod proxy_ajp
+	a2enmod rewrite
+	a2enmod deflate
+	a2enmod headers
+	a2enmod proxy_balancer
+	a2enmod proxy_connect
+	a2enmod proxy_html
+	service apache2 restart
 else
 	apt-get install mysql-server gcc python python-pip python-mysqldb
 fi
