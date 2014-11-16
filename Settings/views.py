@@ -2,7 +2,7 @@ from django.conf import settings
 
 from Core.baseviews import *
 from Core.models import *
-from Weather.models import *
+from Core.weathermodels import *
 
 class handleSettingsView(viewRequestHandler):
 	def getViewParameters(self):

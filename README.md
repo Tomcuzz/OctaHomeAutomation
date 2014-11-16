@@ -10,6 +10,7 @@ With all the new devices that are coming out with all thier own control pannels 
 
 ## Installation
 Commands for installation need to be run as root.
+
 (This can be either through the 'root' user or through 'sudo')
 ### Automatic Installation
 ```
@@ -23,7 +24,9 @@ cd ..
 
 python manage.py SetupServer
 ```
+*** During the `bash Install.sh` step if you currently have a website running on this server or have custom installation server requirements, it is recomended that you go through the `skip-webserver`
 
+(Examples of the config files are in the supporting files folder)
 
 ### Manual Installation
 #### Unpack:

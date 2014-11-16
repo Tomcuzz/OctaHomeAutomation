@@ -19,6 +19,10 @@ done
 
 if [[ "$server" == "nginx" ]]; then
 	apt-get install nginx mysql-server gcc python python-pip python-mysqldb
+	cp NginxConfig.txt /etc/nginx/sites-enabled/homeautomation
+	rm /etc/nginx/sites-enabled/default
+	service apache2 stop
+	service nginx restart
 elif [[ "$server" == "apache2" ]]; then
 	apt-get install apache2 libapache2-mod-proxy-html libxml2-dev mysql-server gcc python python-pip python-mysqldb
 else
@@ -38,8 +42,6 @@ pip install paramiko
 
 pip install astral
 pip install authy
-
-cp HomeAutomationNginxConfig.txt /etc/nginx/sites-enabled/homeautomation
 
 cp InitScript.txt /etc/init.d/homeautomation
 chmod +x /etc/init.d/homeautomation
