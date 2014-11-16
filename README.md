@@ -9,15 +9,18 @@ With all the new devices that are coming out with all thier own control pannels 
 <br/>
 
 ## Installation
+Commands for installation need to be run as root.
+(This can be either through the 'root' user or through 'sudo')
 ### Automatic Installation
 ```
+cd /var/www
 git clone https://github.com/Tomcuzz/OctaHomeAutomation.git HomeAutomation
 cd HomeAutomation/SupportingFiles
 bash Install.sh
 cd ..
-```
-Create a database/user with the details you just entered
-```
+
+# (Create a database/user with the details you just entered)
+
 python manage.py SetupServer
 ```
 
