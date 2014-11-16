@@ -14,7 +14,7 @@ class Alarm(Event):
 	CeleryTaskId = models.TextField(default="")
 	User = models.ForeignKey(CustomUser, blank=True, null=True, on_delete=models.SET_NULL)
 	
-	def call():
+	def call(self):
 		try:
 			super(Alarm, self).call()
 		
