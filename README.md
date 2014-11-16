@@ -20,7 +20,6 @@ With all the new devices that are coming out with all thier own control pannels 
 ### Python Setup:
 1. Install Django
 2. Install MySqld
-3. Install South
 3. Install Djcelery
 4. Install dateutil
 5. Install proxmoxer
