@@ -18,11 +18,11 @@ while true; do
 done
 
 if [[ "$server" == "nginx" ]]; then
-	apt-get install nginx mysql-server python python-pip python-mysqldb
+	apt-get install nginx mysql-server gcc python python-pip python-mysqldb
 elif [[ "$server" == "apache2" ]]; then
-	apt-get install apache2 libapache2-mod-proxy-html libxml2-dev mysql-server python python-pip python-mysqldb
+	apt-get install apache2 libapache2-mod-proxy-html libxml2-dev mysql-server gcc python python-pip python-mysqldb
 else
-	apt-get install mysql-server python python-pip python-mysqldb
+	apt-get install mysql-server gcc python python-pip python-mysqldb
 fi
 
 pip install Django
@@ -46,13 +46,11 @@ chmod +x /etc/init.d/homeautomation
 
 cp ../HomeAutomation/settings.py.dist ../HomeAutomation/settings.py
 
-
-
-database = ''
-host = ''
-user = ''
-password = ''
-port = ''      
+$database = ''
+$host = ''
+$user = ''
+$password = ''
+$port = ''      
 
 while true; do
 	read -p "Database Name:" database
