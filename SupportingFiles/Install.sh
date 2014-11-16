@@ -46,35 +46,34 @@ chmod +x /etc/init.d/homeautomation
 
 cp ../HomeAutomation/settings.py.dist ../HomeAutomation/settings.py
 
-$database = ''
-$host = ''
-$user = ''
-$password = ''
-$port = ''      
+database=""
+host=""
+user=""
+password=""
+port=""
 
 while true; do
-	read -p "Database Name:" database
-	read -p "Database Host:" host
-	read -p "Database User:" user
-	read -p "Database Password:" password
-	read -p "Database Port:" port
-	read -p "Are these details correct? [y/n]" yn
-	case $yn in
-		[Yy]* ) break;;
-	esac
+        read -p "Database Name:" database
+        read -p "Database Host:" host
+        read -p "Database User:" user
+        read -p "Database Password:" password
+        read -p "Database Port:" port
+        read -p "Are these details correct? [y/n]" yn
+        case $yn in
+                [Yy]* ) break;;
+        esac
 done
-
 if [ "$database" = "" ]; then
-	$database = "HomeControl"
+	database="HomeControl"
 fi
-if [ "$host" = "" ]; then
-	$host = "127.0.0.1"
+if [ "$host" == "" ]; then
+	host="127.0.0.1"
 fi
-if [ "$user" = "" ]; then
-	$user = "root"
+if [ "$user"=="" ]; then
+	user="root"
 fi
-if [ "$password" = "" ]; then
-	$password = "password"
+if [ "$password" == "" ]; then
+	password="password"
 fi
 
 sed -i 's/###DB_DATABASE##(\'HomeControl\')###/$database/' ../HomeAutomation/settings.py
