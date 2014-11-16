@@ -10,9 +10,9 @@ fi
 while true; do
 	read -p "-> What web server would you like to setup? [nginx/apache2/skip-webserver] " server
     case $server in
-        nginx) break;;
-        apache2) break;;
-        skip-webserver) break;;
+	nginx) break;;
+	apache2) break;;
+	skip-webserver) break;;
     esac
     echo -e "${red}Not recognised please enter one of the following: \"nginx\", \"apache2\", \"skip-webserver\"${NC}"
 done
@@ -54,18 +54,31 @@ user=""
 password=""
 port=""
 
+authyapikey=""
+metofficeapikey=""
+proxmoxip=""
+proxmoxuser=""
+proxmoxpassword=""
+
 while true; do
-        read -p "Admin Name [default='Joe Bloggs']:" adminname
-        read -p "Admin Email [default='joebloggs@example.com']:" adminemail
-        read -p "Database Name [default='HomeControl']:" database
-        read -p "Database Host [default='127.0.0.1']:" host
-        read -p "Database User [default='root']:" user
-        read -p "Database Password [default='password']:" password
-        read -p "Database Port [default='']:" port
-        read -p "Are these details correct? [y/n]" yn
-        case $yn in
-                [Yy]* ) break;;
-        esac
+	read -p "Admin Name [default='Joe Bloggs']:" adminname
+	read -p "Admin Email [default='joebloggs@example.com']:" adminemail
+	read -p "Database Name [default='HomeControl']:" database
+	read -p "Database Host [default='127.0.0.1']:" host
+	read -p "Database User [default='root']:" user
+	read -p "Database Password [default='password']:" password
+	read -p "Database Port [default='']:" port
+	
+	read -p "Authy API Key (Two-Factor Authentication) [default='']:" authyapikey
+	read -p "Met Office API Key (Weather) [default='']:" metofficeapikey
+	read -p "Proxmox IP Address [default='127.0.0.1']:" proxmoxip
+	read -p "Proxmox User [default='homeautomation@pam']:" proxmoxuser
+	read -p "Proxmox Password [default='password']:" proxmoxpassword
+	
+	read -p "Are these details correct? [y/n]" yn
+	case $yn in
+		[Yy]* ) break;;
+	esac
 done
 
 if [ "$adminname" = "" ]; then
@@ -87,8 +100,22 @@ if [ "$password" == "" ]; then
 	password="password"
 fi
 
-###ADMIN_NAME##('Joe Bloggs')###
-###ADMIN_EMAIL##('joebloggs@example.com')###
+
+if [ "$authyapikey" == "" ]; then
+	authyapikey=""
+fi
+if [ "$metofficeapikey" == "" ]; then
+	metofficeapikey=""
+fi
+if [ "$proxmoxip" == "" ]; then
+	proxmoxip="127.0.0.1"
+fi
+if [ "$proxmoxuser" == "" ]; then
+	proxmoxuser="homeautomation@pam"
+fi
+if [ "$proxmoxpassword" == "" ]; then
+	proxmoxpassword="password"
+fi
 
 
 sed -i "s/###ADMIN_NAME##('Joe Bloggs')###/'$adminname'/" ../HomeAutomation/settings.py
@@ -98,3 +125,9 @@ sed -i "s/###DB_HOST##('127.0.0.1')###/'$host'/" ../HomeAutomation/settings.py
 sed -i "s/###DB_USER##('root')###/'$user'/" ../HomeAutomation/settings.py
 sed -i "s/###DB_PASSWORD##('password')###/'$password'/" ../HomeAutomation/settings.py
 sed -i "s/###DB_PORT##('')###/'$port'/" ../HomeAutomation/settings.py
+
+sed -i "s/###AUTHY_API_KEY##('')###/'$authyapikey'/" ../HomeAutomation/settings.py
+sed -i "s/###MET_OFFICE_API_KEY##('')###/'$metofficeapikey'/" ../HomeAutomation/settings.py
+sed -i "s/###PROXMOX_IP##('127.0.0.1')###/'$proxmoxip'/" ../HomeAutomation/settings.py
+sed -i "s/###PROXMOX_USER##('homeautomation@pam')###/'$proxmoxuser'/" ../HomeAutomation/settings.py
+sed -i "s/###PROXMOX_PASSWORD##('password')###/'$proxmoxpassword'/" ../HomeAutomation/settings.py

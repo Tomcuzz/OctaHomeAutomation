@@ -11,7 +11,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    ('###ADMIN_NAME##('Joe Bloggs')###', '###ADMIN_EMAIL##('joebloggs@example.com')###'),
+    (###ADMIN_NAME##('Joe Bloggs')###, ###ADMIN_EMAIL##('joebloggs@example.com')###),
 )
 
 MANAGERS = ADMINS
@@ -33,6 +33,18 @@ AUTH_USER_MODEL = 'Core.CustomUser'
 AUTHENTICATION_BACKENDS = (
     'Core.models.CustomBeckends',
 )
+
+#Api Key Authy Two Factor Authentication
+AUTHY_API_KEY = ###AUTHY_API_KEY##('')###
+
+#Weather Api Key For Met Office
+MET_OFFICE_API_KEY = ###MET_OFFICE_API_KEY##('')###
+
+#Settings For Connecting To Proxmox
+PROXMOX_SERVER_IP_ADDRESS = ###PROXMOX_IP##('127.0.0.1')###
+PROXMOX_USER = ###PROXMOX_USER##('homeautomation@pam')###
+PROXMOX_PASSWORD = ###PROXMOX_PASSWORD##('password')###
+PROXMOX_VERIFY_SSL = False
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
@@ -137,28 +149,29 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     #My Pages
+    'Core',
+    'Settings',
     'Home',
     'HomeStats',
-    #'Security',
     'Lights',
     'Alarm',
-    #'Curtains',
+    'Curtains',
     'TempControl',
-    #'AudioVisual',
+    'AudioVisual',
     #'Meals',
     #'Recipes',
-    #'DeviceInput',
+    'DeviceInput',
     'Proxmox',
     'DnsAdmin',
-    'Account',
     #My support Apps
     'Weather',
-    #'ErrorPages',
-    #'SharedFunctions',
-    #'Api',
+    'ErrorPages',
+    'SharedFunctions',
+    'Api',
     #My Addons
     'djcelery',
     'kombu.transport.django',
+    #'south',
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
