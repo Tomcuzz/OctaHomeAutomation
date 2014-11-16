@@ -17,10 +17,10 @@ class WeatherLocationManager(models.Manager):
 		
 		for location in locationItems:
 			try:
-				weatherLocationObject = WeatherLocations.objects.get(locationId=location['id'])
+				weatherLocationObject = WeatherLocation.objects.get(locationId=location['id'])
 				
-			except WeatherLocations.DoesNotExist:
-				weatherLocationObject = WeatherLocations()
+			except WeatherLocation.DoesNotExist:
+				weatherLocationObject = WeatherLocation()
 				weatherLocationObject.locationId = location['id']
 			
 			weatherLocationObject.name = location['name']
