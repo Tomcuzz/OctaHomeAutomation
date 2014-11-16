@@ -9,15 +9,29 @@ With all the new devices that are coming out with all thier own control pannels 
 <br/>
 
 ## Installation
-### Unpack:
+### Automatic Installation
+```
+git clone https://github.com/Tomcuzz/OctaHomeAutomation.git HomeAutomation
+cd HomeAutomation/SupportingFiles
+bash Install.sh
+cd ..
+```
+Create a database/user with the details you just entered
+```
+python manage.py SetupServer
+```
+
+
+### Manual Installation
+#### Unpack:
 1. Unpack the package to /var/www/HomeAutomation
 
-### Install Services:
+#### Install Services:
 1. Install Nginx
 2. Install MySql
 3. Install Python
 
-### Python Setup:
+#### Python Setup:
 1. Install Django
 2. Install MySqld
 3. Install Djcelery
@@ -26,10 +40,10 @@ With all the new devices that are coming out with all thier own control pannels 
 6. Install Astral
 7. Install Authy
 
-### Nginx Setup:
+#### Nginx Setup:
 1. Copy HomeAutomationNginxConfig.txt to /etc/nginx/sites-enabled/homeautomation
 
-### Home Automisation Service Setup
+#### Home Automisation Service Setup
 1. Copy InitScript.txt to /etc/init.d/homeautomation
 2. chmod +x /etc/init.d/homeautomation
 3. Copy the settings.py.dist file to settings.py and edit to reflect your settings
