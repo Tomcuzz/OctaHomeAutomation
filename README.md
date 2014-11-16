@@ -6,7 +6,8 @@ Octa is an open source home automation panel that is currently under active deve
 
 With lots of new devices that are now coming out with all of their own control pannels and Apps in a lots of different locations, this was made to centralise them all and put them all together in one location.
 
-  
+<br/>
+
 ## Setup
 ### Unpack:
 1. Unpack the package to /var/www/HomeAutomation
@@ -36,7 +37,8 @@ With lots of new devices that are now coming out with all of their own control p
 3. Run Self Setup: python manage.py ServerSetup
 3. Start the service from sudo/root with: service homeautomation start
 
-  
+<br/>
+
 ## Development
 ### Roadmap
 1. Inprovements To The Core
