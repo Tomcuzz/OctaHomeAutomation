@@ -81,7 +81,3 @@ sed -i 's/###DB_HOST##(\'127.0.0.1\')###/$host/' ../HomeAutomation/settings.py
 sed -i 's/###DB_USER##(\'root\')###/$user/' ../HomeAutomation/settings.py
 sed -i 's/###DB_PASSWORD##(\'password\')###/$password/' ../HomeAutomation/settings.py
 sed -i 's/###DB_PORT##(\'\')###/$port/' ../HomeAutomation/settings.py
-
-cd ..
-
-python manage.py ServerSetup
