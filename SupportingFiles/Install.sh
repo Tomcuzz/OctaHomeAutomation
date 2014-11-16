@@ -46,6 +46,8 @@ chmod +x /etc/init.d/homeautomation
 
 cp ../HomeAutomation/settings.py.dist ../HomeAutomation/settings.py
 
+adminname=""
+adminemail=""
 database=""
 host=""
 user=""
@@ -53,16 +55,25 @@ password=""
 port=""
 
 while true; do
-        read -p "Database Name:" database
-        read -p "Database Host:" host
-        read -p "Database User:" user
-        read -p "Database Password:" password
-        read -p "Database Port:" port
+        read -p "Admin Name [default='Joe Bloggs']:" adminname
+        read -p "Admin Email [default='joebloggs@example.com']:" adminemail
+        read -p "Database Name [default='HomeControl']:" database
+        read -p "Database Host [default='127.0.0.1']:" host
+        read -p "Database User [default='root']:" user
+        read -p "Database Password [default='password']:" password
+        read -p "Database Port [default='']:" port
         read -p "Are these details correct? [y/n]" yn
         case $yn in
                 [Yy]* ) break;;
         esac
 done
+
+if [ "$adminname" = "" ]; then
+	adminname="Joe Bloggs"
+fi
+if [ "$adminemail" == "" ]; then
+	adminemail="joebloggs@example.com"
+fi
 if [ "$database" = "" ]; then
 	database="HomeControl"
 fi
@@ -76,6 +87,12 @@ if [ "$password" == "" ]; then
 	password="password"
 fi
 
+###ADMIN_NAME##('Joe Bloggs')###
+###ADMIN_EMAIL##('joebloggs@example.com')###
+
+
+sed -i "s/###ADMIN_NAME##('Joe Bloggs')###/'$adminname'/" ../HomeAutomation/settings.py
+sed -i "s/###ADMIN_EMAIL##('joebloggs@example.com')###/'$adminemail'/" ../HomeAutomation/settings.py
 sed -i "s/###DB_DATABASE##('HomeControl')###/'$database'/" ../HomeAutomation/settings.py
 sed -i "s/###DB_HOST##('127.0.0.1')###/'$host'/" ../HomeAutomation/settings.py
 sed -i "s/###DB_USER##('root')###/'$user'/" ../HomeAutomation/settings.py
