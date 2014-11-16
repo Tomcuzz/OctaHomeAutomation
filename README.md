@@ -48,7 +48,7 @@ With all the new devices that are coming out with all thier own control pannels 
 ### Contributing
 1. Fork it.
 2. Create a branch (`git checkout -b my_markup`)
-3. Commit your changes (`git commit -am "Added Snarkdown"`)
+3. Commit your changes (`git commit -am "Added Space Ship Control"`)
 4. Push to the branch (`git push origin my_markup`)
 5. Open a Pull Request
 6. Enjoy a refreshing Coke and wait
