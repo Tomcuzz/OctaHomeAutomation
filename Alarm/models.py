@@ -17,15 +17,15 @@ class Alarm(Event):
 	def call(self):
 		try:
 			super(Alarm, self).call()
-		
-		if newAlarm.recurrence == "Once A Hour":
-			self.Date = self.Date + datetime.timedelta(hours=1)
-		elif newAlarm.recurrence == "Once A Day":
-			self.Date = self.Date + datetime.timedelta(days=1)
-		elif newAlarm.recurrence == "Once A Week":
-			self.Date = self.Date + datetime.timedelta(days=7)
-		elif newAlarm.recurrence == "Once A Month":
-			self.Date = self.Date + relativedelta(months=1)
+		finally:
+			if newAlarm.recurrence == "Once A Hour":
+				self.Date = self.Date + datetime.timedelta(hours=1)
+			elif newAlarm.recurrence == "Once A Day":
+				self.Date = self.Date + datetime.timedelta(days=1)
+			elif newAlarm.recurrence == "Once A Week":
+				self.Date = self.Date + datetime.timedelta(days=7)
+			elif newAlarm.recurrence == "Once A Month":
+				self.Date = self.Date + relativedelta(months=1)
 	
 	class Meta:
 		db_table = u'Alarms'
