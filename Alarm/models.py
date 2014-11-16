@@ -1,6 +1,6 @@
 from django.db import models
 from Core.models import *
-from Account.models import *
+from Settings.models import *
 
 import time
 import datetime
