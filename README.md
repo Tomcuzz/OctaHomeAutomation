@@ -8,7 +8,7 @@ With all the new devices that are coming out with all thier own control pannels 
 
 <br/>
 
-## Setup
+## Installation
 ### Unpack:
 1. Unpack the package to /var/www/HomeAutomation
 
