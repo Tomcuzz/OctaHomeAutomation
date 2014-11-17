@@ -72,3 +72,6 @@ python manage.py SetupServer
 4. Push to the branch (`git push origin my_markup`)
 5. Open a Pull Request
 6. Enjoy a refreshing Coke and wait
+
+## Licensing
+Please Read The `LICENSE.md` File Included In This Repository
