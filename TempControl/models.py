@@ -2,7 +2,7 @@ import datetime
 import json
 from django.db import models
 
-from Core.models import *
+from Core.devicemodels import *
 from Core.communication_controller import *
 
 class TempMonitorDevice(InputDevice):

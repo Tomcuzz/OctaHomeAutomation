@@ -1,5 +1,5 @@
 from Core.baseviews import *
-from Core.models import *
+from Core.devicemodels import *
 from models import *
 import json
 
@@ -124,3 +124,12 @@ class handleLightCommand(commandRequestHandler):
 				if str(aLight.id) == str(self.Kwarguments['lightId']) and (aLight.__class__.__name__ == self.Kwarguments['lightType']):
 					light = aLight
 		return light
+
+
+#if deviceType == "Arduino":
+#			message = "r=" + str(r) + ",g=" + str(g) + ",b=" + str(b) + ",t=" + str(scrollTime) + ","
+#			CommunicationControl().sendUDPMessage(ipAddress, 100, message)
+#		elif deviceType == "MaxPi":
+#			urlLocation = "/colour?r=" + str(r) + "&g=" + str(g) + "&b=" + str(b) + "&delay=" + str(int(float(scrollTime) * 100))
+#			port = 8080
+#			CommunicationControl().sendHTTPGetRequest(ipAddress, port, urlLocation)

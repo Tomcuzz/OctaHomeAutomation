@@ -166,7 +166,6 @@ INSTALLED_APPS = (
     #My support Apps
     'Weather',
     'ErrorPages',
-    'SharedFunctions',
     'Api',
     #My Addons
     'djcelery',

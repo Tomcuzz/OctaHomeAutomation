@@ -1,22 +1,31 @@
 from django.db import models
-from Core.models import *
-from Settings.models import *
+from Core.inputoutputmodels import *
+from Core.authmodels import *
 
 import time
 import datetime
 from dateutil.relativedelta import *
 
 
-class Alarm(Event):
+class Alarm(models.Model):
+	##############
+	# Parameters #
+	##############
+	Name = models.CharField(max_length=30)
+	Actions = models.ManyToManyField(Action, related_name="AlarmEvents")
 	Enabled = models.BooleanField(default=False)
 	Date = models.DateTimeField()
 	Recurrence = models.TextField(default="")
 	CeleryTaskId = models.TextField(default="")
 	User = models.ForeignKey(CustomUser, blank=True, null=True, on_delete=models.SET_NULL)
 	
+	##################
+	# Object Methods #
+	##################
 	def call(self):
 		try:
-			super(Alarm, self).call()
+			for action in self.Actions:
+				action.run()
 		finally:
 			if newAlarm.recurrence == "Once A Hour":
 				self.Date = self.Date + datetime.timedelta(hours=1)
