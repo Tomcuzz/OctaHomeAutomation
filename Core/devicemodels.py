@@ -1,5 +1,6 @@
 from django.db import models
 from Core.locationmodels import *
+from helpers import *
 
 ################
 # Device Types #
