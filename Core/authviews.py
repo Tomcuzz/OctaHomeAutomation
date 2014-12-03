@@ -11,12 +11,12 @@ class handleLoginView(viewRequestHandler):
 			
 		if self.Post.has_key('username') and self.Post.has_key('password'):
 			user = authenticate(username=self.Post['username'], password=self.Post['password'])
-			if user is not None:
+			if user is not None and user.authy_id != "":
+				self.loginToken = user.get_login_token()
+			elif user is not None:
 				login(self.Request, user)
-			else:
-				self.loginToken = CustomBeckends().first_step(username=self.Post['username'], password=self.Post['password'])
 		elif self.Post.has_key('authytoken') and self.Post.has_key('logintoken'):
-			user = authenticate(username=self.Post['username'], password=None, authy_token=self.Post['authytoken'], login_token=self.Post['logintoken'])
+			user = CustomUser().objects.authyCheck(self.Post['username'], self.Post['logintoken'], self.Post['authytoken'])
 			if user is not None:
 				login(self.Request, user)
 		

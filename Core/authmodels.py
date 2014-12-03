@@ -12,6 +12,25 @@ from authy.api import AuthyApiClient
 # Account Model #
 #################
 class CustomUserManager(BaseUserManager):
+	def authyCheck(self, username, loginToken, authyToken):
+		try:
+			user = CustomUser.objects.get(email=username)
+		except CustomUser.DoesNotExist:
+			try:
+				user = CustomUser.objects.get(username=username)
+			except CustomUser.DoesNotExist:
+				return None
+		
+		if user.authy_step_token == loginToken and user.handle_authy_token(authyToken):
+			user.authy_step_token = ''
+			user.save()
+			return user
+		else:
+			user.authy_step_token = ''
+			user.save()
+			return None
+		
+	
 	def create_user(self, email, first_name, last_name, password=None, **extra_fields):
 		now = timezone.now()
 		if not email:
@@ -33,42 +52,7 @@ class CustomUserManager(BaseUserManager):
 		u.save(using=self._db)
 
 		return u
-
-class CustomBeckends(ModelBackend):
-	def authenticate(self, username='', password=None, authy_token='', login_token='', force_single_step=False):
-		try:
-			user = CustomUser.objects.get(email=username)
-		except CustomUser.DoesNotExist:
-			try:
-				user = CustomUser.objects.get(username=username)
-			except CustomUser.DoesNotExist:
-				return None
-		
-		if force_single_step or (authy_token == "" and login_token == ""):
-			if user.check_password(password):
-				return user
-			else:
-				return None
-		
-		elif authy_token != "" and login_token != "":
-			if user.authy_id == "" and login_token == user.authy_step_token:
-				return user
-			
-			if login_token == user.authy_step_token and user.handle_authy_token(authy_token):
-				return user
-			else:
-				return None
-		
-		return None
-			
-		
-	def first_step(self, username=None, password=None):
-		user = super(CustomBeckends, self).authenticate(username, password)
-		if user is None or user.authy_id == '':
-			return None
-		user.authy_step_token = ''.join(random.choice(string.ascii_uppercase) for i in range(45))
-		user.save()
-		return user.authy_step_token
+	
 
 class CustomUser(AbstractBaseUser):
 	email = models.EmailField(_('email'), max_length=254, unique=True, validators=[validators.validate_email])
@@ -87,6 +71,11 @@ class CustomUser(AbstractBaseUser):
 
 	USERNAME_FIELD = 'email'
 	REQUIRED_FIELDS = ['first_name', 'last_name']
+	
+	def get_login_token(self):
+		self.authy_step_token = ''.join(random.choice(string.ascii_uppercase) for i in range(45))
+		self.save()
+		return self.authy_step_token
 	
 	def handle_authy_token(self, authy_token):
 		authy_api = AuthyApiClient(djsetting.AUTHY_API_KEY)
