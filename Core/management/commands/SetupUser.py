@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 import getpass
-from Core.models import *
+from Core.authmodels import *
 from django.contrib.auth import *
 
 class Command(BaseCommand):
@@ -120,14 +120,3 @@ class Command(BaseCommand):
 			else:
 				print "No Option Entered Please Enter If This User Should Be A Super User"
 		
-		print "Please enter your Home Location (6 digit number from the met office)(London Is: 352409)"
-		message = "Home Location[xxxxxx]:"
-		while True:
-			self.homeLocation = raw_input(message)
-			if self.homeLocation:
-				if len(self.homeLocation) == 6 and self.homeLocation.isdigit():
-					break
-				else:
-					print "Location invalid"
-			else:
-				print "No Location Code Entered Please Enter Your Home Location (6 digit number from the met office)"

@@ -6,6 +6,6 @@ class Command(BaseCommand):
 
 	def handle(self, *args, **options):
 		call_command('migrate', interactive=True)
-		call_command('SetupUser', interactive=True)
 		call_command('SetupWeather', interactive=True)
+		call_command('SetupUser', interactive=True)
 		call_command('SetupCoreLocations', interactive=True)

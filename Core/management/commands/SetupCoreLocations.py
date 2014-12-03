@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-from Core.models import *
+from Core.locationmodels import *
 
 class Command(BaseCommand):
 	help = "Set Up Core Model Items (World, Country, House, Rooms)"
@@ -15,10 +15,18 @@ class Command(BaseCommand):
 		country.World = world
 		country.save()
 		
+		
+		homeLocationString = self.getAskForDetail('House Location (6 digit number from the met office)(London Is: 352409) [xxxxxx]:',
+			"No Location Code Entered Please Enter Your Home Location (6 digit number from the met office)",
+			'', 6, True)
+		homeLocation = WeatherLocation.objects.get(locationId=homeLocationString)
+		
 		homeName = self.getAskForDetail('House Name')
 		home = Home()
+		home.IsRemote = True
 		home.Name = homeName
 		home.Country = country
+		home.WeatherLocation = homeLocation
 		home.save()
 		
 		roomsAdded = 0
@@ -35,7 +43,7 @@ class Command(BaseCommand):
 				
 				roomsAdded = roomsAdded + 1
 		
-	def getAskForDetail(self, detailName, errorMessage='', prompt=''):
+	def getAskForDetail(self, detailName, errorMessage='', prompt='', specificLength=0, onlyDigits=False):
 		toReturn = ''
 		print "Please enter " + detailName
 		if prompt != '':
@@ -45,11 +53,11 @@ class Command(BaseCommand):
 		
 		while True:
 			toReturn = raw_input(message)
-			if toReturn:
+			if toReturn and (specificLength != 0 or len(toReturn) == specificLength) and ((not onlyDigits) or toReturn.isdigit()):
 				break
 			else:
 				if errorMessage != '':
 					print errorMessage
 				else:
-					print "Nothing Entered Please Enter " + detailName
+					print "Input Error Please Enter " + detailName
 		return toReturn

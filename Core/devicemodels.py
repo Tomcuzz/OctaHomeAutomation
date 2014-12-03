@@ -109,7 +109,7 @@ class InputDevice(Device):
 	##############
 	# Parameters #
 	##############
-	events = models.ManyToManyField('Event', related_name="%(app_label)s_%(class)s_Devices")
+	events = models.ManyToManyField('TriggerEvent', related_name="%(app_label)s_%(class)s_Devices")
 	
 	########
 	# Meta #

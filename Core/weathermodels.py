@@ -49,30 +49,26 @@ class WeatherLocation(models.Model):
 	latitude = models.TextField()
 	elevation = models.TextField(default="")
 	
+	weather = models.OneToOneField('Weather', primary_key=True)
+	
+	def getWeather():
+		if self.weather == None:
+			#Get WEATHER FROM INTERNET HERE
+			self.weather = Weather()
+			self.weather.update()
+		elif self.weather.LoadDate < datetime.datetime.utcnow().replace(tzinfo=utc) - datetime.timedelta(hours=1):
+			#UPDATE THE WEATHER ITEM
+			self.weatherItem.update()
+		
+		return self.weather
+	
+		
 	class Meta:
 		db_table = u'WeatherLocations'
 
-class WeatherManager(models.Manager):
-	def getLocation(self, location):
-		weatherLocation = WeatherLocation.objecte.get(locationId=location)
-		if weatherLocation == None:
-			return None
-			
-		weatherItem = self.get(Location=weatherLocation)
-		if weatherItem != None:
-			if weatherItem.LoadDate < datetime.datetime.utcnow().replace(tzinfo=utc) - datetime.timedelta(hours=1):
-				weatherItem.update()
-			return weatherItem
-		else:
-			weatherItem = Weather()
-			weatherItem.Location = weatherLocation
-			weatherItem.save()
-			weatherItem.update()
-			return weatherItem
-
 
 class Weather(models.Model):
-	Location = models.ForeignKey(WeatherLocation)
+	
 	LoadDate = models.DateTimeField(auto_now=True)
 	MesurementUnits = models.TextField(default="")
 	FiveDayWeather = models.TextField(default="")
@@ -93,7 +89,7 @@ class Weather(models.Model):
 	
 	def update(self):
 		apiKey = settings.MET_OFFICE_API_KEY
-		fivedayurl = "http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/" + self.Location.locationId + "?res=daily&key=" + apiKey
+		fivedayurl = "http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/" + self.WeatherLocation.locationId + "?res=daily&key=" + apiKey
 		weatherArray = json.loads(urllib.urlopen(fivedayurl).read())
 		self.setMesurementUnits(weatherArray['SiteRep']['Wx']['Param'])
 		self.setFiveDayWeather(weatherArray['SiteRep']['DV'])
