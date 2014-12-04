@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.utils import timezone
 from django.utils.timezone import utc
 import urllib
 import json
@@ -12,7 +13,6 @@ class WeatherLocationManager(models.Manager):
 		page = urllib.urlopen(url).read()
 		jsonResult = json.loads(page)
 		
-		
 		locationItems = jsonResult['Locations']['Location']
 		
 		for location in locationItems:
@@ -21,7 +21,7 @@ class WeatherLocationManager(models.Manager):
 				
 			except WeatherLocation.DoesNotExist:
 				weatherLocationObject = WeatherLocation()
-				weatherLocationObject.locationId = location['id']
+				weatherLocationObject.locationId = str(location['id'])
 			
 			weatherLocationObject.name = location['name']
 			weatherLocationObject.longitude = location['longitude']
@@ -35,7 +35,6 @@ class WeatherLocationManager(models.Manager):
 				weatherLocationObject.elevation = location['elevation']
 			
 			weatherLocationObject.save()
-	
 
 
 class WeatherLocation(models.Model):
@@ -49,16 +48,18 @@ class WeatherLocation(models.Model):
 	latitude = models.TextField()
 	elevation = models.TextField(default="")
 	
-	weather = models.OneToOneField('Weather', primary_key=True)
+	weather = models.OneToOneField('Weather', related_name='WeatherLocation', null=True)
 	
-	def getWeather():
+	def getWeather(self):
 		if self.weather == None:
 			#Get WEATHER FROM INTERNET HERE
-			self.weather = Weather()
+			self.weather = Weather.objects.create()
+			self.weather.save()
+			self.save()
 			self.weather.update()
-		elif self.weather.LoadDate < datetime.datetime.utcnow().replace(tzinfo=utc) - datetime.timedelta(hours=1):
+		elif self.weather.LoadDate < datetime.datetime.utcnow().replace(tzinfo=timezone.utc) - datetime.timedelta(hours=1):
 			#UPDATE THE WEATHER ITEM
-			self.weatherItem.update()
+			self.weather.update()
 		
 		return self.weather
 	
@@ -91,25 +92,26 @@ class Weather(models.Model):
 		apiKey = settings.MET_OFFICE_API_KEY
 		fivedayurl = "http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/" + self.WeatherLocation.locationId + "?res=daily&key=" + apiKey
 		weatherArray = json.loads(urllib.urlopen(fivedayurl).read())
+		print weatherArray
 		self.setMesurementUnits(weatherArray['SiteRep']['Wx']['Param'])
 		self.setFiveDayWeather(weatherArray['SiteRep']['DV'])
-		self.LoadDate = datetime.now()
+		self.LoadDate = timezone.now()
 		self.save()
 	
 	
-	def getTempUnits():
+	def getTempUnits(self):
 		if self.getMesurementUnits()[0]['units'] == "F":
 			return "Fahrenheit"
 		else:
 			return "Celsius"
 	
-	def getTempMax(day=0):
+	def getTempMax(self, day=0):
 		return self.getFiveDayWeather()['Location']['Period'][day]['Rep'][0]['Dm']
 	
-	def getTempMin(day=0):
+	def getTempMin(self, day=0):
 		return self.getFiveDayWeather()['Location']['Period'][day]['Rep'][1]['Nm']
 	
-	def getFeelsLikeTemp(day=0, forDay=True):
+	def getFeelsLikeTemp(self, day=0, forDay=True):
 		if forDay:
 			dayInt = 0
 			tempKey = "FDm"
@@ -118,7 +120,7 @@ class Weather(models.Model):
 			tempKey = "FNm"
 		return self.getFiveDayWeather()['Location']['Period'][day]['Rep'][dayInt][tempKey]
 	
-	def getHumidity(day=0, forDay=True):
+	def getHumidity(self, day=0, forDay=True):
 		if forDay:
 			dayInt = 0
 			tempKey = "Hn"
@@ -127,13 +129,13 @@ class Weather(models.Model):
 			tempKey = "Hm"
 		return self.getFiveDayWeather()['Location']['Period'][day]['Rep'][dayInt][tempKey]
 	
-	def getWindDirection(day=0):
+	def getWindDirection(self, day=0):
 		return self.getFiveDayWeather()['Location']['Period'][day]['Rep'][0]['D']
 	
-	def getWindSpeed(day=0):
+	def getWindSpeed(self, day=0):
 		return self.getFiveDayWeather()['Location']['Period'][day]['Rep'][0]['S']
 	
-	def getWindGust(day=0, forDay=True):
+	def getWindGust(self, day=0, forDay=True):
 		if forDay:
 			dayInt = 0
 			tempKey = "Gn"
@@ -142,13 +144,13 @@ class Weather(models.Model):
 			tempKey = "Gm"
 		return self.getFiveDayWeather()['Location']['Period'][day]['Rep'][dayInt][tempKey]
 	
-	def getWeatherTypeNum(day=0, isNight=0):
+	def getWeatherTypeNum(self, day=0, isNight=0):
 		return self.getFiveDayWeather()['Location']['Period'][day]['Rep'][isNight]['W']
 	
-	def getMaxUVIndex(day=0):
+	def getMaxUVIndex(self, day=0):
 		return self.getFiveDayWeather()['Location']['Period'][day]['Rep'][0]['U']
 	
-	def getPrecipitationProbability(day=0, forDay=True):
+	def getPrecipitationProbability(self, day=0, forDay=True):
 		if forDay:
 			dayInt = 0
 			tempKey = "PPd"
@@ -157,10 +159,10 @@ class Weather(models.Model):
 			tempKey = "PPn"
 		return self.getFiveDayWeather()['Location']['Period'][day]['Rep'][dayInt][tempKey]
 	
-	def getVisibilityNum(day=0):
+	def getVisibilityNum(self, day=0):
 		return self.getFiveDayWeather()['Location']['Period'][day]['Rep'][0]['V']
 	
-	def getVisibilityText(day=0):
+	def getVisibilityText(self, day=0):
 		visabilityNum = self.getVisibilityNum(day)
 		if visabilityNum == "UN":
 			return "Unknown"
@@ -179,7 +181,7 @@ class Weather(models.Model):
 		else:
 			return "Unavalable"
 	
-	def getWeatherTypeText(location, day=0, isNight=0):
+	def getWeatherTypeText(self, day=0, isNight=0):
 		weatherNum = int(self.getWeatherTypeNum(day, isNight))
 		if -1 < weatherNum < 31:
 			return "Not available"

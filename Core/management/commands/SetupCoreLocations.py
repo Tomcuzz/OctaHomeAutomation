@@ -1,5 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 from Core.locationmodels import *
+from Core.weathermodels import *
 
 class Command(BaseCommand):
 	help = "Set Up Core Model Items (World, Country, House, Rooms)"
@@ -53,7 +54,7 @@ class Command(BaseCommand):
 		
 		while True:
 			toReturn = raw_input(message)
-			if toReturn and (specificLength != 0 or len(toReturn) == specificLength) and ((not onlyDigits) or toReturn.isdigit()):
+			if toReturn and (specificLength == 0 or len(toReturn) == specificLength) and ((not onlyDigits) or toReturn.isdigit()):
 				break
 			else:
 				if errorMessage != '':
