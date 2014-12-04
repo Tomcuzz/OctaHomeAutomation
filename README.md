@@ -49,7 +49,7 @@ python manage.py SetupServer
 #### Nginx Setup:
 1. Copy SupportFiles/NginxConfig.txt to /etc/nginx/sites-enabled/homeautomation
 
-#### Home Automization Service Setup
+#### Home Automation Service Setup
 1. Copy SupportFiles/InitScript.txt to /etc/init.d/homeautomation
 2. chmod +x /etc/init.d/homeautomation
 3. Copy the HomeAutomation/settings.py.dist file to HomeAutomation/settings.py and edit to reflect your settings
