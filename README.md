@@ -4,7 +4,7 @@
 
 Octa is an open source home automation panel that is currently under active development.
 
-With all the new devices that are coming out with all thier own control pannels and apps, this was made to centralise them all and put them all together in one location so you can have full control of your home in one location, and easily link events in one system with actions in another.
+With all the new devices that are coming out with all their own control panels and apps, this was made to centralise them all and put them all together in one location so you can have full control of your home in one location, and easily link events in one system with actions in another.
 
 <br/>
 
@@ -47,12 +47,12 @@ python manage.py SetupServer
 7. Install Authy
 
 #### Nginx Setup:
-1. Copy HomeAutomationNginxConfig.txt to /etc/nginx/sites-enabled/homeautomation
+1. Copy SupportFiles/NginxConfig.txt to /etc/nginx/sites-enabled/homeautomation
 
-#### Home Automisation Service Setup
-1. Copy InitScript.txt to /etc/init.d/homeautomation
+#### Home Automation Service Setup
+1. Copy SupportFiles/InitScript.txt to /etc/init.d/homeautomation
 2. chmod +x /etc/init.d/homeautomation
-3. Copy the settings.py.dist file to settings.py and edit to reflect your settings
+3. Copy the HomeAutomation/settings.py.dist file to HomeAutomation/settings.py and edit to reflect your settings
 3. Run Self Setup: python manage.py ServerSetup
 3. Start the service from sudo/root with: service homeautomation start
 
@@ -61,7 +61,7 @@ python manage.py SetupServer
 ## Development
 ### Roadmap
 1. Inprovements To The Core
-2. Implementations Of Submoduls For Different Services
+2. Implementations Of Submodules For Different Services
 3. Implementations Of Popular Services (e.g. Nest, Hue, LightWaveRF,...)
 4. Create Mobile App's For All The Platforms
 
