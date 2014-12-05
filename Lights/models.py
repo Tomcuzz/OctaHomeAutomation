@@ -4,6 +4,11 @@ from Core.inputoutputmodels import *
 from Core.communication_controller import *
 
 class ScrollModes(models.Model):
+	####################
+	# Class Parameters #
+	####################
+	ViewPartial = 'pages/Lights/_Light'
+	
 	##############
 	# Parameters #
 	##############
@@ -22,6 +27,11 @@ class ScrollModes(models.Model):
 
 
 class LightDevice(OutputDevice):
+	####################
+	# Class Parameters #
+	####################
+	ViewPartial = ''
+	
 	##############
 	# Parameters #
 	##############
@@ -57,6 +67,11 @@ class LightDevice(OutputDevice):
 
 
 class RGBLight(LightDevice):
+	####################
+	# Class Parameters #
+	####################
+	ViewPartial = 'pages/Lights/_RGBLight'
+	
 	##############
 	# Parameters #
 	##############

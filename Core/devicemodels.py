@@ -6,6 +6,11 @@ from helpers import *
 # Device Types #
 ################
 class Device(models.Model):
+	####################
+	# Class Parameters #
+	####################
+	ViewPartial = ''
+	
 	##############
 	# Parameters #
 	##############
