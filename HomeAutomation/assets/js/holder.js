@@ -1,6 +1,6 @@
+/*
 
-
-/*Holder - 1.9 - client side image placeholders
+Holder - 1.9 - client side image placeholders
 (c) 2012-2013 Ivan Malopinsky / http://imsky.co
 
 Provided under the Apache 2.0 License: http://www.apache.org/licenses/LICENSE-2.0
