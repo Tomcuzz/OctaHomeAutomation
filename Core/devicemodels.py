@@ -6,10 +6,13 @@ from helpers import *
 # Device Types #
 ################
 class Device(models.Model):
-	####################
-	# Class Parameters #
-	####################
+	######################
+	# Display Parameters #
+	######################
 	ViewPartial = ''
+	
+	def getJsPartials(self):
+		return ['']
 	
 	##############
 	# Parameters #
@@ -18,6 +21,61 @@ class Device(models.Model):
 	Rooms = models.ManyToManyField('Room', blank=True, null=True, related_name="%(app_label)s_%(class)s_Devices")
 	IpAddress = models.TextField()
 	Port = models.IntegerField()
+	
+	##################
+	# Object Methods #
+	##################
+	def listActions(self):
+		return ["setName", "addRoomById", "removeRoomById", "setIpAddress", "setPort"]
+	
+	def	handleAction(self, action, parameters):
+		if action == "setName":
+			return self.setName(parameters[0])
+		elif action == "addRoomById":
+			return self.addRoomById(parameters[0])
+		elif action == "removeRoomById":
+			return self.removeRoomById(parameters[0])
+		elif action == "setIpAddress":
+			return self.setIpAddress(parameters[0])
+		elif action == "setPort":
+			return self.setPort(parameters[0])
+		else:
+			return False
+	
+	def getState(self):
+		return {'Name':self.Name, 'Rooms':self.getRooms(), 'IpAddress':self.IpAddress, 'Port':self.Port}
+	
+	
+	def setName(self, name):
+		self.Name = name
+		self.save()
+		return True
+	
+	def getRooms(self):
+		return []
+	
+	def addRoomById(self, roomId):
+		room = Room.objects.get(pk=roomId)
+		self.Rooms.add(room)
+		self.save()
+		return True
+	
+	def removeRoomById(self, roomId):
+		room = Room.objects.get(pk=roomId)
+		self.Rooms.remove(room)
+		self.save()
+		return True
+	
+	def setIpAddress(self, ipAddress):
+		self.IpAddress = ipAddress
+		self.save()
+		return True
+	
+	def setPort(self, port):
+		self.Port = port
+		self.save()
+		return True
+		
 	
 	#################
 	# Class Methods #
@@ -49,6 +107,14 @@ class Device(models.Model):
 			returnDevices = devices
 		
 		return returnDevices
+	
+	@classmethod
+	def getDevice(cls, deviceType, deviceId):
+		device = None
+		for aDevice in Device.getDevices():
+			if str(aDevice.id) == str(deviceId) and (aDevice.__class__.__name__ == str(deviceType)):
+				device = aDevice
+		return device
 	
 	@classmethod
 	def getClassNames(cls):

@@ -31,21 +31,28 @@ class LightDevice(OutputDevice):
 	# Class Parameters #
 	####################
 	ViewPartial = ''
+	def getJsPartials(self):
+		result = super(LightDevice, self).getJsPartials()
+		result.extend(["pages/Lights/_LightJs.html"])
+		return 	result
 	
 	##############
 	# Parameters #
 	##############
 	IsOn = models.BooleanField(default=False)
 	
-	#################
-	# Class Methods #
-	#################
+	##################
+	# Object Methods #
+	##################
 	def listActions(self):
-		return super(LightDevice, self).listActions().append(["setOnOff"])
+		return super(LightDevice, self).listActions().extend(["setOnOff"])
 	
 	def	handleAction(self, function, parameters):
 		if function == "setOnOff":
-			self.setOnOff(parameters[0])
+			if parameters.has_key('value'):
+				return self.setOnOff(parameters['value'])
+			else:
+				return False
 		else:
 			super(LightDevice, self).handleAction(function, parameters)
 		self.save()
@@ -53,10 +60,7 @@ class LightDevice(OutputDevice):
 	def getState(self):
 		return super(LightDevice, self).getState().update({"IsOn":self.IsOn})
 	
-	##################
-	# Object Methods #
-	##################
-	def setOnOff(setOn):
+	def setOnOff(self, setOn):
 		pass
 	
 	########
@@ -71,6 +75,10 @@ class RGBLight(LightDevice):
 	# Class Parameters #
 	####################
 	ViewPartial = 'pages/Lights/_RGBLight'
+	def getJsPartials(self):
+		result = super(RGBLight, self).getJsPartials()
+		result.extend(["pages/Lights/_RGBLightJs.html"])
+		return 	result
 	
 	##############
 	# Parameters #
@@ -88,11 +96,11 @@ class RGBLight(LightDevice):
 	
 	def	handleAction(self, function, parameters):
 		if function == "setRGB":
-			self.setRGB(parameters[0], parameters[1], parameters[2])
+			 return self.setRGB(parameters[0], parameters[1], parameters[2])
 		elif function == "setSroll":
-			self.setScroll(parameters[0])
+			return self.setScroll(parameters[0])
 		else:
-			super(RGBLight, self).handleAction(function, parameters)
+			return super(RGBLight, self).handleAction(function, parameters)
 		self.save()
 	
 	def getState(self):
@@ -108,14 +116,20 @@ class RGBLight(LightDevice):
 			return "Off"
 	
 	def setOnOff(self, setOn):
-		if setOn:
-			self.setRGB(self.R, self.G, self.B)
+		if setOn == 'On':
+			if self.R != 0 and self.G != 0 and self.B != 0:
+				self.setRGB(self.R, self.G, self.B)
+			else:
+				self.setRGB(255, 255, 255)
+			self.isOn = True
+			self.save()
+			return True
 		else:
 			self.setRGB(0, 0, 0)
-		self.isOn = setOn
-		self.save()
-		return True
-	
+			self.isOn = False
+			self.save()
+			return True
+		
 	def setR(self, r):
 		if self.checkColourInt(r):
 			return self.setRGB(r, self.G, self.B)
@@ -133,6 +147,24 @@ class RGBLight(LightDevice):
 			return self.setRGB(self.R, self.G, b)
 		else:
 			return False
+	
+	def getDisplayR(self):
+		if self.IsOn > 0:
+			return self.R
+		else:
+			return 0
+	
+	def getDisplayG(self):
+		if self.IsOn > 0:
+			return self.G
+		else:
+			return 0
+	
+	def getDisplayB(self):
+		if self.IsOn > 0:
+			return self.B
+		else:
+			return 0
 	
 	def setScroll(self, scrollModeName):
 		self.Scroll = ScrollModes.objects.get(name=scrollModeName)

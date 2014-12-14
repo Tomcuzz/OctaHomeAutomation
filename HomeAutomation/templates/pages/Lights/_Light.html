@@ -11,9 +11,9 @@
 	{% endif %}
 	<td>
 		{% if alight.IsOn %}
-			<button class="btn btn-danger" name="light{{alight.id}}OnOff" onClick="switchState('{{alight.id}}', '{{alight|getClassName}}')">{{alight.getSuperClassNames}}Turn Off</button>
+			<button class="btn btn-danger" name="light{{alight.id}}OnOff" onClick="onOffSwitchState('{{alight.id}}', '{{alight|getClassName}}', '{% url 'SingleDeviceCommand' command='setOnOff' deviceType=alight|getClassName deviceId=alight.id %}?value=Off')">{{alight.getSuperClassNames}}Turn Off</button>
 		{% else %}
-			<button class="btn btn-success" name="light{{alight.id}}OnOff" onClick="switchState('{{alight.id}}', '{{alight|getClassName}}')">{{alight.getSuperClassNames}}Turn On</button>
+			<button class="btn btn-success" name="light{{alight.id}}OnOff" onClick="onOffSwitchState('{{alight.id}}', '{{alight|getClassName}}', '{% url 'SingleDeviceCommand' command='setOnOff' deviceType=alight|getClassName deviceId=alight.id %}?value=Off')">{{alight.getSuperClassNames}}Turn On</button>
 		{% endif %}
 	</td>
 </tr>

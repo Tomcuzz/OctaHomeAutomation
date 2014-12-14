@@ -6,18 +6,18 @@
 	<td>{{alight.Room.Name | replaceUnderscores}}</td>
 	<td>
 		<p class="text-danger">R= 
-		<s id="rgbR{{alight.id}}" name="light{{alight.id}}Red" data-type="text" data-pk="1" data-url="{% url 'LightCommand' command='setR' lightType=alight|getClassName lightId=alight.id %}" data-original-title="Set Red Level">{{alight.R}}</s>, </p>
+		<s id="rgbR{{alight.id}}" name="light{{alight.id}}Red" data-type="text" data-pk="1" data-url="{% url 'LightCommand' command='setR' lightType=alight|getClassName lightId=alight.id %}" data-original-title="Set Red Level">{{alight.getDisplayR}}</s>, </p>
 		<p class="text-success">G= 
-		<s id="rgbG{{alight.id}}" name="light{{alight.id}}Green" data-type="text" data-pk="1" data-url="{% url 'LightCommand' command='setG' lightType=alight|getClassName lightId=alight.id %}" data-original-title="Set Green Level">{{alight.G}}</s>, </p>
+		<s id="rgbG{{alight.id}}" name="light{{alight.id}}Green" data-type="text" data-pk="1" data-url="{% url 'LightCommand' command='setG' lightType=alight|getClassName lightId=alight.id %}" data-original-title="Set Green Level">{{alight.getDisplayG}}</s>, </p>
 		<p class="text-info">B= 
-		<s id="rgbB{{alight.id}}" name="light{{alight.id}}Blue" data-type="text" data-pk="1" data-url="{% url 'LightCommand' command='setB' lightType=alight|getClassName lightId=alight.id %}" data-original-title="Set Blue Level">{{alight.B}}</s></p>
+		<s id="rgbB{{alight.id}}" name="light{{alight.id}}Blue" data-type="text" data-pk="1" data-url="{% url 'LightCommand' command='setB' lightType=alight|getClassName lightId=alight.id %}" data-original-title="Set Blue Level">{{alight.getDisplayB}}</s></p>
 	</td>
 	<td>
 		<div class="btn-group">
 			{% if alight.IsOn != True %}
-				<button class="btn btn-success" name="light{{alight.id}}OnOff" onClick="switchState('{{alight.id}}', '{{alight|getClassName}}')">Turn On</button>
+				<button class="btn btn-success" name="light{{alight.id}}OnOff" onClick="RGBSwitchState('{{alight.id}}', '{{alight|getClassName}}', '{% url 'SingleDeviceCommand' command='setOnOff' deviceType=alight|getClassName deviceId=alight.id %}?value=On')">Turn On</button>
 			{% else %}
-				<button class="btn btn-danger" name="light{{alight.id}}OnOff" onClick="switchState('{{alight.id}}', '{{alight|getClassName}}')">Turn Off</button>
+				<button class="btn btn-danger" name="light{{alight.id}}OnOff" onClick="RGBSwitchState('{{alight.id}}', '{{alight|getClassName}}', '{% url 'SingleDeviceCommand' command='setOnOff' deviceType=alight|getClassName deviceId=alight.id %}?value=Off')">Turn Off</button>
 			{% endif %}
 			<a class="btn btn-primary" onClick="changeColour('{{alight.id}}')" rel="drevil"> Set Colour </a>
 			<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">

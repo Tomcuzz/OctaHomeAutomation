@@ -9,6 +9,8 @@ modulePatterns = [
     url(r'^Login/', handleLoginView.as_view(), name='Login'),
     url(r'^LogOut/', handleLogOutView.as_view(), name='LogOut'),
     
+    url(r'^Core/', include('Core.urls')),
+    
     url(r'^HomeStats/', include('HomeStats.urls')),
 	url(r'^Lights/', include('Lights.urls')),
     url(r'^TempControl/', include('TempControl.urls')),

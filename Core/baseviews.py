@@ -10,6 +10,7 @@ class requestHandler(View):
 	Request = {}
 	Get = {}
 	Post = {}
+	AllRequestParams = {}
 	Protocal = 'html'
 	isSecuredArea = True
 	isUserAuthenticated = False
@@ -21,6 +22,7 @@ class requestHandler(View):
 		self.Arguments = args
 		self.Kwarguments = kwargs
 		self.Get = self.getGetVeriables()
+		self.AllRequestParams = self.getAllRequestParams()
 		self.Protocal = self.getProtocol()
 		self.isSecuredArea = self.isPageSecured()
 		self.isUserAuthenticated = self.Request.user.is_authenticated()
@@ -30,7 +32,9 @@ class requestHandler(View):
 		self.Request = request
 		self.arguments = args
 		self.Kwarguments = kwargs
+		self.Get = self.getGetVeriables()
 		self.Post = self.getPostVeriables()
+		self.AllRequestParams = self.getAllRequestParams()
 		self.Protocal = self.getProtocol()
 		self.isSecuredArea = self.isPageSecured()
 		self.isUserAuthenticated = self.Request.user.is_authenticated()
@@ -44,6 +48,12 @@ class requestHandler(View):
 	
 	def getPostVeriables(self):
 		return dict(zip(self.Request.POST.keys(), self.Request.POST.values()))
+	
+	def getAllRequestParams(self):
+		get = self.getGetVeriables()
+		post = self.getPostVeriables()
+		get.update(post)
+		return get
 	
 	def handleRequest(self):
 		pass
