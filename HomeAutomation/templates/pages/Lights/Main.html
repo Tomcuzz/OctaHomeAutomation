@@ -41,11 +41,6 @@
 {% endblock %}
 
 {% block ExtraJavaScript %}
-	<link href="{{STATIC_URL}}css/bootstrap-editable.css" rel="stylesheet"/>
-	<script src="{{STATIC_URL}}js/bootstrap-editable.js"></script>
-	<script type="text/javascript" src="{{STATIC_URL}}js/farbtastic.js"></script>
-	<link rel="stylesheet" href="{{STATIC_URL}}css/farbtastic.css" type="text/css" />
-	
 	{% for jsPartial in lights|getUniqueJsPartials %}
 		{% if jsPartial != '' %}
 			{% include jsPartial %}

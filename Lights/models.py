@@ -77,7 +77,7 @@ class RGBLight(LightDevice):
 	ViewPartial = 'pages/Lights/_RGBLight'
 	def getJsPartials(self):
 		result = super(RGBLight, self).getJsPartials()
-		result.extend(["pages/Lights/_RGBLightJs.html"])
+		result.extend(["pages/Lights/_RGBLightJs.html", "JsHelpers/_x-editable.html", "JsHelpers/_farbtastic.html"])
 		return 	result
 	
 	##############
