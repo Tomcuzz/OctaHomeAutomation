@@ -4,11 +4,6 @@ from Core.inputoutputmodels import *
 from Core.communication_controller import *
 
 class ScrollModes(models.Model):
-	####################
-	# Class Parameters #
-	####################
-	ViewPartial = 'pages/Lights/_Light'
-	
 	##############
 	# Parameters #
 	##############
@@ -28,9 +23,9 @@ class ScrollModes(models.Model):
 
 class LightDevice(OutputDevice):
 	####################
-	# Class Parameters #
+	# View Parameters #
 	####################
-	ViewPartial = ''
+	ViewPartial = 'pages/Lights/_Light'
 	def getJsPartials(self):
 		result = super(LightDevice, self).getJsPartials()
 		result.extend(["pages/Lights/_LightJs.html"])
@@ -45,7 +40,9 @@ class LightDevice(OutputDevice):
 	# Object Methods #
 	##################
 	def listActions(self):
-		return super(LightDevice, self).listActions().extend(["setOnOff"])
+		result = super(LightDevice, self).listActions()
+		result.extend(["setOnOff"])
+		return result
 	
 	def	handleAction(self, function, parameters):
 		if function == "setOnOff":
@@ -54,11 +51,13 @@ class LightDevice(OutputDevice):
 			else:
 				return False
 		else:
-			super(LightDevice, self).handleAction(function, parameters)
+			return super(LightDevice, self).handleAction(function, parameters)
 		self.save()
 	
 	def getState(self):
-		return super(LightDevice, self).getState().update({"IsOn":self.IsOn})
+		result = super(LightDevice, self).getState()
+		result.update({"IsOn":self.IsOn})
+		return result
 	
 	def setOnOff(self, setOn):
 		pass
@@ -92,19 +91,40 @@ class RGBLight(LightDevice):
 	# Class Methods #
 	#################
 	def listActions(self):
-		return super(RGBLight, self).listActions().append(["setRGB", "setScroll"])
+		result = super(RGBLight, self).listActions()
+		result.extend(["setRGB", "setR", "setG", "setB", "setScroll"])
+		return result
 	
 	def	handleAction(self, function, parameters):
 		if function == "setRGB":
-			 return self.setRGB(parameters[0], parameters[1], parameters[2])
+			if parameters.has_key('R') and parameters.has_key('G') and parameters.has_key('B'):
+				return self.setRGB(parameters['R'], parameters['G'], parameters['B'])
+			else:
+				return False
+		elif function == "setR":
+			if parameters.has_key('value'):
+				return self.setR(parameters['value'])
+			else:
+				return False
+		elif function == "setG":
+			if parameters.has_key('value'):
+				return self.setG(parameters['value'])
+			else:
+				return False
+		elif function == "setB":
+			if parameters.has_key('value'):
+				return self.setB(parameters['value'])
+			else:
+				return False
 		elif function == "setSroll":
 			return self.setScroll(parameters[0])
 		else:
 			return super(RGBLight, self).handleAction(function, parameters)
-		self.save()
 	
 	def getState(self):
-		return super(RGBLight, self).getState().update({"R":self.R, "G":self.G, "B":self.B, "Scroll":self.getScroll()})
+		result = super(RGBLight, self).getState()
+		result.update({"R":self.R, "G":self.G, "B":self.B, "Scroll":self.getScroll()})
+		return result
 		
 	##################
 	# Object Methods #

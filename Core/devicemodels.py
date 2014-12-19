@@ -26,10 +26,12 @@ class Device(models.Model):
 	# Object Methods #
 	##################
 	def listActions(self):
-		return ["setName", "addRoomById", "removeRoomById", "setIpAddress", "setPort"]
+		return ["getState", "setName", "addRoomById", "removeRoomById", "setIpAddress", "setPort"]
 	
 	def	handleAction(self, action, parameters):
-		if action == "setName":
+		if action == "getState":
+			return self.getState()
+		elif action == "setName":
 			return self.setName(parameters[0])
 		elif action == "addRoomById":
 			return self.addRoomById(parameters[0])
@@ -43,7 +45,7 @@ class Device(models.Model):
 			return False
 	
 	def getState(self):
-		return {'Name':self.Name, 'Rooms':self.getRooms(), 'IpAddress':self.IpAddress, 'Port':self.Port}
+		return {"Name":self.Name, "Rooms":self.getRoomIds(), "IpAddress":self.IpAddress, "Port":self.Port}
 	
 	
 	def setName(self, name):
@@ -51,8 +53,11 @@ class Device(models.Model):
 		self.save()
 		return True
 	
-	def getRooms(self):
-		return []
+	def getRoomIds(self):
+		rooms = []
+		for room in self.Rooms.all():
+			rooms.append(room.id)
+		return rooms
 	
 	def addRoomById(self, roomId):
 		room = Room.objects.get(pk=roomId)
@@ -154,10 +159,6 @@ class Device(models.Model):
 			if issubclass(self.__class__, deviceClass):
 				name.append(deviceClass.__name__)
 		return name
-				
-	
-	def getState(self):
-		return {}
 	
 	########
 	# Meta #

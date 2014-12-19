@@ -203,6 +203,9 @@ class commandRequestHandler(requestHandler):
 	def returnOk(self):
 		return HttpResponse('Ok')
 	
+	def returnResult(self, result):
+		return HttpResponse(result)
+	
 	def redirect(self, path):
 		return redirect(path)
 	

@@ -6,7 +6,7 @@
 	<td>{{alight.Room.Name | replaceUnderscores}}</td>
 	<td>
 		<p class="text-danger">R= 
-		<s id="rgbR{{alight.id}}" name="light{{alight.id}}Red" data-type="text" data-pk="1" data-url="{% url 'LightCommand' command='setR' lightType=alight|getClassName lightId=alight.id %}" data-original-title="Set Red Level">{{alight.getDisplayR}}</s>, </p>
+		<s id="rgbR{{alight.id}}" name="light{{alight.id}}Red" data-type="text" data-pk="1" data-url="{% url 'SingleDeviceCommand' command='setR' deviceType=alight|getClassName deviceId=alight.id %}" data-original-title="Set Red Level">{{alight.getDisplayR}}</s>, </p>
 		<p class="text-success">G= 
 		<s id="rgbG{{alight.id}}" name="light{{alight.id}}Green" data-type="text" data-pk="1" data-url="{% url 'LightCommand' command='setG' lightType=alight|getClassName lightId=alight.id %}" data-original-title="Set Green Level">{{alight.getDisplayG}}</s>, </p>
 		<p class="text-info">B= 
