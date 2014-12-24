@@ -15,9 +15,9 @@
 	<td>
 		<div class="btn-group">
 			{% if alight.IsOn != True %}
-				<button class="btn btn-success" name="light{{alight.id}}OnOff" onClick="RGBSwitchState('{{alight.id}}', '{{alight|getClassName}}', '{% url 'SingleDeviceCommand' command='setOnOff' deviceType=alight|getClassName deviceId=alight.id %}?value=On')">Turn On</button>
+				<button class="btn btn-success" name="light{{alight.id}}OnOff" onClick="RGBSwitchState('{{alight.id}}', '{{alight|getClassName}}')">Turn On</button>
 			{% else %}
-				<button class="btn btn-danger" name="light{{alight.id}}OnOff" onClick="RGBSwitchState('{{alight.id}}', '{{alight|getClassName}}', '{% url 'SingleDeviceCommand' command='setOnOff' deviceType=alight|getClassName deviceId=alight.id %}?value=Off')">Turn Off</button>
+				<button class="btn btn-danger" name="light{{alight.id}}OnOff" onClick="RGBSwitchState('{{alight.id}}', '{{alight|getClassName}}')">Turn Off</button>
 			{% endif %}
 			<a class="btn btn-primary" onClick="changeColour('{{alight.id}}')" rel="drevil"> Set Colour </a>
 			<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">

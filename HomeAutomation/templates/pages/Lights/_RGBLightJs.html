@@ -9,16 +9,16 @@
 		});
 	});
 	
-	function RGBSwitchState(id, type, url) {
+	function RGBSwitchState(id, type) {
 		lightObject = "light" + id + "OnOff";
 		if (document.getElementsByName(lightObject)[0].innerHTML == "Turn On") {
-			turnOn(id, type, url)
+			RGBTurnOn(id, type)
 		} else {
-			turnOff(id, type, url)
+			RGBTurnOff(id, type)
 		}
 	}
 	
-	function RGBTurnOff(id, type, url) {
+	function RGBTurnOff(id, type) {
 		lightObject = "light" + id + "OnOff";
 		lightState = "light" + id + "State";
 		lightRedLevel = "light" + id + "Red";
@@ -29,10 +29,13 @@
 		document.getElementsByName(lightRedLevel)[0].innerHTML = "0";
 		document.getElementsByName(lightGreenLevel)[0].innerHTML = "0";
 		document.getElementsByName(lightBlueLevel)[0].innerHTML = "0";
+		
+		url = Urls.SingleDeviceCommand('json', 'setOnOff', type, id) + "?value=Off"
 		httpGet(url);
 	}
 	
-	function turnOn(id, type, url) {
+	function RGBTurnOn(id, type) {
+		url = Urls.SingleDeviceCommand('json', 'setOnOff', type, id) + "?value=On"
 		httpGet(url);
 		
 		lightObject = "light" + id + "OnOff";

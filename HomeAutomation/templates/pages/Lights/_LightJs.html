@@ -1,14 +1,15 @@
 <script>
-	function onOffSwitchState(id, type, url) {
+	function onOffSwitchState(id, type) {
 		lightObject = "light" + id + "OnOff";
 		if (document.getElementsByName(lightObject)[0].innerHTML == "Turn On") {
-			turnOn(id, type, url)
+			onOffTurnOn(id, type)
 		} else {
-			turnOff(id, type, url)
+			onOffTurnOff(id, type)
 		}
 	}
 	
-	function onOffTurnOff(id, type, url) {
+	function onOffTurnOff(id, type) {
+		url = Urls.SingleDeviceCommand('json', 'setOnOff', type, id) + "?value=Off"
 		httpGet(url);
 		lightObject = "light" + id + "OnOff";
 		lightState = "light" + id + "State";
@@ -18,7 +19,8 @@
 		document.getElementsByName(lightState)[0].className = "text-error";
 	}
 	
-	function onOffTurnOn(id, type, url) {
+	function onOffTurnOn(id, type) {
+		url = Urls.SingleDeviceCommand('json', 'setOnOff', type, id) + "?value=On"
 		httpGet(url);
 		lightObject = "light" + id + "OnOff";
 		lightDropDown = "light" + id + "DropDown";
