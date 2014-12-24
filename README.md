@@ -33,7 +33,7 @@ python manage.py SetupServer
 1. Unpack the package to /var/www/HomeAutomation
 
 #### Install Services:
-1. Install Nginx
+1. Install Nginx/Apache2
 2. Install MySql
 3. Install Python
 
@@ -45,9 +45,13 @@ python manage.py SetupServer
 5. Install proxmoxer
 6. Install Astral
 7. Install Authy
+8. Install django_js_reverse
 
 #### Nginx Setup:
 1. Copy SupportFiles/NginxConfig.txt to /etc/nginx/sites-enabled/homeautomation
+
+#### Apache2 Setup
+There is currently no example configuration file for apache. Sorry :(
 
 #### Home Automation Service Setup
 1. Copy SupportFiles/InitScript.txt to /etc/init.d/homeautomation
@@ -63,9 +67,10 @@ python manage.py SetupServer
 1. Inprovements To The Core
 2. Implementations Of Submodules For Different Services
 3. Implementations Of Popular Services (e.g. Nest, Hue, LightWaveRF,...)
-4. Create Mobile App's For All The Platforms
+4. Create Native App's For Popular Platforms (Mac/iOS/Andriod/PC/Windows Mobile)
 
 ### Contributing
+Who doesn't like a bit of calaboration! Feel free to pitch in!
 1. Fork it.
 2. Create a branch (`git checkout -b my_markup`)
 3. Commit your changes (`git commit -am "Added Space Ship Control"`)
