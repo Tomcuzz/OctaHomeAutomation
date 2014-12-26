@@ -31,22 +31,24 @@ class Device(models.Model):
 	def	handleAction(self, action, parameters):
 		if action == "getState":
 			return self.getState()
-		elif action == "setName":
-			return self.setName(parameters[0])
-		elif action == "addRoomById":
-			return self.addRoomById(parameters[0])
-		elif action == "removeRoomById":
-			return self.removeRoomById(parameters[0])
-		elif action == "setIpAddress":
-			return self.setIpAddress(parameters[0])
-		elif action == "setPort":
-			return self.setPort(parameters[0])
+		elif parameters.has_key('value') and action in ["setName", "addRoomById", "removeRoomById", "setIpAddress", "setPort"]:
+			if action == "setName":
+				return self.setName(parameters['value'])
+			elif action == "addRoomById":
+				return self.addRoomById(parameters['value'])
+			elif action == "removeRoomById":
+				return self.removeRoomById(parameters['value'])
+			elif action == "setIpAddress":
+				return self.setIpAddress(parameters['value'])
+			elif action == "setPort":
+				return self.setPort(parameters['value'])
+			else:
+				return False
 		else:
 			return False
 	
 	def getState(self):
 		return {"Name":self.Name, "Rooms":self.getRoomIds(), "IpAddress":self.IpAddress, "Port":self.Port}
-	
 	
 	def setName(self, name):
 		self.Name = name
@@ -188,4 +190,30 @@ class InputDevice(Device):
 	# Meta #
 	########
 	class Meta:
-		abstract = True	
+		abstract = True
+
+
+################
+# Device Modes #
+################
+class DeviceMode(models.Model):
+	##############
+	# Parameters #
+	##############
+	Name = models.TextField()
+	
+	#################
+	# Class Methods #
+	#################
+	@classmethod
+	def getDeviceModeNames(cls, kwargs={}):
+		modeNames = []
+		for mode in cls.objects.all():
+			modeNames.extend(mode.Name)
+		return modeNames
+	
+	########
+	# Meta #
+	########
+	class Meta:
+		abstract = True

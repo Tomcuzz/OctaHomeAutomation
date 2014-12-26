@@ -30,12 +30,12 @@
 		document.getElementsByName(lightGreenLevel)[0].innerHTML = "0";
 		document.getElementsByName(lightBlueLevel)[0].innerHTML = "0";
 		
-		url = Urls.SingleDeviceCommand('json', 'setOnOff', type, id) + "?value=Off"
+		url = Urls.SingleDeviceCommand('json', 'setIsOn', type, id) + "?value=Off"
 		httpGet(url);
 	}
 	
 	function RGBTurnOn(id, type) {
-		url = Urls.SingleDeviceCommand('json', 'setOnOff', type, id) + "?value=On"
+		url = Urls.SingleDeviceCommand('json', 'setIsOn', type, id) + "?value=On"
 		httpGet(url);
 		
 		lightObject = "light" + id + "OnOff";

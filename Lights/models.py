@@ -3,11 +3,10 @@ from Core.devicemodels import *
 from Core.inputoutputmodels import *
 from Core.communication_controller import *
 
-class ScrollModes(models.Model):
+class LightScrollMode(DeviceMode):
 	##############
 	# Parameters #
 	##############
-	Name = models.TextField()
 	RValues = models.TextField()
 	GValues = models.TextField()
 	BValues = models.TextField()
@@ -18,7 +17,7 @@ class ScrollModes(models.Model):
 	# Meta #
 	########
 	class Meta:
-		db_table = u'ScrollModes'
+		db_table = u'LightScrollMode'
 
 
 class LightDevice(OutputDevice):
@@ -41,11 +40,11 @@ class LightDevice(OutputDevice):
 	##################
 	def listActions(self):
 		result = super(LightDevice, self).listActions()
-		result.extend(["setOnOff"])
+		result.extend(["setIsOn"])
 		return result
 	
 	def	handleAction(self, function, parameters):
-		if function == "setOnOff":
+		if function == "setIsOn":
 			if parameters.has_key('value'):
 				return self.setOnOff(parameters['value'])
 			else:
@@ -56,7 +55,7 @@ class LightDevice(OutputDevice):
 	
 	def getState(self):
 		result = super(LightDevice, self).getState()
-		result.update({"IsOn":self.IsOn})
+		result.update({"IsOn":{"DisplayName":"On/Off", "Type":"Bool", "value":self.IsOn}})
 		return result
 	
 	def setOnOff(self, setOn):
@@ -85,7 +84,7 @@ class RGBLight(LightDevice):
 	R = models.IntegerField()
 	G = models.IntegerField()
 	B = models.IntegerField()
-	Scroll = models.ForeignKey(ScrollModes, blank=True, null=True, related_name="RGBLights")
+	Scroll = models.ForeignKey(LightScrollMode, blank=True, null=True, related_name="RGBLights")
 	
 	#################
 	# Class Methods #
@@ -101,29 +100,26 @@ class RGBLight(LightDevice):
 				return self.setRGB(parameters['R'], parameters['G'], parameters['B'])
 			else:
 				return False
-		elif function == "setR":
-			if parameters.has_key('value'):
+		elif parameters.has_key('value') and action in ["setR", "setG", "setB", "setLightScrollScene"]:
+			if function == "setR":
 				return self.setR(parameters['value'])
-			else:
-				return False
-		elif function == "setG":
-			if parameters.has_key('value'):
+			elif function == "setG":
 				return self.setG(parameters['value'])
-			else:
-				return False
-		elif function == "setB":
-			if parameters.has_key('value'):
+			elif function == "setB":
 				return self.setB(parameters['value'])
+			elif function == "setLightScrollScene":
+				return self.setScroll(parameters['value'])
 			else:
 				return False
-		elif function == "setSroll":
-			return self.setScroll(parameters[0])
 		else:
 			return super(RGBLight, self).handleAction(function, parameters)
 	
 	def getState(self):
 		result = super(RGBLight, self).getState()
-		result.update({"R":self.R, "G":self.G, "B":self.B, "Scroll":self.getScroll()})
+		result.update({"R":{"DisplayName":"Red Level", "Type":"Int", "value":self.R}})
+		result.update({"G":{"DisplayName":"Green Level", "Type":"Int", "value":self.G}})
+		result.update({"B":{"DisplayName":"Blue Level", "Type":"Int", "value":self.B}})
+		result.update({"Scroll":{"DisplayName":"Scroll Mode", "Type":"Mode", "ModeType":"LightScrollMode", "value":self.getScroll()}})
 		return result
 		
 	##################
@@ -133,7 +129,7 @@ class RGBLight(LightDevice):
 		if self.Scroll:
 			return self.Scroll.Name
 		else:
-			return "Off"
+			return "None"
 	
 	def setOnOff(self, setOn):
 		if setOn == 'On':
@@ -187,7 +183,7 @@ class RGBLight(LightDevice):
 			return 0
 	
 	def setScroll(self, scrollModeName):
-		self.Scroll = ScrollModes.objects.get(name=scrollModeName)
+		self.Scroll = LightScrollMode.objects.get(Name=scrollModeName)
 		self.save()
 	
 	def setRGB(self, r, g, b):
