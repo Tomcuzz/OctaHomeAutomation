@@ -12,7 +12,7 @@ class handleLightView(viewRequestHandler):
 		else:
 			lights = LightDevice.getDevices(self.Kwarguments)
 			
-			parameters = {'lights':lights, 'scrollModes':ScrollModes.objects.all()}
+			parameters = {'lights':lights, 'scrollModes':LightScrollMode.objects.all()}
 			
 			if self.Kwarguments.has_key('house'):
 				if self.Kwarguments['house'] == 'all':

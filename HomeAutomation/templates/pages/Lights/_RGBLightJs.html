@@ -1,16 +1,6 @@
 <script>
-	$(document).ready(function() {
-		$.fn.editable.defaults.ajaxOptions = {type: "POST"};
-		$.fn.editable.defaults.mode = 'inline';
-		$('#lightTable s').editable({
-			params: {
-				csrfmiddlewaretoken: '{{csrfmiddlewaretoken}}'
-			}
-		});
-	});
-	
 	function RGBSwitchState(id, type) {
-		lightObject = "light" + id + "OnOff";
+		lightObject = "light" + id + type + "OnOff";
 		if (document.getElementsByName(lightObject)[0].innerHTML == "Turn On") {
 			RGBTurnOn(id, type)
 		} else {
@@ -19,11 +9,11 @@
 	}
 	
 	function RGBTurnOff(id, type) {
-		lightObject = "light" + id + "OnOff";
-		lightState = "light" + id + "State";
-		lightRedLevel = "light" + id + "Red";
-		lightGreenLevel = "light" + id + "Green";
-		lightBlueLevel = "light" + id + "Blue";
+		lightObject = "light" + id + type + "OnOff";
+		lightState = "light" + id + type + "State";
+		lightRedLevel = "light" + id + type + "Red";
+		lightGreenLevel = "light" + id + type + "Green";
+		lightBlueLevel = "light" + id + type + "Blue";
 		document.getElementsByName(lightObject)[0].innerHTML = "Turn On";
 		document.getElementsByName(lightObject)[0].className = "btn btn-success";
 		document.getElementsByName(lightRedLevel)[0].innerHTML = "0";
@@ -38,26 +28,21 @@
 		url = Urls.SingleDeviceCommand('json', 'setIsOn', type, id) + "?value=On"
 		httpGet(url);
 		
-		lightObject = "light" + id + "OnOff";
-		lightDropDown = "light" + id + "DropDown";
-		lightState = "light" + id + "State";
-		lightRedLevel = "light" + id + "Red";
-		lightGreenLevel = "light" + id + "Green";
-		lightBlueLevel = "light" + id + "Blue";
+		lightObject = "light" + id + type + "OnOff";
+		lightDropDown = "light" + id + type + "DropDown";
+		lightState = "light" + id + type + "State";
+		lightRedLevel = "light" + id + type + "Red";
+		lightGreenLevel = "light" + id + type + "Green";
+		lightBlueLevel = "light" + id + type + "Blue";
 		
-		rUrl = "{% url 'LightCommandWithOutLight' command='getR' %}" + type + "/" + id + "/";
-		gUrl = "{% url 'LightCommandWithOutLight' command='getG' %}" + type + "/" + id + "/";
-		bUrl = "{% url 'LightCommandWithOutLight' command='getB' %}" + type + "/" + id + "/";
-		
-		R = httpGet(rUrl);
-		G = httpGet(gUrl);
-		B = httpGet(bUrl);
-		
+		statusurl = Urls.SingleDeviceCommand('json', 'getState', type, id)
+		$.getJSON(statusurl, function (json) {
+			document.getElementsByName(lightRedLevel)[0].innerHTML = json["R"]["value"];
+			document.getElementsByName(lightGreenLevel)[0].innerHTML = json["G"]["value"];
+			document.getElementsByName(lightBlueLevel)[0].innerHTML = json["B"]["value"];
+		});
 		document.getElementsByName(lightObject)[0].innerHTML = "Turn Off";
 		document.getElementsByName(lightObject)[0].className = "btn btn-danger";
-		document.getElementsByName(lightRedLevel)[0].innerHTML = R;
-		document.getElementsByName(lightGreenLevel)[0].innerHTML = G;
-		document.getElementsByName(lightBlueLevel)[0].innerHTML = B;
 	}
 	
 	function setScroll(lightId, ScrollState) {
@@ -75,26 +60,40 @@
 		httpGet(url);
 	}
 	var currentPickerColour;
-	function changeColour(id) {
-		var rId = "rgbR" + id;
-		var gId = "rgbG" + id;
-		var bId = "rgbB" + id;
+	function changeColour(id, type) {
+		window.lastLightId = id;
+		window.lastLightType = type;
 		
-		var rValue = document.getElementById(rId).innerHTML;
-		var gValue = document.getElementById(gId).innerHTML;
-		var bValue = document.getElementById(bId).innerHTML;
-		
-		var hexValue = rgbToHex(rValue, gValue, bValue);
-		
-		var currentPickerColour = hexValue;
+		statusurl = Urls.SingleDeviceCommand('json', 'getState', type, id);
+		$.getJSON(statusurl, function (json) {
+			var currentPickerColour = rgbToHex(json["R"]["value"], json["G"]["value"], json["B"]["value"]);
+						
+			var pickerId = '#' + id + type + "colorpicker";
+			
+			var picker = $.farbtastic(pickerId);
+			picker.linkTo(callback);
+			picker.setColor(currentPickerColour);
+		});
 	}
 	
 	function callback(color) {
-		currentPickerColour=color;
-		
 		var colour = convertHexToRGB(color);
-		var postUrl = "/HomeControl/SetRGBLightNoAuth.php";
-		var dataString = 'lightId='+ '1' + '&r=' + colour[0] + '&g=' + colour[1] + '&b=' + colour[2]; 
+		var postUrl = Urls.SingleDeviceCommand('json', 'setRGB', window.lastLightType, window.lastLightId);
+		
+		var dataString = 'R=' + colour[0] + '&G=' + colour[1] + '&B=' + colour[2] + '&csrfmiddlewaretoken={{csrfmiddlewaretoken}}'; 
+		
+		
+		lightObject = "light" + window.lastLightId + window.lastLightType + "OnOff";
+		lightState = "light" + window.lastLightId + window.lastLightType + "State";
+		lightRedLevel = "light" + window.lastLightId + window.lastLightType + "Red";
+		lightGreenLevel = "light" + window.lastLightId + window.lastLightType + "Green";
+		lightBlueLevel = "light" + window.lastLightId + window.lastLightType + "Blue";
+		document.getElementsByName(lightObject)[0].innerHTML = "Turn On";
+		document.getElementsByName(lightObject)[0].className = "btn btn-success";
+		document.getElementsByName(lightRedLevel)[0].innerHTML = colour[0];
+		document.getElementsByName(lightGreenLevel)[0].innerHTML = colour[1];
+		document.getElementsByName(lightBlueLevel)[0].innerHTML = colour[2];
+		
 		$.ajax({  
 			type: "POST",  
 			url: postUrl,  
@@ -119,17 +118,17 @@
 	}
 	
 	$(document).ready(function() {
-		$("body").popover({
-			trigger: "click",
-			placement: "bottom",
-			title: "Colorpicker",
-			content: $("#colorpicker"),
-			selector: "a[rel=drevil]",
-			html: true
-		}).on("click", "a[rel=drevil]", function() {
-			var picker = $.farbtastic('#colorpicker');
-			picker.linkTo(callback);
-			picker.setColor(this.currentPickerColour);
+		$(".colourPopover").popover({
+			title : 'Set Colour',
+			placement : 'bottom',
+			html : true
+		});
+		$.fn.editable.defaults.ajaxOptions = {type: "POST"};
+		$.fn.editable.defaults.mode = 'inline';
+		$('#lightTable s').editable({
+			params: {
+				csrfmiddlewaretoken: '{{csrfmiddlewaretoken}}'
+			}
 		});
 	});
 	

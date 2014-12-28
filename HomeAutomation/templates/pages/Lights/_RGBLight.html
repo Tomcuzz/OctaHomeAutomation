@@ -6,33 +6,32 @@
 	<td>{{alight.Room.Name | replaceUnderscores}}</td>
 	<td>
 		<p class="text-danger">R= 
-		<s id="rgbR{{alight.id}}" name="light{{alight.id}}Red" data-type="text" data-pk="1" data-url="{% url 'SingleDeviceCommand' command='setR' deviceType=alight|getClassName deviceId=alight.id %}" data-original-title="Set Red Level">{{alight.getDisplayR}}</s>, </p>
+		<s id="rgbR{{alight.id}}" name="light{{alight.id}}{{alight|getClassName}}Red" data-type="text" data-pk="1" data-url="{% url 'SingleDeviceCommand' command='setR' deviceType=alight|getClassName deviceId=alight.id %}" data-original-title="Set Red Level">{{alight.getDisplayR}}</s>, </p>
 		<p class="text-success">G= 
-		<s id="rgbG{{alight.id}}" name="light{{alight.id}}Green" data-type="text" data-pk="1" data-url="{% url 'LightCommand' command='setG' lightType=alight|getClassName lightId=alight.id %}" data-original-title="Set Green Level">{{alight.getDisplayG}}</s>, </p>
+		<s id="rgbG{{alight.id}}" name="light{{alight.id}}{{alight|getClassName}}Green" data-type="text" data-pk="1" data-url="{% url 'LightCommand' command='setG' lightType=alight|getClassName lightId=alight.id %}" data-original-title="Set Green Level">{{alight.getDisplayG}}</s>, </p>
 		<p class="text-info">B= 
-		<s id="rgbB{{alight.id}}" name="light{{alight.id}}Blue" data-type="text" data-pk="1" data-url="{% url 'LightCommand' command='setB' lightType=alight|getClassName lightId=alight.id %}" data-original-title="Set Blue Level">{{alight.getDisplayB}}</s></p>
+		<s id="rgbB{{alight.id}}" name="light{{alight.id}}{{alight|getClassName}}Blue" data-type="text" data-pk="1" data-url="{% url 'LightCommand' command='setB' lightType=alight|getClassName lightId=alight.id %}" data-original-title="Set Blue Level">{{alight.getDisplayB}}</s></p>
 	</td>
 	<td>
 		<div class="btn-group">
 			{% if alight.IsOn != True %}
-				<button class="btn btn-success" name="light{{alight.id}}OnOff" onClick="RGBSwitchState('{{alight.id}}', '{{alight|getClassName}}')">Turn On</button>
+				<button class="btn btn-success" name="light{{alight.id}}{{alight|getClassName}}OnOff" onClick="RGBSwitchState('{{alight.id}}', '{{alight|getClassName}}')">Turn On</button>
 			{% else %}
-				<button class="btn btn-danger" name="light{{alight.id}}OnOff" onClick="RGBSwitchState('{{alight.id}}', '{{alight|getClassName}}')">Turn Off</button>
+				<button class="btn btn-danger" name="light{{alight.id}}{{alight|getClassName}}OnOff" onClick="RGBSwitchState('{{alight.id}}', '{{alight|getClassName}}')">Turn Off</button>
 			{% endif %}
-			<a class="btn btn-primary" onClick="changeColour('{{alight.id}}')" rel="drevil"> Set Colour </a>
-			<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">
-				 Dropdown 
-			<span class="caret"></span>
-			</button>
-			<ul class="dropdown-menu">
-				<li role="presentation" class="dropdown-header">Scroll Modes</li>
-				<li><a href="#" onClick="setScroll('{{alight.id}}', 'Off')">Off<i name="Light{{alight.id}}ScrollOff" class="{% if alight.Scroll == "Off" %}icon-ok{% endif %}pull-right"></i></a></li>
-				{% for scrollMode in scrollModes %}
-					<li><a href="#" onClick="setScroll('{{alight.id}}', '{{scrollMode.Name}}')">{{scrollMode.Name}}<i name="Light{{alight.id}}Scroll{{scrollMode.Name}}" class="{% if alight.Scroll == "{{scrollMode.Name}}" %}icon-ok{% endif %}pull-right"></i></a></li>
-				{% endfor %}
-				<li role="presentation" class="dropdown-header">Scenes</li>
-				<li><a href="#" onClick="setScroll('{{alight.id}}', 'Off')">Movie<i name="Light{{alight.id}}ScrollOff" class="pull-right"></i></a></li>
-			</ul>
+			<div class="btn-group">
+				<button type="button" class="btn btn-primary colourPopover" id="setColorButton" onClick="changeColour('{{alight.id}}', '{{alight|getClassName}}')" data-toggle="popover" title="Set Colour" data-content="<div id='{{alight.id}}{{alight|getClassName}}colorpicker' style='width:195px; height:195px;'></div>">Set Colour</button>
+			</div>
+			<div class="btn-group">
+				<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">Scroll Mode<span class="caret"></span></button>
+				<ul class="dropdown-menu">
+					<li role="presentation" class="dropdown-header">Scroll Modes</li>
+					<li><a href="#" onClick="setScroll('{{alight.id}}', 'Off')">Off<i name="Light{{alight.id}}ScrollOff" class="{% if alight.Scroll == "Off" %}icon-ok{% endif %}pull-right"></i></a></li>
+					{% for scrollMode in scrollModes %}
+						<li><a href="#" onClick="setScroll('{{alight.id}}', '{{scrollMode.Name}}')">{{scrollMode.Name}}<i name="Light{{alight.id}}Scroll{{scrollMode.Name}}" class="{% if alight.Scroll == "{{scrollMode.Name}}" %}icon-ok{% endif %}pull-right"></i></a></li>
+					{% endfor %}
+				</ul>
+			</div>
 		</div>
 		<div id="colorpicker">
 				<div class="my-farbtastic"></div>
