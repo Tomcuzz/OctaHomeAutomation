@@ -94,25 +94,25 @@ class RGBLight(LightDevice):
 		result.extend(["setRGB", "setR", "setG", "setB", "setScroll"])
 		return result
 	
-	def	handleAction(self, function, parameters):
-		if function == "setRGB":
+	def	handleAction(self, action, parameters):
+		if action == "setRGB":
 			if parameters.has_key('R') and parameters.has_key('G') and parameters.has_key('B'):
 				return self.setRGB(parameters['R'], parameters['G'], parameters['B'])
 			else:
 				return False
 		elif parameters.has_key('value') and action in ["setR", "setG", "setB", "setLightScrollScene"]:
-			if function == "setR":
+			if action == "setR":
 				return self.setR(parameters['value'])
-			elif function == "setG":
+			elif action == "setG":
 				return self.setG(parameters['value'])
-			elif function == "setB":
+			elif action == "setB":
 				return self.setB(parameters['value'])
-			elif function == "setLightScrollScene":
+			elif action == "setLightScrollScene":
 				return self.setScroll(parameters['value'])
 			else:
 				return False
 		else:
-			return super(RGBLight, self).handleAction(function, parameters)
+			return super(RGBLight, self).handleAction(action, parameters)
 	
 	def getState(self):
 		result = super(RGBLight, self).getState()

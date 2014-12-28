@@ -8,9 +8,9 @@
 		<p class="text-danger">R= 
 		<s id="rgbR{{alight.id}}" name="light{{alight.id}}{{alight|getClassName}}Red" data-type="text" data-pk="1" data-url="{% url 'SingleDeviceCommand' command='setR' deviceType=alight|getClassName deviceId=alight.id %}" data-original-title="Set Red Level">{{alight.getDisplayR}}</s>, </p>
 		<p class="text-success">G= 
-		<s id="rgbG{{alight.id}}" name="light{{alight.id}}{{alight|getClassName}}Green" data-type="text" data-pk="1" data-url="{% url 'LightCommand' command='setG' lightType=alight|getClassName lightId=alight.id %}" data-original-title="Set Green Level">{{alight.getDisplayG}}</s>, </p>
+		<s id="rgbG{{alight.id}}" name="light{{alight.id}}{{alight|getClassName}}Green" data-type="text" data-pk="1" data-url="{% url 'SingleDeviceCommand' command='setG' deviceType=alight|getClassName deviceId=alight.id %}" data-original-title="Set Green Level">{{alight.getDisplayG}}</s>, </p>
 		<p class="text-info">B= 
-		<s id="rgbB{{alight.id}}" name="light{{alight.id}}{{alight|getClassName}}Blue" data-type="text" data-pk="1" data-url="{% url 'LightCommand' command='setB' lightType=alight|getClassName lightId=alight.id %}" data-original-title="Set Blue Level">{{alight.getDisplayB}}</s></p>
+		<s id="rgbB{{alight.id}}" name="light{{alight.id}}{{alight|getClassName}}Blue" data-type="text" data-pk="1" data-url="{% url 'SingleDeviceCommand' command='setB' deviceType=alight|getClassName deviceId=alight.id %}" data-original-title="Set Blue Level">{{alight.getDisplayB}}</s></p>
 	</td>
 	<td>
 		<div class="btn-group">
