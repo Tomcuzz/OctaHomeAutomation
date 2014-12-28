@@ -4,6 +4,7 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
 from django.middleware.csrf import get_token
 from models import *
+from Core.locationmodels import *
 import json
 
 class requestHandler(View):
@@ -148,11 +149,12 @@ class viewRequestHandler(requestHandler):
 	###################
 	def getSideBar(self):
 		currentRoom = self.getCurrentRoom()
+		currentHouse = self.getCurrentHome()
 		
 		linkName = self.getSidebarUrlName()
 		
 		address = reverse(linkName)
-		links = [{'title': 'All Rooms', 'address': address, 'active': self.getSideBarActiveState(None, currentRoom)}]
+		links = [{'title': 'All Rooms', 'address': address, 'active': self.getSideBarActiveState([None, None], [currentRoom, currentHouse])}]
 		
 		for house in Home.objects.all():
 			roomItems = []
@@ -162,7 +164,7 @@ class viewRequestHandler(requestHandler):
 				roomItems.append(sidebarSubItem)
 			
 			address = reverse(linkName, kwargs={'house':house.id})
-			sidebarItem = {'title': house.Name.replace("_", " ") , 'address': address , 'active':self.getSideBarActiveState(house, currentRoom), 'sublinks':roomItems}
+			sidebarItem = {'title': house.Name.replace("_", " ") , 'address': address , 'active':self.getSideBarActiveState(house, currentHouse), 'sublinks':roomItems}
 			links.append(sidebarItem)
 		
 		return links
@@ -175,9 +177,19 @@ class viewRequestHandler(requestHandler):
 	
 	#Get Room Method
 	def getCurrentRoom(self):
-		roomString = self.Request.GET.get('room', 'All')
-		if roomString != 'All':
-			return Rooms.object.filter(id=roomString)
+		if not self.Kwarguments.has_key('room'):
+			return None
+		elif self.Kwarguments['room'] != 'All':
+			return Room.objects.get(id=self.Kwarguments['room'])
+		else:
+			return None
+	
+	#Get Home Method
+	def getCurrentHome(self):
+		if not self.Kwarguments.has_key('house'):
+			return None
+		elif self.Kwarguments['house'] != 'All':
+			return Home.objects.get(id=self.Kwarguments['house'])
 		else:
 			return None
 
