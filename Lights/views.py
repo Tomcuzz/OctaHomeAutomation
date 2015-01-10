@@ -8,7 +8,10 @@ class handleLightView(viewRequestHandler):
 		if self.Page == 'AddLight':
 			deviceNames = LightDevice.getClassNames()
 			rooms = Room.objects.all()
-			return {'deviceName':deviceNames, 'rooms':rooms}
+			if self.Get.has_key('next'):
+				return {'deviceName':deviceNames, 'rooms':rooms, 'next':self.Get['next']}
+			else:
+				return {'deviceName':deviceNames, 'rooms':rooms}
 		else:
 			lights = LightDevice.getDevices(self.Kwarguments)
 			
@@ -22,7 +25,7 @@ class handleLightView(viewRequestHandler):
 				parameters.update({'house':houseId})
 			else:
 				parameters.update({'houses':Home.objects.all()})
-				
+			
 			if self.Kwarguments.has_key('room'):
 				parameters.update({'rooms':self.Kwarguments['room']})
 			else:
@@ -49,14 +52,7 @@ class handleLightView(viewRequestHandler):
 
 class handleLightCommand(commandRequestHandler):
 	def runCommand(self):
-		light = self.getLight()
-		if light:
-			if self.Command == 'getState':
-				return HttpResponse(json.dumps({"R":light.R, "G":light.G, "B":light.B, "Scroll":light.getScroll()}))
-			else:
-				return self.handleUserError('Command Not Recognised')
-				
-		elif self.Command == 'AddLight':
+		if self.Command == 'AddLight':
 			if self.Post.has_key('devicetype'):
 				newLight = LightDevice(self.Post['devicetype'], self.Post)
 				if newLight != None:
@@ -69,10 +65,3 @@ class handleLightCommand(commandRequestHandler):
 		else:
 			return self.handleUserError('Light Not Found')
 	
-	def getLight(self):
-		light = None
-		if self.Kwarguments.has_key('lightType') and self.Kwarguments.has_key('lightId'):
-			for aLight in Device.getDevices():
-				if str(aLight.id) == str(self.Kwarguments['lightId']) and (aLight.__class__.__name__ == self.Kwarguments['lightType']):
-					light = aLight
-		return light

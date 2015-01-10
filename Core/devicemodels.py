@@ -1,5 +1,6 @@
 from django.db import models
 from Core.locationmodels import *
+from Core.messagemodels import *
 from helpers import *
 
 ################
@@ -19,8 +20,9 @@ class Device(models.Model):
 	##############
 	Name = models.CharField(max_length=30)
 	Rooms = models.ManyToManyField('Room', blank=True, null=True, related_name="%(app_label)s_%(class)s_Devices")
+	Logs = models.ManyToManyField('LogItem', blank=True, null=True, related_name="%(app_label)s_%(class)s_Devices")
 	IpAddress = models.TextField()
-	Port = models.IntegerField()
+	Port = models.IntegerField(default=0)
 	
 	##################
 	# Object Methods #
@@ -131,7 +133,7 @@ class Device(models.Model):
 		return classNames
 	
 	@classmethod
-	def create(cls, className, kwargs={}):
+	def createDevice(cls, className, kwargs={}):
 		if cls.__name__ == className:
 			if kwargs.has_key('name'):
 				device = cls(Name = kwargs['name'])
@@ -140,20 +142,25 @@ class Device(models.Model):
 		else:
 			device = None
 			for deviceClass in getNonAbstractSubClasses(cls):
-				if cls.__name__ == className:
-					device = deviceClass(kwargs)
+				if deviceClass.__name__ == className:
+					device = deviceClass(Name = kwargs['name'])
 					break
 			if device == None:
 				return None
-			
+			device.save()
+			device.setup(kwargs)
+			device.save()
+			return device
+	
+	def setup(self, kwargs={}):
 		if kwargs.has_key('room'):
 			room = Room.objects.get(pk=kwargs['room'])
-			device.Rooms.add(room)
+			self.Rooms.add(room)
 		if kwargs.has_key('ipaddress'):
-			device.IpAddress = kwargs['ipaddress']
+			self.IpAddress = kwargs['ipaddress']
 		if kwargs.has_key('port'):
-			device.Port = kwargs['port']
-		return device
+			self.Port = int(kwargs['port'])
+		return self
 	
 	def getSuperClassNames(self):
 		name = []

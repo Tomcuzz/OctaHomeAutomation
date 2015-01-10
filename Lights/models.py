@@ -81,9 +81,9 @@ class RGBLight(LightDevice):
 	##############
 	# Parameters #
 	##############
-	R = models.IntegerField()
-	G = models.IntegerField()
-	B = models.IntegerField()
+	R = models.IntegerField(default=0)
+	G = models.IntegerField(default=0)
+	B = models.IntegerField(default=0)
 	Scroll = models.ForeignKey(LightScrollMode, blank=True, null=True, related_name="RGBLights")
 	
 	#################
@@ -116,9 +116,9 @@ class RGBLight(LightDevice):
 	
 	def getState(self):
 		result = super(RGBLight, self).getState()
-		result.update({"R":{"DisplayName":"Red Level", "Type":"Int", "value":self.R}})
-		result.update({"G":{"DisplayName":"Green Level", "Type":"Int", "value":self.G}})
-		result.update({"B":{"DisplayName":"Blue Level", "Type":"Int", "value":self.B}})
+		result.update({"R":{"DisplayName":"Red Level", "Type":"Int", "MinValue":0, "MaxValue":255, "value":self.R}})
+		result.update({"G":{"DisplayName":"Green Level", "Type":"Int", "MinValue":0, "MaxValue":255, "value":self.G}})
+		result.update({"B":{"DisplayName":"Blue Level", "Type":"Int", "MinValue":0, "MaxValue":255, "value":self.B}})
 		result.update({"Scroll":{"DisplayName":"Scroll Mode", "Type":"Mode", "ModeType":"LightScrollMode", "value":self.getScroll()}})
 		return result
 		

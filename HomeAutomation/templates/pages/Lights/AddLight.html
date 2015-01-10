@@ -17,7 +17,7 @@
 			}
 		}
 	</script>
-	<form action="{% url 'LightCommandWithOutLight' command='AddLight' %}" method="POST" onsubmit="return validateForm()" name="CreateLightForm">
+	<form action="{% url 'AddDeviceCommand' %}" method="POST" onsubmit="return validateForm()" name="CreateLightForm">
 		<fieldset>
 			<input type="hidden" name="csrfmiddlewaretoken" value="{{csrfmiddlewaretoken|safe}}"/>
 			<label>Light Name:</label>
@@ -43,6 +43,9 @@
 				{% endfor %}
 			</select>
 			<br>
+			{% if next %}
+				<input type="hidden" name="next" value="{{next}}"/>
+			{% endif %}
 			<button type="submit" class="btn btn-default">Add User</button>
 		</fieldset>
 	</form>

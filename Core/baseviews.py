@@ -196,6 +196,8 @@ class viewRequestHandler(requestHandler):
 class commandRequestHandler(requestHandler):
 	Command = ''
 	#Normal Overridable methods
+	def commandNeeded(self):
+		return True
 	
 	def runCommand(self, command):
 		pass
@@ -205,7 +207,9 @@ class commandRequestHandler(requestHandler):
 		if self.securityFails():
 			return self.handleAuthenticationFailue()
 		
-		if self.Kwarguments.has_key('command'):
+		if self.commandNeeded() == False and not self.Kwarguments.has_key('command'):
+			self.Command = "NotGiven"
+		elif self.Kwarguments.has_key('command'):
 			self.Command = self.Kwarguments['command']
 		else:
 			return self.handleUserError('No Command Given')
