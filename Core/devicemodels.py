@@ -20,6 +20,7 @@ class Device(models.Model):
 	##############
 	Name = models.CharField(max_length=30)
 	Rooms = models.ManyToManyField('Room', blank=True, null=True, related_name="%(app_label)s_%(class)s_Devices")
+	IsOn = models.BooleanField(default=False)
 	Logs = models.ManyToManyField('LogItem', blank=True, null=True, related_name="%(app_label)s_%(class)s_Devices")
 	IpAddress = models.TextField()
 	Port = models.IntegerField(default=0)
@@ -28,18 +29,20 @@ class Device(models.Model):
 	# Object Methods #
 	##################
 	def listActions(self):
-		return ["getState", "setName", "addRoomById", "removeRoomById", "setIpAddress", "setPort"]
+		return ["getState", "setName", "addRoomById", "removeRoomById", "setIsOn", "setIpAddress", "setPort"]
 	
 	def	handleAction(self, action, parameters):
 		if action == "getState":
 			return self.getState()
-		elif parameters.has_key('value') and action in ["setName", "addRoomById", "removeRoomById", "setIpAddress", "setPort"]:
+		elif parameters.has_key('value') and action in ["setName", "addRoomById", "removeRoomById", "setIsOn", "setIpAddress", "setPort"]:
 			if action == "setName":
 				return self.setName(parameters['value'])
 			elif action == "addRoomById":
 				return self.addRoomById(parameters['value'])
 			elif action == "removeRoomById":
 				return self.removeRoomById(parameters['value'])
+			elif function == "setIsOn":
+				return self.setIsOn(parameters['value'])
 			elif action == "setIpAddress":
 				return self.setIpAddress(parameters['value'])
 			elif action == "setPort":
@@ -50,7 +53,7 @@ class Device(models.Model):
 			return False
 	
 	def getState(self):
-		return {"Name":self.Name, "Rooms":self.getRoomIds(), "IpAddress":self.IpAddress, "Port":self.Port}
+		return {"Name":self.Name, "Rooms":self.getRoomIds(), "IsOn":{"DisplayName":"On/Off", "Type":"Bool", "value":self.IsOn}, "IpAddress":self.IpAddress, "Port":self.Port}
 	
 	def setName(self, name):
 		self.Name = name
@@ -74,6 +77,9 @@ class Device(models.Model):
 		self.Rooms.remove(room)
 		self.save()
 		return True
+	
+	def setIsOn(self, setOn):
+		pass
 	
 	def setIpAddress(self, ipAddress):
 		self.IpAddress = ipAddress
@@ -161,6 +167,10 @@ class Device(models.Model):
 		if kwargs.has_key('port'):
 			self.Port = int(kwargs['port'])
 		return self
+	
+	@classmethod
+	def getSectionName(cls):
+		return None
 	
 	def getSuperClassNames(self):
 		name = []

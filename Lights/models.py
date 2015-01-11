@@ -30,37 +30,6 @@ class LightDevice(OutputDevice):
 		result.extend(["pages/Lights/_LightJs.html"])
 		return 	result
 	
-	##############
-	# Parameters #
-	##############
-	IsOn = models.BooleanField(default=False)
-	
-	##################
-	# Object Methods #
-	##################
-	def listActions(self):
-		result = super(LightDevice, self).listActions()
-		result.extend(["setIsOn"])
-		return result
-	
-	def	handleAction(self, function, parameters):
-		if function == "setIsOn":
-			if parameters.has_key('value'):
-				return self.setOnOff(parameters['value'])
-			else:
-				return False
-		else:
-			return super(LightDevice, self).handleAction(function, parameters)
-		self.save()
-	
-	def getState(self):
-		result = super(LightDevice, self).getState()
-		result.update({"IsOn":{"DisplayName":"On/Off", "Type":"Bool", "value":self.IsOn}})
-		return result
-	
-	def setOnOff(self, setOn):
-		pass
-	
 	########
 	# Meta #
 	########
@@ -131,7 +100,7 @@ class RGBLight(LightDevice):
 		else:
 			return "None"
 	
-	def setOnOff(self, setOn):
+	def setIsOn(self, setOn):
 		if setOn == 'On':
 			if self.R != 0 and self.G != 0 and self.B != 0:
 				self.setRGB(self.R, self.G, self.B)
