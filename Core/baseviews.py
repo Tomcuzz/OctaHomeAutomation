@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from django.middleware.csrf import get_token
 from models import *
 from Core.locationmodels import *
-import json
+import django.core.serializers
 
 class requestHandler(View):
 	Request = {}
@@ -221,6 +221,9 @@ class commandRequestHandler(requestHandler):
 	
 	def returnResult(self, result):
 		return HttpResponse(result)
+	
+	def returnJSONResult(self, result):
+		return HttpResponse(django.core.serializers.serialize('json', result), content_type="application/json")
 	
 	def redirect(self, path):
 		return redirect(path)

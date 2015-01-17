@@ -1,0 +1,87 @@
+<div class="message-column">
+	<div class="message-area" id="message-area">
+		
+		
+		
+	</div>
+</div>
+
+<script>
+	var shownLogs = [];
+	var shownNotifications = [];
+	var shownWarnings = [];
+	var shownErrors = [];
+	
+	notificationUrl = Urls.SingleDeviceCommand('json', 'getState', type, id);
+	$.getJSON(notificationUrl, function (json) {
+		
+		var currentPickerColour = rgbToHex(json["R"]["value"], json["G"]["value"], json["B"]["value"]);
+					
+		var pickerId = '#' + id + type + "colorpicker";
+		
+		var picker = $.farbtastic(pickerId);
+		picker.linkTo(callback);
+		picker.setColor(currentPickerColour);
+	});
+	
+	
+	
+	
+	displayMessage("log", "Tite", "Here is a log");
+	displayMessage("notification", "Tite", "Here is a notification");
+	displayMessage("warning", "Tite", "Here is a warning");
+	displayMessage("error", "Tite", "Here is a error");
+	
+	function displayMessage(type, title, message) {
+		var messageClass = "";
+		if (type == "log") {
+			messageClass = "alert alert-info alert-dismissible";
+		} else if (type == "notification") {
+			messageClass = "alert alert-success alert-dismissible";
+		} else if (type == "warning") {
+			messageClass = "alert alert-warning alert-dismissible";
+		} else if (type == "error") {
+			messageClass = "alert alert-danger alert-dismissible";
+		} else {
+			messageClass = "alert alert-info alert-dismissible";
+		}
+		
+		var messageArea = document.getElementById("message-area");
+		
+		var newMessageNode = document.createElement("div");
+		newMessageNode.className = messageClass; 
+		newMessageNode.setAttribute( "role", "alert" );
+		
+		var newMessageButton = document.createElement("button");
+		newMessageButton.className = "close";
+		newMessageButton.setAttribute( "type", "button" );
+		newMessageButton.setAttribute( "data-dismiss", "alert" );
+		newMessageButton.setAttribute( "aria-label", "Close" );
+		
+		var newMessageSymbol = document.createElement("span");
+		newMessageSymbol.setAttribute( "aria-hidden", "true" );
+		newMessageSymbol.innerHTML = "&times;";
+		newMessageButton.appendChild(newMessageSymbol);
+		newMessageNode.appendChild(newMessageButton);
+		
+		var newMessageTextArea = document.createElement("div");
+		
+		var newMessageTitle = document.createElement("strong");
+		newMessageTitle.innerHTML = "Title goes here" + " \- ";
+		newMessageTextArea.appendChild(newMessageTitle);
+		
+		var newMessageBody = document.createElement("div");
+		newMessageBody.innerHTML = "The longer body goes here";
+		newMessageBody.style.display = "inline";
+		newMessageTextArea.appendChild(newMessageBody);
+		
+		newMessageNode.appendChild(newMessageTextArea);
+		
+		$(newMessageNode).appendTo(messageArea).fadeIn(2000);
+	}
+	
+	function dismissWarning(id) {
+		
+	}
+	
+</script>

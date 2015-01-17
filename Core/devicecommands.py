@@ -1,6 +1,5 @@
 from baseviews import *
 from devicemodels import *
-import json
 
 class handleSingleDeviceCommand(commandRequestHandler):
 	def runCommand(self):
@@ -10,13 +9,13 @@ class handleSingleDeviceCommand(commandRequestHandler):
 				if self.Command in device.listActions():
 					result = device.handleAction(self.Command, self.AllRequestParams)
 					if isinstance(result, dict) or isinstance(result, list):
-						return self.returnResult(json.dumps(result))
+						return self.returnJSONResult(result)
 					elif isinstance(result, str):
 						return self.returnResult(result)
 					elif result == True:
 						return self.returnOk()
 					elif result != False and result != None:
-						return self.returnResult(json.dumps(result))
+						return self.returnJSONResult(result)
 					else:
 						return self.handleUserError('Command Error')
 				else:

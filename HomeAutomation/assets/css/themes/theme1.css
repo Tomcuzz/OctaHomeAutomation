@@ -1,4 +1,9 @@
+html {
+	height:100%;
+}
+
 body {
+	height:100%;
 	padding-top: 0px;
 	padding-bottom: 40px;
 	background-image: url('/assets/img/background.jpg');
@@ -8,7 +13,6 @@ body {
 .container {
 	width: 80%;
 }
-
 
 .dropdown-menu > li > a:hover,
 .dropdown-menu > li > a:focus {
@@ -134,4 +138,27 @@ body {
 }
 .no-account a:hover {
   	color: #aaaaaa;
+}
+
+
+
+/* Notification Area */
+.message-column {
+	position:absolute;
+	top:50px;
+	bottom:0;
+	right:0;
+	width:25%;
+}
+
+.message-area {
+	position:absolute;
+	bottom:0;
+	width:100%;
+	padding: 10px;
+	padding-bottom: 0px;
+}
+
+.alert {
+	margin-bottom: 10px;
 }
