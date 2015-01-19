@@ -8,9 +8,13 @@ class handleMessageCommand(commandRequestHandler):
 			return self.returnJSONResult(list(NotificationMessage.objects.filter(Dismissed=False)))
 		elif self.Command == "AllNotifications":
 			return self.returnJSONResult(list(NotificationMessage.objects.all()))
-		elif self.Command == "AllNewWarning":
+		elif self.Command == "AllNewWarnings":
 			return self.returnJSONResult(list(WarningMessage.objects.filter(Dismissed=False)))
-		elif self.Command == "AllWarning":
+		elif self.Command == "AllWarnings":
+			return self.returnJSONResult(list(WarningMessage.objects.all()))
+		elif self.Command == "AllNewErrors":
+			return self.returnJSONResult(list(WarningMessage.objects.filter(Dismissed=False)))
+		elif self.Command == "AllErrors":
 			return self.returnJSONResult(list(WarningMessage.objects.all()))
 		
 		elif self.Command == "DismissNotification":

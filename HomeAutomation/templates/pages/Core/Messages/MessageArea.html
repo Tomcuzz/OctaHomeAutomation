@@ -12,27 +12,52 @@
 	var shownWarnings = [];
 	var shownErrors = [];
 	
-	notificationUrl = Urls.SingleDeviceCommand('json', 'getState', type, id);
+	var logUrl = Urls.MessagesCommand('json', 'AllNewNotifications');
+	var notificationUrl = Urls.MessagesCommand('json', 'AllNewNotifications');
+	var warningUrl = Urls.MessagesCommand('json', 'AllNewWarnings');
+	var errorUrl = Urls.MessagesCommand('json', 'AllNewErrors');
+	$.getJSON(logUrl, function (json) {
+		var x;
+		for (x in json) {
+			if containsObject(x["pk"], shownLogs) {
+				displayMessage("log", x["pk"], x["fields"]["Title"], x["fields"]["Message"]);
+			}
+		}
+	});
 	$.getJSON(notificationUrl, function (json) {
-		
-		var currentPickerColour = rgbToHex(json["R"]["value"], json["G"]["value"], json["B"]["value"]);
-					
-		var pickerId = '#' + id + type + "colorpicker";
-		
-		var picker = $.farbtastic(pickerId);
-		picker.linkTo(callback);
-		picker.setColor(currentPickerColour);
+		var x;
+		for (x in json) {
+			if containsObject(x["pk"], shownNotifications) {
+				displayMessage("notification", x["pk"], x["fields"]["Title"], x["fields"]["Message"]);
+			}
+		}
+	});
+	$.getJSON(warningUrl, function (json) {
+		var x;
+		for (x in json) {
+			if containsObject(x["pk"], shownWarnings) {
+				displayMessage("warning", x["pk"], x["fields"]["Title"], x["fields"]["Message"]);
+			}
+		}
+	});
+	$.getJSON(errorUrl, function (json) {
+		var x;
+		for (x in json) {
+			if containsObject(x["pk"], shownErrors) {
+				displayMessage("error", x["pk"], x["fields"]["Title"], x["fields"]["Message"]);
+			}
+		}
 	});
 	
 	
 	
 	
-	displayMessage("log", "Tite", "Here is a log");
-	displayMessage("notification", "Tite", "Here is a notification");
-	displayMessage("warning", "Tite", "Here is a warning");
-	displayMessage("error", "Tite", "Here is a error");
+	displayMessage("log", "1", "Tite", "Here is a log");
+	displayMessage("notification", "2", "Tite", "Here is a notification");
+	displayMessage("warning", "3", "Tite", "Here is a warning");
+	displayMessage("error", "4", "Tite", "Here is a error");
 	
-	function displayMessage(type, title, message) {
+	function displayMessage(type, id, title, message) {
 		var messageClass = "";
 		if (type == "log") {
 			messageClass = "alert alert-info alert-dismissible";
@@ -82,6 +107,16 @@
 	
 	function dismissWarning(id) {
 		
+	}
+	
+	function containsObject(obj, list) {
+		var i;
+		for (i = 0; i < list.length; i++) {
+			if (list[i] === obj) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 </script>
