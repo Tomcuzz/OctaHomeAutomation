@@ -7,55 +7,75 @@
 </div>
 
 <script>
-	var shownLogs = [];
-	var shownNotifications = [];
-	var shownWarnings = [];
-	var shownErrors = [];
+	window.shownLogs = [];
+	window.shownNotifications = [];
+	window.shownWarnings = [];
+	window.shownErrors = [];
 	
-	var logUrl = Urls.MessagesCommand('json', 'AllNewNotifications');
-	var notificationUrl = Urls.MessagesCommand('json', 'AllNewNotifications');
-	var warningUrl = Urls.MessagesCommand('json', 'AllNewWarnings');
-	var errorUrl = Urls.MessagesCommand('json', 'AllNewErrors');
-	$.getJSON(logUrl, function (json) {
-		var x;
-		for (x in json) {
-			if containsObject(x["pk"], shownLogs) {
-				displayMessage("log", x["pk"], x["fields"]["Title"], x["fields"]["Message"]);
+	startCheckers();
+	
+	function startCheckers() {
+		checkForLogs();
+		checkForNotifications();
+		checkForWarnings();
+		checkForErrors();
+		var logChecker = setInterval(checkForLogs, 10000);
+		var notificationChecker = setInterval(checkForNotifications, 10000);
+		var warningChecker = setInterval(checkForWarnings, 10000);
+		var errorChecker = setInterval(checkForErrors, 10000);
+	}
+	
+	function checkForLogs() {
+		var logUrl = Urls.MessagesCommand('json', 'LastHourLogs');
+		$.getJSON(logUrl, function (json) {
+			var x;
+			for (x in json) {
+				if (containsObject(json[x]["pk"], window.shownLogs) == false) {
+					displayMessage("log", json[x]["pk"], json[x]["fields"]["Title"], json[x]["fields"]["Message"]);
+					window.shownLogs.push(json[x]["pk"])
+				}
 			}
-		}
-	});
-	$.getJSON(notificationUrl, function (json) {
-		var x;
-		for (x in json) {
-			if containsObject(x["pk"], shownNotifications) {
-				displayMessage("notification", x["pk"], x["fields"]["Title"], x["fields"]["Message"]);
+		});
+	}
+	
+	function checkForNotifications() {
+		var notificationUrl = Urls.MessagesCommand('json', 'AllNewNotifications');
+		$.getJSON(notificationUrl, function (json) {
+			var x;
+			for (x in json) {
+				if (containsObject(json[x]["pk"], window.shownNotifications) == false) {
+					displayMessage("notification", json[x]["pk"], json[x]["fields"]["Title"], json[x]["fields"]["Message"]);
+					window.shownNotifications.push(json[x]["pk"])
+				}
 			}
-		}
-	});
-	$.getJSON(warningUrl, function (json) {
-		var x;
-		for (x in json) {
-			if containsObject(x["pk"], shownWarnings) {
-				displayMessage("warning", x["pk"], x["fields"]["Title"], x["fields"]["Message"]);
+		});
+	}
+	
+	function checkForWarnings() {
+		var warningUrl = Urls.MessagesCommand('json', 'AllNewWarnings');
+		$.getJSON(warningUrl, function (json) {
+			var x;
+			for (x in json) {
+				if (containsObject(json[x]["pk"], window.shownWarnings) == false) {
+					displayMessage("warning", json[x]["pk"], json[x]["fields"]["Title"], json[x]["fields"]["Message"]);
+					window.shownWarnings.push(json[x]["pk"])
+				}
 			}
-		}
-	});
-	$.getJSON(errorUrl, function (json) {
-		var x;
-		for (x in json) {
-			if containsObject(x["pk"], shownErrors) {
-				displayMessage("error", x["pk"], x["fields"]["Title"], x["fields"]["Message"]);
+		});
+	}
+	
+	function checkForErrors() {
+		var errorUrl = Urls.MessagesCommand('json', 'AllNewErrors');
+		$.getJSON(errorUrl, function (json) {
+			var x;
+			for (x in json) {
+				if (containsObject(json[x]["pk"], window.shownErrors) == false) {
+					displayMessage("error", json[x]["pk"], json[x]["fields"]["Title"], json[x]["fields"]["Message"]);
+					window.shownErrors.push(json[x]["pk"])
+				}
 			}
-		}
-	});
-	
-	
-	
-	
-	displayMessage("log", "1", "Tite", "Here is a log");
-	displayMessage("notification", "2", "Tite", "Here is a notification");
-	displayMessage("warning", "3", "Tite", "Here is a warning");
-	displayMessage("error", "4", "Tite", "Here is a error");
+		});
+	}
 	
 	function displayMessage(type, id, title, message) {
 		var messageClass = "";
@@ -74,8 +94,9 @@
 		var messageArea = document.getElementById("message-area");
 		
 		var newMessageNode = document.createElement("div");
-		newMessageNode.className = messageClass; 
+		newMessageNode.className = messageClass;
 		newMessageNode.setAttribute( "role", "alert" );
+		newMessageNode.setAttribute( "data-id", id );
 		
 		var newMessageButton = document.createElement("button");
 		newMessageButton.className = "close";
@@ -92,11 +113,11 @@
 		var newMessageTextArea = document.createElement("div");
 		
 		var newMessageTitle = document.createElement("strong");
-		newMessageTitle.innerHTML = "Title goes here" + " \- ";
+		newMessageTitle.innerHTML = title + " \- ";
 		newMessageTextArea.appendChild(newMessageTitle);
 		
 		var newMessageBody = document.createElement("div");
-		newMessageBody.innerHTML = "The longer body goes here";
+		newMessageBody.innerHTML = message;
 		newMessageBody.style.display = "inline";
 		newMessageTextArea.appendChild(newMessageBody);
 		

@@ -144,6 +144,7 @@ body {
 
 /* Notification Area */
 .message-column {
+    z-index: 100;
 	position:absolute;
 	top:50px;
 	bottom:0;
