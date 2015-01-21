@@ -81,14 +81,19 @@
 		var messageClass = "";
 		if (type == "log") {
 			messageClass = "alert alert-info alert-dismissible";
+			dismissClickFunction = "";
 		} else if (type == "notification") {
 			messageClass = "alert alert-success alert-dismissible";
+			dismissClickFunction = "dismissNotification('" + id + "');";
 		} else if (type == "warning") {
 			messageClass = "alert alert-warning alert-dismissible";
+			dismissClickFunction = "dismissWarning('" + id + "');";
 		} else if (type == "error") {
 			messageClass = "alert alert-danger alert-dismissible";
+			dismissClickFunction = "dismissError('" + id + "');";
 		} else {
 			messageClass = "alert alert-info alert-dismissible";
+			dismissClickFunction = "";
 		}
 		
 		var messageArea = document.getElementById("message-area");
@@ -103,6 +108,7 @@
 		newMessageButton.setAttribute( "type", "button" );
 		newMessageButton.setAttribute( "data-dismiss", "alert" );
 		newMessageButton.setAttribute( "aria-label", "Close" );
+		newMessageButton.setAttribute("onclick", dismissClickFunction);
 		
 		var newMessageSymbol = document.createElement("span");
 		newMessageSymbol.setAttribute( "aria-hidden", "true" );
@@ -126,9 +132,22 @@
 		$(newMessageNode).appendTo(messageArea).fadeIn(2000);
 	}
 	
-	function dismissWarning(id) {
-		
+	
+	function dismissNotification(id) {
+		var errorUrl = Urls.MessagesCommand('json', 'DismissNotification') + "?value=" + id;
+		$.get(errorUrl,{},function(result){});
 	}
+	
+	function dismissWarning(id) {
+		var errorUrl = Urls.MessagesCommand('json', 'DismissWarning') + "?value=" + id;
+		$.get(errorUrl,{},function(result){});
+	}
+	
+	function dismissError(id) {
+		var errorUrl = Urls.MessagesCommand('json', 'DismissError') + "?value=" + id;
+		$.get(errorUrl,{},function(result){});
+	}
+	
 	
 	function containsObject(obj, list) {
 		var i;
