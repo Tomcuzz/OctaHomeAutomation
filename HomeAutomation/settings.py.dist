@@ -28,7 +28,7 @@ DATABASES = {
     }
 }
 
-AUTH_USER_MODEL = 'Core.CustomUser'
+AUTH_USER_MODEL = 'OctaHomeCore.CustomUser'
 
 #Api Key Authy Two Factor Authentication
 AUTHY_API_KEY = ###AUTHY_API_KEY##('')###
@@ -134,7 +134,7 @@ INSTALLED_APPS = (
     'kombu.transport.django',
     'django_js_reverse',
     #My Pages
-    'Core',
+    'OctaHomeCore',
     'Settings',
     'Home',
     'HomeStats',

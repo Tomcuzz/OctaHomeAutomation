@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
 from django.middleware.csrf import get_token
 from models import *
-from Core.locationmodels import *
+from OctaHomeCore.locationmodels import *
 import django.core.serializers
 
 class requestHandler(View):

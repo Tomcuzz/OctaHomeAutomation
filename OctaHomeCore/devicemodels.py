@@ -1,6 +1,6 @@
 from django.db import models
-from Core.locationmodels import *
-from Core.messagemodels import *
+from OctaHomeCore.locationmodels import *
+from OctaHomeCore.messagemodels import *
 from helpers import *
 
 ################

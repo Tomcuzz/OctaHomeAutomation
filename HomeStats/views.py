@@ -4,8 +4,8 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 
 from DeviceInput.models import *
-from Core.baseviews import *
-from Core.models import *
+from OctaHomeCore.baseviews import *
+from OctaHomeCore.models import *
 
 from Lights.models import *
 from TempControl.models import *

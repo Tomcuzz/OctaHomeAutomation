@@ -1,5 +1,5 @@
-from Core.baseviews import *
-from Core.devicemodels import *
+from OctaHomeCore.baseviews import *
+from OctaHomeCore.devicemodels import *
 from models import *
 import json
 

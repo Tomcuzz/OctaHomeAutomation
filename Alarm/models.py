@@ -1,6 +1,6 @@
 from django.db import models
-from Core.inputoutputmodels import *
-from Core.authmodels import *
+from OctaHomeCore.inputoutputmodels import *
+from OctaHomeCore.authmodels import *
 
 import time
 import datetime

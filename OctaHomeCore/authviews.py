@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
-from Core.baseviews import *
-from Core.models import *
+from OctaHomeCore.baseviews import *
+from OctaHomeCore.models import *
 
 class handleLoginView(viewRequestHandler):
 	loginToken = ''

@@ -2,8 +2,8 @@ import datetime
 import json
 from django.db import models
 
-from Core.devicemodels import *
-from Core.communication_controller import *
+from OctaHomeCore.devicemodels import *
+from OctaHomeCore.communication_controller import *
 
 class TempMonitorDevice(InputDevice):
 	LastTemp = models.IntegerField()

@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
-from Core.locationmodels import *
-from Core.weathermodels import *
+from OctaHomeCore.locationmodels import *
+from OctaHomeCore.weathermodels import *
 
 class Command(BaseCommand):
 	help = "Set Up Core Model Items (World, Country, House, Rooms)"

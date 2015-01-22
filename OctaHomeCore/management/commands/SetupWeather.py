@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-from Core.weathermodels import *
+from OctaHomeCore.weathermodels import *
 
 class Command(BaseCommand):
 	help = "Set Up Database Weather Locations"

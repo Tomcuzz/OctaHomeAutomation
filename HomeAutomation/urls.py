@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-from Core.authviews import *
+from OctaHomeCore.authviews import *
 
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
@@ -9,7 +9,7 @@ modulePatterns = [
     url(r'^Login/', handleLoginView.as_view(), name='Login'),
     url(r'^LogOut/', handleLogOutView.as_view(), name='LogOut'),
     
-    url(r'^Core/', include('Core.urls')),
+    url(r'^Core/', include('OctaHomeCore.urls')),
     
     url(r'^HomeStats/', include('HomeStats.urls')),
 	url(r'^Lights/', include('Lights.urls')),

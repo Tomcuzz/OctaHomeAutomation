@@ -10,7 +10,7 @@ from django.middleware.csrf import get_token
 
 from authy.api import AuthyApiClient
 
-from Core.models import *
+from OctaHomeCore.models import *
 from sideBar import *
 
 def AccountCommand(request):

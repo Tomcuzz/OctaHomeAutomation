@@ -1,8 +1,8 @@
 from django.conf import settings
 
-from Core.baseviews import *
-from Core.models import *
-from Core.weathermodels import *
+from OctaHomeCore.baseviews import *
+from OctaHomeCore.models import *
+from OctaHomeCore.weathermodels import *
 
 class handleSettingsView(viewRequestHandler):
 	def getViewParameters(self):
