@@ -23,17 +23,17 @@ class handleSettingsView(viewRequestHandler):
 		
 	def getTemplate(self):
 		if self.Page == 'None':
-			return 'OctaHomeCore/pages/Settings/EditUser'
+			return 'OctaHomeSettings/EditUser'
 		elif self.Page == 'Actions':
-			return 'OctaHomeCore/pages/Settings/Actions'
+			return 'OctaHomeSettings/Actions'
 		elif self.Page == 'Events':
-			return 'OctaHomeCore/pages/Settings/Events'
+			return 'OctaHomeSettings/Events'
 		elif self.Page == 'EditUsers':
-			return 'OctaHomeCore/pages/Settings/EditUsers'
+			return 'OctaHomeSettings/EditUsers'
 		elif self.Page == 'AddUser':
-			return 'OctaHomeCore/pages/Settings/AddUser'
+			return 'OctaHomeSettings/AddUser'
 		else:
-			return 'OctaHomeCore/pages/Settings/EditUser'
+			return 'OctaHomeSettings/EditUser'
 	
 	def getSideBar(self):
 		links = [
