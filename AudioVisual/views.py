@@ -9,4 +9,4 @@ def AudioVisualMain(request):
         else:
 	        title = "Under Construction"
 	        stuff = "This Page Is Currently Under Construction"
-	        return render(request, 'OctaHomeCore/pages/AudioVisual.html', {'PageAreaTitle':title, 'PageAreaContent': stuff})
+	        return render(request, 'OctaHomeAudioVisual/Main.html', {'PageAreaTitle':title, 'PageAreaContent': stuff})
