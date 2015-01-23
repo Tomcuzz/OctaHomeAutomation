@@ -30,9 +30,9 @@ class handleLoginView(viewRequestHandler):
 				self.redirect(reverse('Home'))
 			return ''
 		if self.loginToken:
-			return 'OctaHomeCore/pages/Core/Account/AuthyLogin'
+			return 'OctaHomeCore/pages/Account/AuthyLogin'
 		else:
-			return 'OctaHomeCore/pages/Core/Account/Login'
+			return 'OctaHomeCore/pages/Account/Login'
 	
 	def getViewParameters(self):
 		parameters = {}
