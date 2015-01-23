@@ -9,4 +9,4 @@ def CurtainsMain(request):
         else:
 		title = "Under Construction"
 		stuff = "This Page Is Currently Under Construction"
-		return render(request, 'OctaHomeCore/pages/Curtains.html', {'PageAreaTitle':title, 'PageAreaContent': stuff})
+		return render(request, 'OctaHomeCurtains/Main.html', {'PageAreaTitle':title, 'PageAreaContent': stuff})
