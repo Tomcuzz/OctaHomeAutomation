@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	    <meta charset="utf-8">
+	    <title>Sign In | Octa-Home</title>
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	    <meta name="description" content="">
+	    <meta name="author" content="">
+	
+	    <!-- Le styles -->
+	    <link href="{{STATIC_URL}}css/bootstrap.css" rel="stylesheet">
+	    <link href="https://www.authy.com/form.authy.min.css" media="screen" rel="stylesheet" type="text/css">
+		<script src="https://www.authy.com/form.authy.min.js" type="text/javascript"></script>
+	    <link href="{{STATIC_URL}}css/themes/theme1.css" rel="stylesheet">
+	    <link href="{{STATIC_URL}}css/bootstrap-responsive.css" rel="stylesheet">
+	
+	    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+	    <!--[if lt IE 9]>
+	      <script src="../assets/js/html5shiv.js"></script>
+	    <![endif]-->
+	
+	    <!-- Fav and touch icons -->
+	    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{{STATIC_URL}}ico/apple-touch-icon-144-precomposed.png">
+	    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{{STATIC_URL}}ico/apple-touch-icon-114-precomposed.png">
+	      <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{{STATIC_URL}}ico/apple-touch-icon-72-precomposed.png">
+	                    <link rel="apple-touch-icon-precomposed" href="{{STATIC_URL}}ico/apple-touch-icon-57-precomposed.png">
+	                                   <link rel="shortcut icon" href="{{STATIC_URL}}ico/favicon.png">
+	  </head>
+	  <body>
+	    <div class="container">
+	      <form class="form-signin" action="{% url 'Login' %}" method="post">
+	      	<input type="hidden" name="csrfmiddlewaretoken" value="{{csrfmiddlewaretoken|safe}}"/>
+	      	<input type="hidden" name="logintoken" value="{{logintoken|safe}}"/>
+	        <h2 class="form-signin-heading">Two-Factor Authentication:</h2>
+	        {% if sencondattempt %}
+	        	<div class="alert alert-danger">Token Error</div>
+	        {% endif %}
+	        <p></p>
+	        <input type="hidden" name="username" value="{{username|safe}}">
+	        <p>SMS Authentication can be sent by <a href="#" onclick="sendSmsRequest();" style="display: inline;">Clicking Here</a></p>
+	        <input id="authy-token" type="text" class="form-control" name="authytoken" placeholder="Authy Token">
+	        <button class="btn btn-large btn-primary" type="submit">Sign in</button>
+	      </form>
+	
+	    </div> <!-- /container -->
+	    <!-- Le javascript
+	    ================================================== -->
+	    <!-- Placed at the end of the document so the pages load faster -->
+	    <script src="{{STATIC_URL}}js/jquery.js"></script>
+	    <script src="{{STATIC_URL}}js/bootstrap-transition.js"></script>
+	    <script src="{{STATIC_URL}}js/bootstrap-alert.js"></script>
+	    <script src="{{STATIC_URL}}js/bootstrap-modal.js"></script>
+	    <script src="{{STATIC_URL}}js/bootstrap-dropdown.js"></script>
+	    <script src="{{STATIC_URL}}js/bootstrap-scrollspy.js"></script>
+	    <script src="{{STATIC_URL}}js/bootstrap-tab.js"></script>
+	    <script src="{{STATIC_URL}}js/bootstrap-tooltip.js"></script>
+	    <script src="{{STATIC_URL}}js/bootstrap-popover.js"></script>
+	    <script src="{{STATIC_URL}}js/bootstrap-button.js"></script>
+	    <script src="{{STATIC_URL}}js/bootstrap-collapse.js"></script>
+	    <script src="{{STATIC_URL}}js/bootstrap-carousel.js"></script>
+	    <script src="{{STATIC_URL}}js/bootstrap-typeahead.js"></script>
+	    <script>
+			function sendSmsRequest() {
+				$.post("{% url 'Login' %}/",{'command':'sendsms','username':'{{username|safe}}'},function(result){
+					alert(result);
+				});
+				//$.get('{% url 'Login' %}/?command=sendsms&username={username|safe}', function(data){
+				//	alert(data);
+				//});
+			}
+		</script>
+	</body>
+</html>

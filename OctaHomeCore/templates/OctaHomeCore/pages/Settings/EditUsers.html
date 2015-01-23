@@ -1,0 +1,128 @@
+{% extends 'OctaHomeCore/baseWithNavBar.html' %}
+
+{% block title %} Settings - Account {% endblock %}
+
+{% block AccountNavBarActive %} active {% endblock %}
+
+{% block PageArea %}
+	<script>
+		function deleteUser(user) {
+			theRowName = "userRow" + user;
+			(elem=document.getElementById(theRowName)).parentNode.removeChild(elem);
+			url = "/account/?command=deleteUser&user=" + user
+			httpGet(url);
+		}
+		function httpGet(theUrl) {
+			var xmlHttp = null;
+			xmlHttp = new XMLHttpRequest();
+			xmlHttp.open( "GET", theUrl, false );
+			xmlHttp.send( null );
+			return xmlHttp.responeText;
+		}
+	</script>
+	<div class="page-header">
+		<h1>Edit User</h1>
+	</div>
+	<table id="userTable" class="table table-striped">
+			<thead>
+				<tr>
+					<th>id</th>
+					<th>User</th>
+					<th>Password</th>
+					<th>Email</th>
+					<th>First Name</th>
+					<th>Surname</th>
+					<th>Admin Level</th>
+					<th>Active Status</th>
+					<th>Last Login</th>
+					<th>Date Joined</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			<tbody>
+			{% for aUser in users %}
+				<tr id="userRow{{aUser.username}}">
+					<td>{{aUser.id}}</td>
+					<td>{{aUser.username}}</td>
+					<td>
+						<s id="password{{aUser.id}}" data-type="password" data-pk="1" data-url="/account/?command=changePassword&user={{aUser.username}}" data-original-title="Change Password">**************</s>
+					</td>
+					<td>
+						<s id="email{{aUser.id}}" data-type="text" data-pk="1" data-url="/account/?command=changeEmail&user={{aUser.username}}" data-original-title="Change Email">{{aUser.email}}</s>
+					</td>
+					<td>
+						<s id="FistName{{aUser.id}}" data-type="text" data-pk="1" data-url="/account/?command=changeFirstName&user={{aUser.username}}" data-original-title="Change Firs Name">{{aUser.first_name}}</s>
+					</td>
+					<td>
+						<s id="SecondName{{aUser.id}}" data-type="text" data-pk="1" data-url="/account/?command=changeSecondName&user={{aUser.username}}" data-original-title="Change Surname">{{aUser.last_name}}</s>
+					</td>
+					<td>
+						<s id="AdmingLevel{{aUser.id}}" data-type="select" data-pk="1" data-url="/account/?command=changeAdminLevel&user={{aUser.username}}" data-original-title="Change Adming Level">
+							{% if aUser.is_superuser %}
+								Admin
+							{% else %}
+								User
+							{% endif %}
+						</s>
+					</td>
+					<td>
+						<s id="ActiveState{{aUser.id}}" data-type="select" data-pk="1" data-url="/account/?command=changeActiveState&user={{aUser.username}}" data-original-title="Change Active State">
+							{% if aUser.is_active %}
+								Active
+							{% else %}
+								Not-Active
+							{% endif %}
+						</s>
+					</td>
+					<script>
+						$(function(){
+							$('#AdmingLevel{{aUser.id}}').editable({
+								{% if aUser.is_superuser %}
+									value: 2,
+								{% else %}
+									value: 1,
+								{% endif %}
+								source: [
+									{value: 1, text: 'User'},
+									{value: 2, text: 'Admin'},
+								]
+							});
+							$('#ActiveState{{aUser.id}}').editable({
+								{% if aUser.is_active %}
+									value: 1,
+								{% else %}
+									value: 2,
+								{% endif %}
+								source: [
+									{value: 1, text: 'Active'},
+									{value: 2, text: 'Not-Active'},
+								]
+							});
+							$.fn.editable.defaults.ajaxOptions = {type: "GET"};
+						});
+					</script>
+					<td>{{aUser.last_login}}</td>
+					<td>{{aUser.date_joined}}</td>
+					<td><button onClick="deleteUser('{{aUser.username}}')" class="btn btn-danger">Delete</button></td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}
+
+{% block ExtraJavaScript %}
+<link href="{{STATIC_URL}}css/bootstrap-editable.css" rel="stylesheet"/>
+<script src="{{STATIC_URL}}js/bootstrap-editable.js"></script>
+<script>
+	$(document).ready(function() {
+		$.fn.editable.defaults.ajaxOptions = {type: "POST"};
+		$.fn.editable.defaults.mode = 'inline';
+		//$('#userTable s').editable(); //Edit All Users Page
+		$('s').editable({
+			params: {
+				csrfmiddlewaretoken: '{{csrfToken}}'
+			}
+		}); //Edit CurrentUserPage
+	});
+</script>
+{% endblock %}

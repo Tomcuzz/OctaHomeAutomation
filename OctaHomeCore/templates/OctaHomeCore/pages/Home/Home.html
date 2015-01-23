@@ -1,0 +1,72 @@
+{% extends 'OctaHomeCore/base.html' %}
+
+{% block title %} Home {% endblock %}
+
+{% block HomeNavBarActive %} active {% endblock %}
+
+{% block extraCSS %}
+	<link rel="stylesheet" href="{{STATIC_URL}}css/custom-homepage.css">
+	<script src="http://squaresend.com/squaresend.js"></script>
+{% endblock %}
+
+{% block HomeHeadJavaScript %}
+		<style media="screen" type="text/css">
+			#background { display: none; }
+			body { overflow: hidden; }
+			#canvas { position: absolute; top: 0px; left: 0px; }
+			#sound { position: absolute; width: 30%; height: 30%; overflow-y: auto; margin-left: 35%; -moz-border-radius: 15px; border-radius: 15px; background-color: #C4C4C4; opacity: 0.3; margin-top: 5%; }
+			.video { position: absolute; width: 90%; height: 80%; margin-left: 5%; margin-top: 5%; }
+		</style>
+		<script src="/assets/js/rainyday.min.js" type="text/javascript"></script>
+		<script>
+			function run() {					
+				var engine = new RainyDay({
+					element: 'kitties',
+					blur: 10,
+					opacity: 1,
+					fps: 20
+				});
+				engine.gravity = engine.GRAVITY_NON_LINEAR;
+				engine.trail = engine.TRAIL_DROPS;					
+				engine.rain([
+				{% if rain == "norain" %}
+				{% elif rain == "drizzel" %}
+					[1, 1, 0.5]
+				{% elif rain == "lightrain" %}
+					[3, 1, 1]
+				{% elif rain == "heavyrain" %}
+					[5, 1, 2]
+				{% else %}
+				{% endif %}
+				], 100);		
+			}
+		</script>
+		<script>
+			setInterval(function(){
+				document.getElementById("updatetime").innerHTML = (new Date()).toLocaleTimeString();
+			}, 1000);
+		</script>
+
+{% endblock %}
+{% block PageAreaWithoutSubhead %}
+<body onload="run();">
+	<div id="parent">
+		<img id="kitties" alt="background" src="/assets/img/city-{{background}}.jpg" style="height: 100%; width: 100%;" />
+	</div>
+    <div id="wrap">
+        <div class="container offset">
+            <div class="row bump-top">
+                <div class="col-lg-offset-2 col-lg-8 center">
+                    <span class="normal">{{ housename }}</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-offset-2 col-lg-8 center">
+                    <span class="smaller"><div id="updatetime"></div></span>
+                </div>
+         </div>
+	  </div>
+	</div>
+</body>
+{% endblock %}
+{% block PageAreaWithoutFooter %}{% endblock %}

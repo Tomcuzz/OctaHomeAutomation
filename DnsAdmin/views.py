@@ -37,5 +37,5 @@ def DnsAdminMain(request):
 		domains.append(domainItem)
 	
 	links = [{'title': 'Zones', 'address': '', 'sublinks':subLinks, 'active': ''}]
-	return render(request, 'pages/DnsAdmin/Settings.html', {'links': links, 'Domains':domains})
+	return render(request, 'OctaHomeCore/pages/DnsAdmin/Settings.html', {'links': links, 'Domains':domains})
 	

@@ -24,10 +24,10 @@ class LightDevice(OutputDevice):
 	####################
 	# View Parameters #
 	####################
-	ViewPartial = 'pages/Lights/_Light'
+	ViewPartial = 'OctaHomeCore/pages/Lights/_Light'
 	def getJsPartials(self):
 		result = super(LightDevice, self).getJsPartials()
-		result.extend(["pages/Lights/_LightJs.html"])
+		result.extend(["OctaHomeCore/pages/Lights/_LightJs.html"])
 		return 	result
 	
 	########
@@ -41,10 +41,10 @@ class RGBLight(LightDevice):
 	####################
 	# Class Parameters #
 	####################
-	ViewPartial = 'pages/Lights/_RGBLight'
+	ViewPartial = 'OctaHomeCore/pages/Lights/_RGBLight'
 	def getJsPartials(self):
 		result = super(RGBLight, self).getJsPartials()
-		result.extend(["pages/Lights/_RGBLightJs.html", "JsHelpers/_x-editable.html", "JsHelpers/_farbtastic.html"])
+		result.extend(["OctaHomeCore/pages/Lights/_RGBLightJs.html", "OctaHomeCore/JsHelpers/_x-editable.html", "OctaHomeCore/JsHelpers/_farbtastic.html"])
 		return 	result
 	
 	##############

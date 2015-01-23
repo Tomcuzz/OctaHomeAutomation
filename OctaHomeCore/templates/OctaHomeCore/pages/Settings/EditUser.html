@@ -1,0 +1,122 @@
+{% extends 'OctaHomeCore/baseWithNavBar.html' %}
+
+{% block title %} Settings - Account {% endblock %}
+
+{% block AccountNavBarActive %} active {% endblock %}
+
+{% block PageArea %}
+	<div class="page-header">
+		<h1>Personal Details</h1>
+	</div>
+	<ul class="nav nav-tabs">
+		<li class="active"><a href="#personaldetails" data-toggle="tab">Personal Details</a></li>
+		<li><a href="#twofactorauth" data-toggle="tab">Two-Factor Authentication</a></li>
+	</ul>
+	<div class="tab-content">
+		<div class="tab-pane active" id="personaldetails" style="padding: 10px;">
+			<label>Username:</label>
+			<s id="CurrentUsernameXeditable" data-type="text" data-pk="1" data-url="/account/?command=changeUsername&editCurrentUser=true" data-original-title="Change Username">{{ user.username }}</s>
+			<br>
+			<label>Password:</label>
+			<s id="CurrentPasswordXeditable" data-type="password" data-pk="1" data-url="/account/?command=changePassword&editCurrentUser=true" data-original-title="Change Password">
+				**************
+			</s>
+			<br>
+			<label>First Name:</label>
+			<s id="CurrentFirstNameXeditable" data-type="text" data-pk="1" data-url="/account/?command=changeFirstName&editCurrentUser=true" data-original-title="Change First Name">
+				{{ user.first_name }}
+			</s>
+			<br>
+			<label>Second Name:</label>
+			<s id="CurrentSecondNameXeditable" data-type="text" data-pk="1" data-url="/account/?command=changeSecondName&editCurrentUser=true" data-original-title="Change Second Name">
+				{{ user.last_name }}
+			</s>
+			<br>
+			<label>Email:</label>
+			<s id="CurrentEmailXeditable" data-type="text" data-pk="1" data-url="/account/?command=changeEmail&editCurrentUser=true" data-original-title="Change Email">
+				{{ user.email }}
+			</s>
+			<br>
+			<label>Weather Location:</label>
+				{{ user.home_location }}
+			<br>
+			<label>Theme:</label>
+				{% if user.theme != "" %}
+					{{ user.theme }}
+				{% else %}
+					theme1
+				{% endif %}
+			<br>
+			<label>Two-Factor Authentication Status:</label>
+				{% if user.authy_id != "" %}
+					<span class="text-success">Enabled</span>
+				{% else %}
+					<span class="text-danger" style="position: inline;">Disabled</span>
+				{% endif %}
+			<br>
+			<label>User Permission Level:</label>
+				{% if user.is_superuser %}
+					Admin
+				{% else %}
+					User
+				{% endif %}
+		</div>
+		<div class="tab-pane" id="twofactorauth" style="padding: 10px;">
+			<label>Two-Factor Authentication Status:</label>
+			{% if user.authy_id != "" %}
+				<p class="text-success">Enabled</p>
+			{% else %}
+				<p class="text-danger" style="position: inline;">Disabled</p>
+			{% endif %}
+			{% if user.authy_id != "" %}
+				<p>
+					<a href="{% url 'SettingsCommand' command='removeTwoFactorAuthentication' %}"><button class="btn btn-danger" >Disable Two-Factor Authentication</button></a>
+				</p>
+			{% else %}
+				<form action="{% url 'SettingsCommand' command='addTwoFactorAuthentication' %}" method="post">
+					<input type="hidden" name="csrfmiddlewaretoken" value="{{csrfmiddlewaretoken}}">
+					<label>Add Two-Factor Authentication:</label>
+					{% if error %}
+			        	<div class="alert alert-danger">{{error}}</div>
+			        {% endif %}
+					<br>
+					<label>Email:</label>
+					<input class="form-control" style="width: 200px;" name="email" type="text" value="" required pattern="[^@]+@[^@]+\.[a-zA-Z]{2,6}"/>
+					<br>
+					<label>Phone Area Code:</label>
+					<p/>
+					<select id="authy-countries" class="form-control" style="width: 200px;" name="areacode"></select>
+					<br>
+					<br>
+					<label>Phone Number:</label>
+					<input class="form-control" style="width: 200px;" id="authy-cellphone" name="phone"  type="text" value=""/>
+					<br>
+					<button class="btn btn-large btn-success" type="submit">Submit</button>
+				</form>
+	{% endif %}
+
+		</div>
+	</div>
+{% endblock %}
+
+{% block ExtraJavaScript %}
+<link href="{{STATIC_URL}}css/bootstrap-editable.css" rel="stylesheet"/>
+<script src="{{STATIC_URL}}js/bootstrap-editable.js"></script>
+<script>	
+	$(document).ready(function() {
+		$.fn.editable.defaults.ajaxOptions = {type: "POST"};
+		//$.fn.editable.defaults.mode = 'inline';
+		//$('#userTable s').editable(); //Edit All Users Page
+		$('s').editable({
+			params: {
+				csrfmiddlewaretoken: '{{csrfmiddlewaretoken}}'
+			}
+		}); //Edit CurrentUserPage
+	});
+</script>
+{% endblock %}
+
+{% block extraCSS %}
+	<link href="https://www.authy.com/form.authy.min.css" media="screen" rel="stylesheet" type="text/css">
+	<script src="https://www.authy.com/form.authy.min.js" type="text/javascript"></script>
+{% endblock %}

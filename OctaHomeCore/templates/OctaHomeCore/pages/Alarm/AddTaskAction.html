@@ -1,0 +1,196 @@
+{% extends 'OctaHomeCore/baseWithNavBar.html' %}
+{% load my_filters %}
+
+{% block title %} Alarm {% endblock %}
+{% block AlarmNavBarActive %} active {% endblock %}
+
+{% block PageArea %}
+	<div class="page-header">
+		<h1>Add Alarm Action Task</h1>
+	</div>
+	<form action="/Alarm/?page=addActionTaskComplete" method="POST" onsubmit="return validateForm()" name="CreateActionTaskForm">
+		<fieldset>
+			<input type="hidden" name="csrfmiddlewaretoken" value="{{csrfmiddlewaretoken|safe}}">
+			<label>Alarm Action Task Name:</label>
+			<input type="text" name="name" class="form-control" style="width: 200px;" placeholder="Name..." maxlength="30" required="" pattern="[^]{3,30}">
+			<br>
+			<label>Action Type:</label>
+			<select name="actiontasktype" class="form-control" style="width: 200px;" onchange="taskActionChanged()">
+				<option>Play Speach</option>
+				<option>Play Music</option>
+				<option>Set Lights</option>
+				<option>Arm/Disarm Motion Device</option>
+			</select>
+			<br>
+			<div name="PlaySpeachArea">
+				<label>Speach Device Ip Address:</label>
+				<input type="text" class="form-control" name="speachdeviceipaddress" style="width: 200px;" placeholder="Ip Address..." maxlength="30" required="" pattern="((^|\.)((25[0-5])|(2[0-4]\d)|(1\d\d)|([1-9]?\d))){4}$">
+				<br>
+				<label>Speach Device Port:</label>
+				<input type="text" class="form-control" name="speachdeviceport" style="width: 200px;" placeholder="Room Name..." maxlength="30" required="" pattern="[0-9]{3,30}">
+				<br>
+				<label>Speach:</label>
+				<div class="row-fluid">
+					<div class="span6">
+						<textarea name="speachscript" class="form-control" class="span12" rows="25"></textarea>
+					</div>
+					<div class="span6">
+						<pre>
+Dynamic Veraiable Key:
+      Name:
+	    /%nt%/ = User's Title
+	    /%nf%/ = User's First Name
+	    /%nl%/ = User's Last Name
+      Date:
+	    /%dd%/ = Numbered Day
+	    /%dD%/ = Day Of Week
+	    /%dm%/ = Numbered Mounth
+	    /%dM%/ = Word Mounth
+	    /%dy%/ = Year
+      Time:
+	    /%th%/ = Time - Hours
+	    /%tm%/ = Time - Minutes
+	    /%ts%/ = Time - Seconds
+	    /%ta%/ = Time - AM/PM
+      Weather:
+	    /%wct%/ = Current Local Temp
+	    /%wtt%/ = Todays Forcasted Min Temp
+	    /%wtT%/ = Todays Forcasted Max Temp
+	    /%wTt%/ = Tomorrows Forcasted Min Temp
+	    /%wTT%/ = Tomorrows Forcasted Max Temp
+	    /%wcw%/ = Current Weather
+	    /%wtw%/ = Todays Forcasted Weather
+	    /%wTw%/ = Tomorrows Forcasted Weather
+      (Postcode is needed for Weather)
+						</pre>
+					</div>
+				</div>
+				<br>
+				<label>Weather Postcode (If Used):</label>
+				<input type="text" class="form-control" name="speachpostcode" style="width: 200px;" placeholder="Post Code..." maxlength="30" required="" pattern="[0-9]{3,30}">
+			</div>
+			<div name="PlayMusicArea" style="display:none;">
+				<label>Music Device Ip Address:</label>
+				<input type="text" name="musicdeviceipaddress" class="form-control" style="width: 200px;" placeholder="Ip Address..." maxlength="30" required="" pattern="((^|\.)((25[0-5])|(2[0-4]\d)|(1\d\d)|([1-9]?\d))){4}$">
+				<br>
+				<label>Music Device Control Port:</label>
+				<input type="text" name="musicdeviceport" class="form-control" style="width: 200px;" placeholder="Music Control Port..." maxlength="30" required="" pattern="[0-9]{3,30}">
+				<br>
+				<label>Playlist Name:</label>
+				<input type="text" name="playlistname" class="form-control" style="width: 200px;" placeholder="Playlist Name..." maxlength="30" required="" pattern="[^]{3,30}">
+			</div>
+			<div name="SetLightsArea" style="display:none;">
+				<label>Light Id:</label>
+				<select name="lightid" class="form-control" style="width: 400px;">
+					{% for aLight in lights %}
+						<option value="{{aLight.id}}">{{aLight.id}} - {{aLight.Room.Name | replaceUnderscores}} - {{aLight.LightName | replaceUnderscores}}</option>
+					{% endfor %}
+				</select>
+				<br>
+				<label>Light Set Type:</label>
+				<select name="settype" class="form-control" style="width: 200px;" onchange="lightSetTypeChanged()">
+					<option>On/Off</option>
+					<option>RGB</option>
+					<option>Scroll</option>
+					<option>Scene</option>
+				</select>
+				<br>
+				<div name="LightSetTypeOnOffArea">
+					<label>Set To:</label>
+					<select name="setlightonoff" class="form-control" style="width: 200px;">
+						<option>On</option>
+						<option>Off</option>
+						<option>Toggle</option>
+					</select>
+				</div>
+				<div name="LightSetTypeRGBArea" style="display:none;">
+					<label>Set R Value:</label>
+					<input type="text" name="setlightrvalue" class="form-control" style="width: 200px;" placeholder="R Value..." maxlength="3" required="" pattern="[0-9]{1,3}">
+					<br>
+					<label>Set G Value:</label>
+					<input type="text" name="setlightgvalue" class="form-control" style="width: 200px;" placeholder="G Value..." maxlength="3" required="" pattern="[0-9]{1,3}">
+					<br>
+					<label>Set B Value:</label>
+					<input type="text" name="setlightbvalue" class="form-control" style="width: 200px;" placeholder="B Value..." maxlength="3" required="" pattern="[0-9]{1,3}">
+				</div>
+				<div name="LightSetTypeScrollArea" style="display:none;">
+					<label>Select Scroll:</label>
+					<select name="setlightscroll" class="form-control" style="width: 200px;">
+						{% for aScroll in lightScrolls %}
+							<option>{{ aScroll.Name }}</option>
+						{% endfor %}
+					</select>
+				</div>
+				<div name="LightSetTypeSceneArea" style="display:none;">
+					<label>Select Scene:</label>
+					<select name="setlightscene" class="form-control" style="width: 200px;">
+						{% for aScene in lightScenes %}
+							<option>{{ aScene.Name }}</option>
+						{% endfor %}
+					</select>
+				</div>
+			</div>
+			<div name="ArmMotionDeviceArea" style="display:none;">
+				<label>Motion Device:</label>
+				<select name="motiondevice" class="form-control" style="width: 400px;">
+					{% for motionDevice in motionDevices %}
+						<option value="{{motionDevice.id}}">{{motionDevice.id}} - {{motionDevice.Room.Name | replaceUnderscores}} - {{motionDevice.Name | replaceUnderscores}}</option>
+					{% endfor %}
+				</select>
+				<br>
+				<label>Armed/Disarmed:</label>
+				<select name="motionarm" class="form-control" style="width: 200px;">
+					<option value="Toggle">Toggle</option>
+					<option value="True">Arm</option>
+					<option value="False">Disarm</option>
+				</select>
+			</div>
+			<br>
+			<label>Run Type:</label>
+			<select name="runtype" class="form-control" style="width: 200px;">
+				<option>Asynchronous</option>
+				<option>Synchronous</option>
+			</select>
+			<br>
+			<button type="submit" class="btn btn-default">Add Alarm Action</button>
+		</fieldset>
+	</form>
+{% endblock %}
+
+
+{% block ExtraJavaScript %}
+	<script>
+		function taskActionChanged() {
+			var selectedValue = document.getElementsByName("actiontasktype")[0].value;
+			document.getElementsByName("PlaySpeachArea")[0].style.display = "none";
+			document.getElementsByName("PlayMusicArea")[0].style.display = "none";
+			document.getElementsByName("SetLightsArea")[0].style.display = "none";
+			document.getElementsByName("ArmMotionDeviceArea")[0].style.display = "none";
+			if (selectedValue == "Play Speach") {
+				document.getElementsByName("PlaySpeachArea")[0].style.display = "block";
+			} else if (selectedValue == "Play Music") {
+				document.getElementsByName("PlayMusicArea")[0].style.display = "block";
+			} else if (selectedValue == "Set Lights") {
+				document.getElementsByName("SetLightsArea")[0].style.display = "block";
+			} else {
+				document.getElementsByName("ArmMotionDeviceArea")[0].style.display = "block";
+			}
+		}
+		function lightSetTypeChanged() {
+			var selectedValue = document.getElementsByName("settype")[0].value;
+			document.getElementsByName("LightSetTypeOnOffArea")[0].style.display = "none";
+			document.getElementsByName("LightSetTypeRGBArea")[0].style.display = "none";
+			document.getElementsByName("LightSetTypeScrollArea")[0].style.display = "none";
+			document.getElementsByName("LightSetTypeSceneArea")[0].style.display = "none";
+			if (selectedValue == "On/Off") {
+				document.getElementsByName("LightSetTypeOnOffArea")[0].style.display = "block";
+			} else if (selectedValue == "RGB") {
+				document.getElementsByName("LightSetTypeRGBArea")[0].style.display = "block";
+			} else if (selectedValue == "Scroll") {
+				document.getElementsByName("LightSetTypeScrollArea")[0].style.display = "block";
+			} else {
+				document.getElementsByName("LightSetTypeSceneArea")[0].style.display = "block";
+			}
+		}
+	</script>
+{% endblock %}

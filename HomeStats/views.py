@@ -56,7 +56,7 @@ class handleHomeStatsView(viewRequestHandler):
 		return None
 	
 	def getTemplate(self):
-		return 'pages/HomeStats/HomeStats'
+		return 'OctaHomeCore/pages/HomeStats/HomeStats'
 	
 	def getSidebarUrlName(self):
 		return 'Home'

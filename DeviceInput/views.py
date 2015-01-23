@@ -79,7 +79,7 @@ def DeviceInputMain(request):
 		motionDevices = MotionInputDevice.objects.all()
         tasks = Tasks.objects.all()
         
-        return render(request, 'pages/DeviceInput/Settings.html', {'ButtonDevices': buttonDevices, 'MotionDevices':motionDevices, 'Tasks':tasks, 'links': links})
+        return render(request, 'OctaHomeCore/pages/DeviceInput/Settings.html', {'ButtonDevices': buttonDevices, 'MotionDevices':motionDevices, 'Tasks':tasks, 'links': links})
 		
 	test = "Not Implemented"
 	return HttpResponse("Ok")

@@ -15,13 +15,13 @@ import datetime
 class handleAlarmView(viewRequestHandler):
 	def getTemplate(self):
 		if self.Page == "None":
-			return 'pages/Alarm/Alarms.html'
+			return 'OctaHomeCore/pages/Alarm/Alarms.html'
 		elif self.page == "AddAlarm":
-			return 'pages/Alarm/AddAlarm.html'
+			return 'OctaHomeCore/pages/Alarm/AddAlarm.html'
 		elif self.page == "AddTaskAction":
-			return 'pages/Alarm/AddTaskAction.html'
+			return 'OctaHomeCore/pages/Alarm/AddTaskAction.html'
 		elif self.Page == "AddTask":
-			return 'pages/Alarm/AddTask.html'
+			return 'OctaHomeCore/pages/Alarm/AddTask.html'
 		else:
 			raise Http404
 		
