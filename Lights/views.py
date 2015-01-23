@@ -36,16 +36,16 @@ class handleLightView(viewRequestHandler):
 	def getTemplate(self):
 		if self.Protocal == 'cisco':
 			if not self.Kwarguments.has_key('house'):
-				return 'OctaHomeCore/pages/Lights/Houses'
+				return 'OctaHomeLights/Houses'
 			elif not self.Kwarguments.has_key('room'):
-				return 'OctaHomeCore/pages/Lights/Rooms'
+				return 'OctaHomeLights/Rooms'
 			elif not self.Kwarguments.has_key('page'):
-				return 'OctaHomeCore/pages/Lights/Lights'
+				return 'OctaHomeLights/Lights'
 		
 		if self.Page == 'AddLight':
-			return 'OctaHomeCore/pages/Lights/AddLight'
+			return 'OctaHomeLights/AddLight'
 		else:
-			return 'OctaHomeCore/pages/Lights/Main'
+			return 'OctaHomeLights/Main'
 	
 	def getSidebarUrlName(self):
 		return 'Lights'
