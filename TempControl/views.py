@@ -9,13 +9,13 @@ class handleTempView(viewRequestHandler):
 	def getTemplate(self):
 		if self.Kwarguments.has_key('page'):
 			if self.Kwarguments['page'] == 'CentralHeating':
-				return 'OctaHomeCore/pages/TempControl/CentralHeating'
+				return 'OctaHomeTempControl/CentralHeating'
 			elif self.Kwarguments['page'] == 'Fan':
-				return 'OctaHomeCore/pages/TempControl/Fan'
+				return 'OctaHomeTempControl/Fan'
 			else:
 				raise Http404
 		else:
-			return 'OctaHomeCore/pages/TempControl/CentralHeating'
+			return 'OctaHomeTempControl/CentralHeating'
 	
 	def getViewParameters(self):
 		parameters = {'device':self.getDevice()}
