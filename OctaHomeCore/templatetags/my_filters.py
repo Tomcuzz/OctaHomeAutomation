@@ -14,7 +14,7 @@ def getClassName(value):
 def getUniqueJsPartials(devices):
 	allJsPartials = []
 	for device in devices:
-		for jsPartial in device.getJsPartials():
+		for jsPartial in device.JsPartials:
 			if jsPartial != '' and jsPartial not in allJsPartials:
 				allJsPartials.append(jsPartial)
 	

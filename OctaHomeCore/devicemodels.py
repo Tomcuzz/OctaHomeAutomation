@@ -12,7 +12,8 @@ class Device(models.Model):
 	######################
 	ViewPartial = ''
 	
-	def getJsPartials(self):
+	@property
+	def JsPartials(self):
 		return ['']
 	
 	##############
@@ -41,7 +42,7 @@ class Device(models.Model):
 				return self.addRoomById(parameters['value'])
 			elif action == "removeRoomById":
 				return self.removeRoomById(parameters['value'])
-			elif function == "setIsOn":
+			elif action == "setIsOn":
 				return self.setIsOn(parameters['value'])
 			elif action == "setIpAddress":
 				return self.setIpAddress(parameters['value'])
