@@ -8,7 +8,7 @@ def RecipesMain(request):
 	else:
 		title = "Under Construction"
 		stuff = "This Page Is Currently Under Construction"
-		return render(request, 'OctaHomeCore/pages/Recipes.html', {'PageAreaTitle':title, 'PageAreaContent': stuff})
+		return render(request, 'OctaHomeFood/Recipes.html', {'PageAreaTitle':title, 'PageAreaContent': stuff})
 
 def MealsMain(request):
 	if not request.user.is_authenticated():
@@ -16,7 +16,7 @@ def MealsMain(request):
 	else:
 		title = "Under Construction"
 		stuff = "This Page Is Currently Under Construction"
-		return render(request, 'OctaHomeCore/pages/Meals.html', {'PageAreaTitle':title, 'PageAreaContent': stuff})
+		return render(request, 'OctaHomeFood/Meals.html', {'PageAreaTitle':title, 'PageAreaContent': stuff})
 
 def FridgeMain(request):
 	if not request.user.is_authenticated():
@@ -24,4 +24,4 @@ def FridgeMain(request):
 	else:
 		title = "Under Construction"
 		stuff = "This Page Is Currently Under Construction"
-		return render(request, 'OctaHomeCore/pages/Meals.html', {'PageAreaTitle':title, 'PageAreaContent': stuff})
+		return render(request, 'OctaHomeFood/Meals.html', {'PageAreaTitle':title, 'PageAreaContent': stuff})
