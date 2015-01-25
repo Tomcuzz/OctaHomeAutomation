@@ -8,38 +8,39 @@ import datetime
 
 class WeatherLocationManager(models.Manager):
 	def updateLocations(self):
-		try:
-			apiKey = settings.MET_OFFICE_API_KEY
-			url = "http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/sitelist?key=" + apiKey
-			page = urllib.urlopen(url).read()
-			jsonResult = json.loads(page)
-			
-			locationItems = jsonResult['Locations']['Location']
-			
-			for location in locationItems:
-				try:
-					weatherLocationObject = WeatherLocation.objects.get(locationId=location['id'])
+		apiKey = settings.MET_OFFICE_API_KEY
+		if apiKey != "":
+			try:
+				url = "http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/sitelist?key=" + apiKey
+				page = urllib.urlopen(url).read()
+				jsonResult = json.loads(page)
+				
+				locationItems = jsonResult['Locations']['Location']
+				
+				for location in locationItems:
+					try:
+						weatherLocationObject = WeatherLocation.objects.get(locationId=location['id'])
+						
+					except WeatherLocation.DoesNotExist:
+						weatherLocationObject = WeatherLocation()
+						weatherLocationObject.locationId = str(location['id'])
 					
-				except WeatherLocation.DoesNotExist:
-					weatherLocationObject = WeatherLocation()
-					weatherLocationObject.locationId = str(location['id'])
-				
-				weatherLocationObject.name = location['name']
-				weatherLocationObject.longitude = location['longitude']
-				weatherLocationObject.latitude = location['latitude']
-				
-				if location.has_key("region"):
-					weatherLocationObject.region = location['region']
-				if location.has_key("unitaryAuthArea"):
-					weatherLocationObject.unitaryAuthArea = location['unitaryAuthArea']
-				if location.has_key('elevation'):
-					weatherLocationObject.elevation = location['elevation']
-				
-				weatherLocationObject.save()
-		except IOError, e:
-			pass
-		except AttributeError, e:
-			pass
+					weatherLocationObject.name = location['name']
+					weatherLocationObject.longitude = location['longitude']
+					weatherLocationObject.latitude = location['latitude']
+					
+					if location.has_key("region"):
+						weatherLocationObject.region = location['region']
+					if location.has_key("unitaryAuthArea"):
+						weatherLocationObject.unitaryAuthArea = location['unitaryAuthArea']
+					if location.has_key('elevation'):
+						weatherLocationObject.elevation = location['elevation']
+					
+					weatherLocationObject.save()
+			except IOError, e:
+				pass
+			except AttributeError, e:
+				pass
 
 
 class WeatherLocation(models.Model):
@@ -84,14 +85,20 @@ class Weather(models.Model):
 		self.MesurementUnits = json.dumps(units)
 	
 	def getMesurementUnits(self):
-		return json.loads(self.MesurementUnits)
+		if self.MesurementUnits == "":
+			return []
+		else:
+			return json.loads(self.MesurementUnits)
 	
 	
 	def setFiveDayWeather(self, weather):
 		self.FiveDayWeather = json.dumps(weather)
 	
 	def getFiveDayWeather(self):
-		return json.loads(self.FiveDayWeather)
+		if self.FiveDayWeather == "":
+			return []
+		else:
+			return json.loads(self.FiveDayWeather)
 	
 	
 	def update(self):
