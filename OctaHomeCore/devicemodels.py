@@ -1,4 +1,5 @@
 from django.db import models
+from polymorphic import PolymorphicModel
 from OctaHomeCore.locationmodels import *
 from OctaHomeCore.messagemodels import *
 from helpers import *
@@ -6,7 +7,7 @@ from helpers import *
 ################
 # Device Types #
 ################
-class Device(models.Model):
+class Device(PolymorphicModel):
 	######################
 	# Display Parameters #
 	######################
@@ -23,6 +24,8 @@ class Device(models.Model):
 	Rooms = models.ManyToManyField('Room', blank=True, null=True, related_name="%(app_label)s_%(class)s_Devices")
 	IsOn = models.BooleanField(default=False)
 	Logs = models.ManyToManyField('LogItem', blank=True, null=True, related_name="%(app_label)s_%(class)s_Devices")
+	Actions = models.ManyToManyField('DeviceAction', blank=True, null=True, related_name="%(app_label)s_%(class)s_Devices")
+	events = models.ManyToManyField('TriggerEvent', related_name="%(app_label)s_%(class)s_Devices")
 	IpAddress = models.TextField()
 	Port = models.IntegerField(default=0)
 	
@@ -184,14 +187,9 @@ class Device(models.Model):
 	# Meta #
 	########
 	class Meta:
-		abstract = True
+		db_table = u'BaseDevices'
 
 class OutputDevice(Device):
-	##############
-	# Parameters #
-	##############
-	Actions = models.ManyToManyField('Action', blank=True, null=True, related_name="%(app_label)s_%(class)s_Devices")
-	
 	########
 	# Meta #
 	########
@@ -199,11 +197,6 @@ class OutputDevice(Device):
 	 	abstract = True
 
 class InputDevice(Device):
-	##############
-	# Parameters #
-	##############
-	events = models.ManyToManyField('TriggerEvent', related_name="%(app_label)s_%(class)s_Devices")
-	
 	########
 	# Meta #
 	########
@@ -214,7 +207,7 @@ class InputDevice(Device):
 ################
 # Device Modes #
 ################
-class DeviceMode(models.Model):
+class DeviceMode(PolymorphicModel):
 	##############
 	# Parameters #
 	##############

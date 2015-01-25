@@ -46,6 +46,7 @@ python manage.py SetupServer
 6. Install Astral
 7. Install Authy
 8. Install django_js_reverse
+9. Install django-polymorphic
 
 #### Nginx Setup:
 1. Copy SupportFiles/NginxConfig.txt to /etc/nginx/sites-enabled/homeautomation

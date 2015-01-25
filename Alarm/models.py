@@ -1,4 +1,5 @@
 from django.db import models
+from polymorphic import PolymorphicModel
 from OctaHomeCore.inputoutputmodels import *
 from OctaHomeCore.authmodels import *
 
@@ -7,7 +8,7 @@ import datetime
 from dateutil.relativedelta import *
 
 
-class Alarm(models.Model):
+class Alarm(PolymorphicModel):
 	##############
 	# Parameters #
 	##############

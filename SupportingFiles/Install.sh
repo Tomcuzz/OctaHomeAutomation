@@ -55,6 +55,7 @@ pip install paramiko
 pip install astral
 pip install authy
 pip install django-js-reverse
+pip install django-polymorphic
 
 cp InitScript.txt /etc/init.d/homeautomation
 chmod +x /etc/init.d/homeautomation
