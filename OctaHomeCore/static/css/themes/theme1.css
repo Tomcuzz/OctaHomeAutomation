@@ -150,6 +150,7 @@ body {
 	bottom:0;
 	right:0;
 	width:25%;
+	pointer-events: none
 }
 
 .message-area {

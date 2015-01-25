@@ -33,7 +33,7 @@
 						</td>
 						<td>
 							<ul style="padding-left: 20px;">
-								{% for device in actionGroup.Devices %}
+								{% for device in actionGroup.Devices.all %}
 									<li>{{ device.Name }}</li>
 								{% endfor %}
 							</ul>

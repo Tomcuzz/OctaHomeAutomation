@@ -28,18 +28,28 @@ class handleSettingsView(viewRequestHandler):
 	def getTemplate(self):
 		if self.Page == 'None':
 			return 'OctaHomeSettings/EditUser'
+		elif self.Page == 'Events':
+			return 'OctaHomeSettings/TriggerEvents'
 		elif self.Page == 'ActionGroups':
 			return 'OctaHomeSettings/ActionGroups'
 		elif self.Page == 'AGConditions':
 			return 'OctaHomeSettings/AGConditions'
 		elif self.Page == 'Actions':
 			return 'OctaHomeSettings/Actions'
-		elif self.Page == 'Events':
-			return 'OctaHomeSettings/Events'
 		elif self.Page == 'EditUsers':
 			return 'OctaHomeSettings/EditUsers'
 		elif self.Page == 'AddUser':
 			return 'OctaHomeSettings/AddUser'
+		
+		elif self.Page == 'AddEvent':
+			return 'OctaHomeSettings/AddTriggerEvent'
+		elif self.Page == 'AddActionGroup':
+			return 'OctaHomeSettings/AddActionGroup'
+		elif self.Page == 'AddAGCondition':
+			return 'OctaHomeSettings/AddAGCondition'
+		elif self.Page == 'AddAction':
+			return 'OctaHomeSettings/AddAction'
+		
 		else:
 			return 'OctaHomeSettings/EditUser'
 	
@@ -47,9 +57,9 @@ class handleSettingsView(viewRequestHandler):
 		links = [
 			{'title': 'Account', 					'address': reverse('Settings'), 									'active': self.getSideBarActiveState('None',			self.Page)},
 			{'title': 'Events',  					'address': reverse('SettingsPage', kwargs={'page':'Events'}),  		'active': self.getSideBarActiveState('Events',			self.Page)},
-			{'title': 'Action Groups', 				'address': reverse('SettingsPage', kwargs={'page':'Actions'}), 		'active': self.getSideBarActiveState('Actions', 		self.Page)},
+			{'title': 'Action Groups', 				'address': reverse('SettingsPage', kwargs={'page':'ActionGroups'}), 'active': self.getSideBarActiveState('ActionGroups', 	self.Page)},
 			{'title': 'Action Group Conditions', 	'address': reverse('SettingsPage', kwargs={'page':'AGConditions'}), 'active': self.getSideBarActiveState('AGConditions', 	self.Page)},
-			{'title': 'Actions', 					'address': reverse('SettingsPage', kwargs={'page':'ActionGroups'}), 'active': self.getSideBarActiveState('ActionGroups',	self.Page)}
+			{'title': 'Actions', 					'address': reverse('SettingsPage', kwargs={'page':'Actions'}), 		'active': self.getSideBarActiveState('Actions',			self.Page)}
 		]
 		
 		if self.Request.user.is_superuser:
@@ -236,5 +246,19 @@ class handleSettingsCommand(commandRequestHandler):
 					return self.handleUserError('Values Needed Not Given')
 			else:
 				return self.handleUserError('Authentication Error')
+		elif self.Command == 'addTriggerEventComplete':
+			if self.Post.has_key('name'):
+				name = self.Post['name']
+				TriggerEvent.objects.create(Name=name)
+				return self.returnOk()
+			else:
+				return self.handleUserError('Not All Values Given')
+		elif self.Command == 'addActionGroupComplete':
+			if self.Post.has_key('name'):
+				name = self.Post['name']
+				ActionGroup.objects.create(Name=name)
+				return self.returnOk()
+			else:
+				return self.handleUserError('Not All Values Given')
 		else:
 			return self.handleUserError('Command Not Found')

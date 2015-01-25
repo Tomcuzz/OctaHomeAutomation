@@ -34,14 +34,14 @@
 						</td>
 						<td>
 							<ul style="padding-left: 20px;">
-								{% for aGCondition in actionGroup.AGCondition %}
+								{% for aGCondition in actionGroup.AGCondition.all %}
 									<li>{{ aGCondition.Name }}</li>
 								{% endfor %}
 							</ul>
 						</td>
 						<td>
 							<ul style="padding-left: 20px;">
-								{% for actions in actionGroup.Actions %}
+								{% for actions in actionGroup.Actions.all %}
 									<li>{{ actions.Name }}</li>
 								{% endfor %}
 							</ul>
@@ -58,7 +58,8 @@
 					<td></td>
 					<td></td>
 					<td></td>
-					<td><button class="btn btn-primary">+</button></td>
+					<td></td>
+					<td><a href="{% url 'SettingsPage' page='AddActionGroup' %}"><button class="btn btn-primary">+</button></a></td>
 				</tr>
 			</tbody>
 		</table>
