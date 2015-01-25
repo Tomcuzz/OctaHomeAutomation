@@ -8,10 +8,14 @@ class handleSettingsView(viewRequestHandler):
 	def getViewParameters(self):
 		parameters = {}
 		
-		if self.Page == 'Actions':
+		if self.Page == 'ActionGroups':
+			parameters = {'actionGroups':ActionGroup.objects.all()}
+		elif self.Page == 'AGConditions':
+			parameters = {'aGConditions':AGCondition.objects.all()}
+		elif self.Page == 'Actions':
 			parameters = {'actions':Action.objects.all()}
 		elif self.Page == 'Events':
-			parameters = {'events':Event.objects.all()}
+			parameters = {'events':TriggerEvent.objects.all()}
 		elif self.Page == 'EditUsers':
 			parameters = {'users':CustomUser.objects.all()}
 		elif self.Page == 'AddUser':
@@ -24,6 +28,10 @@ class handleSettingsView(viewRequestHandler):
 	def getTemplate(self):
 		if self.Page == 'None':
 			return 'OctaHomeSettings/EditUser'
+		elif self.Page == 'ActionGroups':
+			return 'OctaHomeSettings/ActionGroups'
+		elif self.Page == 'AGConditions':
+			return 'OctaHomeSettings/AGConditions'
 		elif self.Page == 'Actions':
 			return 'OctaHomeSettings/Actions'
 		elif self.Page == 'Events':
@@ -37,9 +45,11 @@ class handleSettingsView(viewRequestHandler):
 	
 	def getSideBar(self):
 		links = [
-			{'title': 'Account', 'address': reverse('Settings'), 								'active': self.getSideBarActiveState('None',	self.Page)},
-			{'title': 'Events',  'address': reverse('SettingsPage', kwargs={'page':'Events'}),  'active': self.getSideBarActiveState('Events',	self.Page)},
-			{'title': 'Actions', 'address': reverse('SettingsPage', kwargs={'page':'Actions'}), 'active': self.getSideBarActiveState('Actions', self.Page)}
+			{'title': 'Account', 					'address': reverse('Settings'), 									'active': self.getSideBarActiveState('None',			self.Page)},
+			{'title': 'Events',  					'address': reverse('SettingsPage', kwargs={'page':'Events'}),  		'active': self.getSideBarActiveState('Events',			self.Page)},
+			{'title': 'Action Groups', 				'address': reverse('SettingsPage', kwargs={'page':'Actions'}), 		'active': self.getSideBarActiveState('Actions', 		self.Page)},
+			{'title': 'Action Group Conditions', 	'address': reverse('SettingsPage', kwargs={'page':'AGConditions'}), 'active': self.getSideBarActiveState('AGConditions', 	self.Page)},
+			{'title': 'Actions', 					'address': reverse('SettingsPage', kwargs={'page':'ActionGroups'}), 'active': self.getSideBarActiveState('ActionGroups',	self.Page)}
 		]
 		
 		if self.Request.user.is_superuser:

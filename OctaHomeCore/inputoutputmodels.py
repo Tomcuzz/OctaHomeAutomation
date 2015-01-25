@@ -1,5 +1,6 @@
 from django.db import models
 from polymorphic import PolymorphicModel
+from OctaHomeCore.devicemodels import *
 import json
 
 ################
@@ -10,14 +11,14 @@ class TriggerEvent(PolymorphicModel):
 	# Parameters #
 	##############
 	Name = models.CharField(max_length=30)
-	Actions = models.ManyToManyField('Action', related_name="TriggerEvents")
+	ActionGroups = models.ManyToManyField('ActionGroup', related_name="TriggerEvents")
 	
 	##################
 	# Object Methods #
 	##################
 	def call(self):
-		for action in self.Actions:
-			action.run()
+		for actionGroup in self.ActionGroups:
+			actionGroup.run()
 	
 	########
 	# Meta #
@@ -26,12 +27,44 @@ class TriggerEvent(PolymorphicModel):
 		db_table = 'TriggerEvents'
 
 
-class ActionCondition(PolymorphicModel):
+class ActionGroup(PolymorphicModel):
 	##############
 	# Parameters #
 	##############
 	Name = models.CharField(max_length=30)
-	Actions = models.ManyToManyField('Action', blank=True, null=True, related_name="%(app_label)s_%(class)s_ActionConditions")
+	AGCondition = models.ManyToManyField('AGCondition')
+	Actions = models.ManyToManyField('Action')
+	
+	##################
+	# Object Methods #
+	##################
+	def checkAllConditions(self):
+		for condition in self.AGCondition:
+			if condition.checkConditions() == False:
+				return False
+		
+		return True
+	
+	def run(self, currentRunType = False):
+		if self.checkAllConditions():
+			self.unconditionalRun(currentRunType)
+	
+	def unconditionalRun(self, currentRunType = False):
+		for action in self.Actions:
+			action.run(currentRunType)
+	
+	########
+	# Meta #
+	########
+	class Meta:
+		db_table = 'ActionGroup'
+
+
+class AGCondition(PolymorphicModel):
+	##############
+	# Parameters #
+	##############
+	Name = models.CharField(max_length=30)
 	
 	##################
 	# Object Methods #
@@ -43,15 +76,15 @@ class ActionCondition(PolymorphicModel):
 	# Meta #
 	########
 	class Meta:
-		abstract = True
+		db_table = 'AGCondition'
 
 
-class DeviceOnOffActionCondition(ActionCondition):
+class DeviceOnOffAGCondition(AGCondition):
 	##############
 	# Parameters #
 	##############
 	PassTarget = models.BooleanField(default=False)
-	CheckDevices = models.ManyToManyField('Device', blank=True, null=True, related_name="%(app_label)s_%(class)s_OnOffActionConditions")
+	CheckDevices = models.ManyToManyField('Device')
 	
 	##################
 	# Object Methods #
@@ -66,7 +99,7 @@ class DeviceOnOffActionCondition(ActionCondition):
 	# Meta #
 	########
 	class Meta:
-		db_table = 'DeviceOnOffActionCondition'
+		db_table = 'DeviceOnOffAGCondition'
 
 class Action(PolymorphicModel):
 	##############
@@ -87,22 +120,7 @@ class Action(PolymorphicModel):
 	##################
 	# Object Methods #
 	##################
-	def checkAllConditions(self):
-		conditions = []
-		for actionConditionClass in getNonAbstractSubClasses(ActionCondition):
-			conditions.extend(actionConditionClass.objects.filter(Actions=self))
-		
-		for condition in conditions:
-			if condition.checkConditions() == False:
-				return False
-		
-		return True
-	
 	def run(self, currentRunType = False):
-		if self.checkAllConditions():
-			self.unconditionalRun(currentRunType)
-	
-	def unconditionalRun(self, currentRunType = False):
 		pass
 	
 	########
@@ -117,19 +135,11 @@ class DeviceAction(Action):
 	##############
 	# Parameters #
 	##############
-	@property
-	def Devices(self):
-		devices = []
-		
-		for deviceClass in getNonAbstractSubClasses(Device):
-			devices.extend(deviceClass.objects.filter(Actions__in=[self]))
-		
-		return devices
-	
+	Devices = models.ManyToManyField('Device')
 	##################
 	# Object Methods #
 	##################
-	def unconditionalRun(self, currentRunType = False):
+	def run(self, currentRunType = False):
 		if self.RunIsAsync == False or self.RunIsAsync == currentRunType:
 			for device in self.Devices:
 				functionName = self.getParameters()[device.Name]['name']

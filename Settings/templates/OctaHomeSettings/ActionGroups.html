@@ -1,0 +1,69 @@
+{% extends 'OctaHomeCore/baseWithNavBar.html' %}
+
+{% block title %} Settings - Account {% endblock %}
+
+{% block AccountNavBarActive %} active {% endblock %}
+
+{% block PageArea %}
+	<div class="page-header">
+		<h1>Action Groups</h1>
+	</div>
+	<div>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>id</th>
+					<th>Name</th>
+					<th>Trigger Events</th>
+					<th>Conditions</th>
+					<th>House Actions</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for actionGroup in actionGroups %}
+					<tr>
+						<td>{{ actionGroup.id }}</td>
+						<td>{{ actionGroup.Name }}</td>
+						<td>
+							<ul style="padding-left: 20px;">
+								{% for event in actionGroup.TriggerEvents.all %}
+									<li>{{ event.Name }}</li>
+								{% endfor %}
+							</ul>
+						</td>
+						<td>
+							<ul style="padding-left: 20px;">
+								{% for aGCondition in actionGroup.AGCondition %}
+									<li>{{ aGCondition.Name }}</li>
+								{% endfor %}
+							</ul>
+						</td>
+						<td>
+							<ul style="padding-left: 20px;">
+								{% for actions in actionGroup.Actions %}
+									<li>{{ actions.Name }}</li>
+								{% endfor %}
+							</ul>
+						</td>
+						<td>
+							<button class="btn btn-success">Trigger</button>
+							<button class="btn btn-primary" style="margin-left:5px;">Edit</button>
+							<button class="btn btn-danger" style="margin-left:5px;">Delete</button>
+						</td>
+					</tr>
+				{% endfor %}
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td><button class="btn btn-primary">+</button></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+{% endblock %}
+
+{% block ExtraJavaScript %}
+{% endblock %}

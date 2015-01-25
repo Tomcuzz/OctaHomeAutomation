@@ -8,12 +8,10 @@ import datetime
 from dateutil.relativedelta import *
 
 
-class Alarm(PolymorphicModel):
+class Alarm(TriggerEvent):
 	##############
 	# Parameters #
 	##############
-	Name = models.CharField(max_length=30)
-	Actions = models.ManyToManyField(Action, related_name="AlarmEvents")
 	Enabled = models.BooleanField(default=False)
 	Date = models.DateTimeField()
 	Recurrence = models.TextField(default="")
@@ -25,7 +23,7 @@ class Alarm(PolymorphicModel):
 	##################
 	def call(self):
 		try:
-			for action in self.Actions:
+			for action in self.ActionGroups:
 				action.run()
 		finally:
 			if newAlarm.recurrence == "Once A Hour":
