@@ -260,5 +260,19 @@ class handleSettingsCommand(commandRequestHandler):
 				return self.returnOk()
 			else:
 				return self.handleUserError('Not All Values Given')
+		elif self.Command == 'addActionGroupConditionComplete':
+			if self.Post.has_key('name'):
+				name = self.Post['name']
+				AGCondition.objects.create(Name=name)
+				return self.returnOk()
+			else:
+				return self.handleUserError('Not All Values Given')
+		elif self.Command == 'addActionComplete':
+			if self.Post.has_key('name'):
+				name = self.Post['name']
+				Action.objects.create(Name=name)
+				return self.returnOk()
+			else:
+				return self.handleUserError('Not All Values Given')
 		else:
 			return self.handleUserError('Command Not Found')

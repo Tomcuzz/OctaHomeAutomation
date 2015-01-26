@@ -14,30 +14,14 @@
 				<tr>
 					<th>id</th>
 					<th>Name</th>
-					<th>Trigger Events</th>
-					<th>Devices</th>
 					<th>Actions</th>
 				</tr>
 			</thead>
 			<tbody>
-				{% for actionGroup in actionGroups %}
+				{% for aGCondition in aGConditions %}
 					<tr>
-						<td>{{ actionGroup.id }}</td>
-						<td>{{ actionGroup.Name }}</td>
-						<td>
-							<ul style="padding-left: 20px;">
-								{% for event in actionGroup.Events.all %}
-									<li>{{ event.Name }}</li>
-								{% endfor %}
-							</ul>
-						</td>
-						<td>
-							<ul style="padding-left: 20px;">
-								{% for device in actionGroup.Devices.all %}
-									<li>{{ device.Name }}</li>
-								{% endfor %}
-							</ul>
-						</td>
+						<td>{{ aGCondition.id }}</td>
+						<td>{{ aGCondition.Name }}</td>
 						<td>
 							<button class="btn btn-success">Trigger</button>
 							<button class="btn btn-primary" style="margin-left:5px;">Edit</button>
@@ -48,9 +32,7 @@
 				<tr>
 					<td></td>
 					<td></td>
-					<td></td>
-					<td></td>
-					<td><button class="btn btn-primary">+</button></td>
+					<td><a href="{% url 'SettingsPage' page='AddAGCondition' %}"><button class="btn btn-primary">+</button></a></td>
 				</tr>
 			</tbody>
 		</table>
