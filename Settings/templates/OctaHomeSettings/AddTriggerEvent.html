@@ -23,20 +23,14 @@
 				<label>Name:</label>
 				<input type="text" name="name" class="form-control" style="width: 200px;" placeholder="Event Name..." maxlength="30" required pattern="[^]{3,30}">
 				<br>
-				<label>Action Group:</label>
+				<label>Action Group:</label><br>
 				<!-- Note the missing multiple attribute! -->
-				<select id="action-group" multiple="multiple">
-					<option value="1">Option 1</option>
-					<option value="2" selected="selected">Option 2</option>
-					<!-- Option 3 will be selected in advance ... -->
-					<option value="3" selected="selected">Option 3</option>
-					<option value="4">Option 4</option>
-					<option value="5">Option 5</option>
-					<option value="6">Option 6</option>
+				<select name="actionGroups" id="action-group" multiple="multiple">
+					{% for actiongroup in actiongroups %}
+						<option value="{{ actiongroup.id }}">{{ actiongroup.Name }}</option>
+					{% endfor %}
 				</select>
-				<script type="text/javascript">
-					$('#action-group').multiselect();
-				</script>
+				<br>
 				<br>
 				<button type="submit" class="btn btn-default">Add Event</button>
 			</fieldset>

@@ -20,6 +20,8 @@ class handleSettingsView(viewRequestHandler):
 			parameters = {'users':CustomUser.objects.all()}
 		elif self.Page == 'AddUser':
 			parameters = {'locations': WeatherLocations.objects.order_by('name').all()}
+		elif self.Page == 'AddEvent':
+			parameters = {'actiongroups': ActionGroup.objects.all()}
 		#else:
 			#return 'pages/Settings/EditUser'
 		
@@ -247,9 +249,17 @@ class handleSettingsCommand(commandRequestHandler):
 			else:
 				return self.handleUserError('Authentication Error')
 		elif self.Command == 'addTriggerEventComplete':
-			if self.Post.has_key('name'):
+			if self.Post.has_key('name') and self.Post.has_key('actionGroups'):
 				name = self.Post['name']
-				TriggerEvent.objects.create(Name=name)
+				actionGroups = self.Post['actionGroups']
+				NewTriggerEvent = TriggerEvent.objects.create(Name=name)
+				
+				for actionGroupId in actionGroups.split(','):
+					actionGroup = ActionGroup.objects.get(pk=actionGroupId)
+					if actionGroup != None:
+						NewTriggerEvent.ActionGroups.add(actionGroup)
+				NewTriggerEvent.save()
+				
 				return self.returnOk()
 			else:
 				return self.handleUserError('Not All Values Given')
