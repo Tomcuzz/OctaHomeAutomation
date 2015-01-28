@@ -23,10 +23,42 @@
 				<label>Name:</label>
 				<input type="text" name="name" class="form-control" style="width: 200px;" placeholder="Event Name..." maxlength="30" required pattern="[^]{3,30}">
 				<br>
+				<label>Events:</label><br>
+				<!-- Note the missing multiple attribute! -->
+				<select name="triggerEvents" id="events" multiple="multiple">
+					{% for triggerEvent in triggerEvents %}
+						<option value="{{ triggerEvent.id }}">{{ triggerEvent.Name }}</option>
+					{% endfor %}
+				</select>
+				<br>
+				<br>
+				<label>Action Group Condition:</label><br>
+				<!-- Note the missing multiple attribute! -->
+				<select name="aGConditions" id="action-group-condition" multiple="multiple">
+					{% for aGCondition in aGConditions %}
+						<option value="{{ aGCondition.id }}">{{ aGCondition.Name }}</option>
+					{% endfor %}
+				</select>
+				<br>
+				<br>
+				<label>Actions:</label><br>
+				<!-- Note the missing multiple attribute! -->
+				<select name="actions" id="actions" multiple="multiple">
+					{% for action in actions %}
+						<option value="{{ action.id }}">{{ action.Name }}</option>
+					{% endfor %}
+				</select>
+				<br>
+				<br>
 				<button type="submit" class="btn btn-default">Add Action Group</button>
 			</fieldset>
 		</form>
 {% endblock %}
 
 {% block ExtraJavaScript %}
+	<script type="text/javascript">
+		$('#events').multiselect();
+		$('#action-group-condition').multiselect();
+		$('#actions').multiselect();
+	</script>
 {% endblock %}

@@ -20,8 +20,11 @@ class handleSettingsView(viewRequestHandler):
 			parameters = {'users':CustomUser.objects.all()}
 		elif self.Page == 'AddUser':
 			parameters = {'locations': WeatherLocations.objects.order_by('name').all()}
+		
 		elif self.Page == 'AddEvent':
 			parameters = {'actiongroups': ActionGroup.objects.all()}
+		elif self.Page == 'AddActionGroup':
+			parameters = {'triggerEvents': TriggerEvent.objects.all(), 'aGConditions':AGCondition.objects.all(), 'actions':Action.objects.all()}
 		#else:
 			#return 'pages/Settings/EditUser'
 		
@@ -264,9 +267,30 @@ class handleSettingsCommand(commandRequestHandler):
 			else:
 				return self.handleUserError('Not All Values Given')
 		elif self.Command == 'addActionGroupComplete':
-			if self.Post.has_key('name'):
+			if self.Post.has_key('name') and self.Post.has_key('triggerEvents') and self.Post.has_key('aGConditions') and self.Post.has_key('actions'):
 				name = self.Post['name']
-				ActionGroup.objects.create(Name=name)
+				triggerEventsIds = self.Post['triggerEvents']
+				aGConditionsIds = self.Post['aGConditions']
+				actionsIds = self.Post['actions']
+				NewActionGroup = ActionGroup.objects.create(Name=name)
+				
+				for triggerEventId in triggerEventsIds.split(','):
+					triggerEvent = TriggerEvent.objects.get(pk=triggerEventId)
+					if triggerEvent != None:
+						NewActionGroup.TriggerEvents.add(triggerEvent)
+				
+				for actionGroupId in aGConditionsIds.split(','):
+					actionGroup = AGCondition.objects.get(pk=actionGroupId)
+					if actionGroup != None:
+						NewActionGroup.AGCondition.add(actionGroup)
+				
+				for actionGroupId in actionsIds.split(','):
+					actionGroup = Action.objects.get(pk=actionGroupId)
+					if actionGroup != None:
+						NewActionGroup.Actions.add(actionGroup)
+				
+				NewActionGroup.save()
+				
 				return self.returnOk()
 			else:
 				return self.handleUserError('Not All Values Given')

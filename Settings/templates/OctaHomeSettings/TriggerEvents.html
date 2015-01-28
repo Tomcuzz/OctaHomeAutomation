@@ -25,7 +25,7 @@
 						<td>{{ event.Name }}</td>
 						<td>
 							<ul style="padding-left: 20px;">
-								{% for action in event.Actions.all %}
+								{% for action in event.ActionGroups.all %}
 									<li>{{ action.Name }}</li>
 								{% endfor %}
 							</ul>
