@@ -33,7 +33,7 @@ class ActionGroup(PolymorphicModel):
 	##############
 	Name = models.CharField(max_length=30)
 	AGCondition = models.ManyToManyField('AGCondition', related_name="ActionGroups")
-	Actions = models.ManyToManyField('Action')
+	Actions = models.ManyToManyField('Action', related_name="ActionGroups")
 	
 	##################
 	# Object Methods #
@@ -106,6 +106,7 @@ class Action(PolymorphicModel):
 	# Parameters #
 	##############
 	Name = models.CharField(max_length=30)
+	TypeName = "Base Action"
 	Parameters = models.TextField()
 	RunIsAsync = models.BooleanField(default=False)
 	
@@ -121,6 +122,15 @@ class Action(PolymorphicModel):
 	# Object Methods #
 	##################
 	def run(self, currentRunType = False):
+		if self.RunIsAsync == False or self.RunIsAsync == currentRunType:
+			self.runSynchronously()
+		else:
+			self.runAsynchronously()
+	
+	def runSynchronously(self):
+		pass
+	
+	def runAsynchronously(self):
 		pass
 	
 	########
@@ -136,18 +146,20 @@ class DeviceAction(Action):
 	# Parameters #
 	##############
 	Devices = models.ManyToManyField('Device')
+	TypeName = "Device Action"
+	
 	##################
 	# Object Methods #
 	##################
-	def run(self, currentRunType = False):
-		if self.RunIsAsync == False or self.RunIsAsync == currentRunType:
-			for device in self.Devices:
-				functionName = self.getParameters()[device.Name]['name']
-				functionParameters = self.getParameters()[device.Name]['parameters']
-				if functionName != '':
-					device.handleAction(functionName, functionParameters)
-		else:
-			raise Exception('ASYNC NOT IMPLEMENTED')
+	def runSynchronously(self):
+		for device in self.Devices:
+			functionName = self.getParameters()[device.Name]['name']
+			functionParameters = self.getParameters()[device.Name]['parameters']
+			if functionName != '':
+				device.handleAction(functionName, functionParameters)
+	
+	def runAsynchronously(self):
+		raise Exception('ASYNC NOT IMPLEMENTED')
 	
 	########
 	# Meta #
