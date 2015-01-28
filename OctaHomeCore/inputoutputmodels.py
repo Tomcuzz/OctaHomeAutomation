@@ -32,7 +32,7 @@ class ActionGroup(PolymorphicModel):
 	# Parameters #
 	##############
 	Name = models.CharField(max_length=30)
-	AGCondition = models.ManyToManyField('AGCondition')
+	AGCondition = models.ManyToManyField('AGCondition', related_name="ActionGroups")
 	Actions = models.ManyToManyField('Action')
 	
 	##################

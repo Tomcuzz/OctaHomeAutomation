@@ -25,6 +25,8 @@ class handleSettingsView(viewRequestHandler):
 			parameters = {'actiongroups': ActionGroup.objects.all()}
 		elif self.Page == 'AddActionGroup':
 			parameters = {'triggerEvents': TriggerEvent.objects.all(), 'aGConditions':AGCondition.objects.all(), 'actions':Action.objects.all()}
+		elif self.Page == 'AddAGCondition':
+			parameters = {'actiongroups':ActionGroup.objects.all()}
 		#else:
 			#return 'pages/Settings/EditUser'
 		
@@ -263,7 +265,7 @@ class handleSettingsCommand(commandRequestHandler):
 						NewTriggerEvent.ActionGroups.add(actionGroup)
 				NewTriggerEvent.save()
 				
-				return self.returnOk()
+				return self.redirect(reverse('SettingsPage', kwargs={'page':'Events'}))
 			else:
 				return self.handleUserError('Not All Values Given')
 		elif self.Command == 'addActionGroupComplete':
@@ -291,21 +293,24 @@ class handleSettingsCommand(commandRequestHandler):
 				
 				NewActionGroup.save()
 				
-				return self.returnOk()
+				
+				return self.redirect(reverse('SettingsPage', kwargs={'page':'ActionGroups'}))
 			else:
 				return self.handleUserError('Not All Values Given')
 		elif self.Command == 'addActionGroupConditionComplete':
 			if self.Post.has_key('name'):
 				name = self.Post['name']
 				AGCondition.objects.create(Name=name)
-				return self.returnOk()
+				
+				return self.redirect(reverse('SettingsPage', kwargs={'page':'AGConditions'}))
 			else:
 				return self.handleUserError('Not All Values Given')
 		elif self.Command == 'addActionComplete':
 			if self.Post.has_key('name'):
 				name = self.Post['name']
 				Action.objects.create(Name=name)
-				return self.returnOk()
+				
+				return self.redirect(reverse('SettingsPage', kwargs={'page':'Actions'}))
 			else:
 				return self.handleUserError('Not All Values Given')
 		else:
