@@ -66,6 +66,15 @@ class AGCondition(PolymorphicModel):
 	##############
 	Name = models.CharField(max_length=30)
 	
+	######################
+	# Display Parameters #
+	######################
+	ViewPartial = ''
+	
+	@property
+	def JsPartials(self):
+		return ['']
+	
 	##################
 	# Object Methods #
 	##################
@@ -109,6 +118,17 @@ class Action(PolymorphicModel):
 	TypeName = "Base Action"
 	Parameters = models.TextField()
 	RunIsAsync = models.BooleanField(default=False)
+	
+	######################
+	# Display Parameters #
+	######################
+	ViewPartial = ''
+	@property
+	def JsPartials(self):
+		return ['']
+	@property
+	def AdditionPartials(self):
+		return ['']
 	
 	##############################
 	# Parameters Getters/Setters #
