@@ -24,7 +24,7 @@
 					<tr>
 						<td>{{ action.id }}</td>
 						<td>{{ action.Name }}</td>
-						<td>{{ action.TypeName }}</td>
+						<td>{{ action.getTypeName }}</td>
 						<td>
 							<ul style="padding-left: 20px;">
 								{% for actionGroup in action.ActionGroups.all %}

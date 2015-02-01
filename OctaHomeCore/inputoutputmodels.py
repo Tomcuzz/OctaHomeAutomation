@@ -115,20 +115,25 @@ class Action(PolymorphicModel):
 	# Parameters #
 	##############
 	Name = models.CharField(max_length=30)
-	TypeName = "Base Action"
 	Parameters = models.TextField()
 	RunIsAsync = models.BooleanField(default=False)
 	
 	######################
 	# Display Parameters #
 	######################
+	@classmethod
+	def getTypeName(cls):
+		return "Base Action"
+	
 	ViewPartial = ''
 	@property
 	def JsPartials(self):
 		return ['']
 	@property
 	def AdditionPartials(self):
-		return ['']
+		return []
+	
+	UserCreatable = False
 	
 	##############################
 	# Parameters Getters/Setters #
@@ -141,6 +146,10 @@ class Action(PolymorphicModel):
 	##################
 	# Object Methods #
 	##################
+	def setUp(self, kwargs={}):
+		if kwargs.has_key('Name'):
+			self.Name = kwargs['Name']
+	
 	def run(self, currentRunType = False):
 		if self.RunIsAsync == False or self.RunIsAsync == currentRunType:
 			self.runSynchronously()
@@ -166,11 +175,28 @@ class DeviceAction(Action):
 	# Parameters #
 	##############
 	Devices = models.ManyToManyField('Device')
-	TypeName = "Device Action"
+	
+	######################
+	# Display Parameters #
+	######################
+	@classmethod
+	def getTypeName(cls):
+		return "Device Action"
+	
+	UserCreatable = False
 	
 	##################
 	# Object Methods #
 	##################
+	def setUp(self, kwargs={}):
+		super(self, DeviceAction).setUp()
+		if kwargs.has_key('deviceIds'):
+			for deviceId in kwargs['Name'].split(','):
+				device = Device.objects.get(pk=deviceId)
+				if device != None:
+					self.Devices.add(device)
+		
+	
 	def runSynchronously(self):
 		for device in self.Devices:
 			functionName = self.getParameters()[device.Name]['name']

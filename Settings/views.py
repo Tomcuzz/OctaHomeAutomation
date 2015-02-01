@@ -3,6 +3,7 @@ from django.conf import settings
 from OctaHomeCore.baseviews import *
 from OctaHomeCore.models import *
 from OctaHomeCore.weathermodels import *
+from OctaHomeCore.helpers import *
 
 class handleSettingsView(viewRequestHandler):
 	def getViewParameters(self):
@@ -27,6 +28,8 @@ class handleSettingsView(viewRequestHandler):
 			parameters = {'triggerEvents': TriggerEvent.objects.all(), 'aGConditions':AGCondition.objects.all(), 'actions':Action.objects.all()}
 		elif self.Page == 'AddAGCondition':
 			parameters = {'actiongroups':ActionGroup.objects.all()}
+		elif self.Page == 'AddAction':
+			parameters = {'types':getAllSubClasses(Action)}
 		#else:
 			#return 'pages/Settings/EditUser'
 		
