@@ -85,23 +85,6 @@ class TopNavBarItem(MenuItem):
 
 
 
-
-class HomeTopNavBarItem(TopNavBarItem):
-	Priority = 10
-	DisplayName = "Home"
-	
-	@property
-	def Link(self):
-		return reverse('Home')
-
-class HomeStatsTopNavBarItem(TopNavBarItem):
-	Priority = 20
-	DisplayName = "Home Stats"
-	
-	@property
-	def Link(self):
-		return reverse('HomeStats')
-
 class CoreSystemsTopNavBarItem(TopNavBarItem):
 	Priority = 30
 	DisplayName = "Core Systems"
