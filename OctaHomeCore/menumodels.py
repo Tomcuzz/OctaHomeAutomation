@@ -76,6 +76,16 @@ class TopNavBarItem(MenuItem):
 	MenuName = "TopNavBar"
 	ViewPartial = "OctaHomeCore/Partials/Menu/MenuItems/TopNavBarItem.html"
 
+
+
+
+
+
+
+
+
+
+
 class HomeTopNavBarItem(TopNavBarItem):
 	Priority = 10
 	DisplayName = "Home"
@@ -84,20 +94,127 @@ class HomeTopNavBarItem(TopNavBarItem):
 	def Link(self):
 		return reverse('Home')
 
-class CoreSystemsTopNavBarItem(TopNavBarItem):
+class HomeStatsTopNavBarItem(TopNavBarItem):
 	Priority = 20
+	DisplayName = "Home Stats"
+	
+	@property
+	def Link(self):
+		return reverse('HomeStats')
+
+class CoreSystemsTopNavBarItem(TopNavBarItem):
+	Priority = 30
 	DisplayName = "Core Systems"
 	Link = "#"
 
 class LightsTopNavBarItem(TopNavBarItem):
 	ParentItem = "Core Systems"
-	Priority = 20
+	Priority = 10
 	DisplayName = "Lights"
 	
 	@property
 	def Link(self):
 		return reverse('Lights')
 
+class AlarmTopNavBarItem(TopNavBarItem):
+	ParentItem = "Core Systems"
+	Priority = 20
+	DisplayName = "Alarm"
+	
+	@property
+	def Link(self):
+		return reverse('Alarm')
+
+class SecurityTopNavBarItem(TopNavBarItem):
+	ParentItem = "Core Systems"
+	Priority = 30
+	DisplayName = "Security"
+	
+	@property
+	def Link(self):
+		return reverse('Security')
+
+class CurtainsTopNavBarItem(TopNavBarItem):
+	ParentItem = "Core Systems"
+	Priority = 40
+	DisplayName = "Curtains"
+	
+	@property
+	def Link(self):
+		return reverse('Curtains')
+
+class TempControlTopNavBarItem(TopNavBarItem):
+	ParentItem = "Core Systems"
+	Priority = 50
+	DisplayName = "Temperature"
+	
+	@property
+	def Link(self):
+		return reverse('TempControl')
+
+class AudioVisualTopNavBarItem(TopNavBarItem):
+	ParentItem = "Core Systems"
+	Priority = 60
+	DisplayName = "Audio/Visual"
+	
+	@property
+	def Link(self):
+		return reverse('AudioVisual')
+
+class FoodTopNavBarItem(TopNavBarItem):
+	Priority = 40
+	DisplayName = "Food"
+	Link = "#"
+
+class MealsTopNavBarItem(TopNavBarItem):
+	ParentItem = "Food"
+	Priority = 20
+	DisplayName = "Meals"
+	
+	@property
+	def Link(self):
+		return reverse('Meals')
+
+class RecipesTopNavBarItem(TopNavBarItem):
+	ParentItem = "Food"
+	Priority = 20
+	DisplayName = "Recipes"
+	
+	@property
+	def Link(self):
+		return reverse('Recipes')
+
+class FridgeTopNavBarItem(TopNavBarItem):
+	ParentItem = "Food"
+	Priority = 20
+	DisplayName = "Fridge"
+	
+	@property
+	def Link(self):
+		return reverse('Fridge')
+
+class NetworkingTopNavBarItem(TopNavBarItem):
+	Priority = 50
+	DisplayName = "Networking"
+	Link = "#"
+
+class ProxmoxTopNavBarItem(TopNavBarItem):
+	ParentItem = "Networking"
+	Priority = 10
+	DisplayName = "Proxmox"
+	
+	@property
+	def Link(self):
+		return reverse('Proxmox')
+
+class DnsAdminTopNavBarItem(TopNavBarItem):
+	ParentItem = "Networking"
+	Priority = 20
+	DisplayName = "Dns Admin"
+	
+	@property
+	def Link(self):
+		return reverse('DnsAdmin')
 
 class SettingsTopNavBarItem(TopNavBarItem):
 	Priority = 90
