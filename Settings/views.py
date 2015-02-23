@@ -2,8 +2,17 @@ from django.conf import settings
 
 from OctaHomeCore.baseviews import *
 from OctaHomeCore.models import *
+from OctaHomeCore.menumodels import *
 from OctaHomeCore.weathermodels import *
 from OctaHomeCore.helpers import *
+
+class SettingsTopNavBarItem(TopNavBarItem):
+	Priority = 90
+	DisplayName = "Settings"
+	
+	@property
+	def Link(self):
+		return "/Settings/"
 
 class handleSettingsView(viewRequestHandler):
 	def getViewParameters(self):
