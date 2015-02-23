@@ -1,4 +1,5 @@
 from django import template
+from django.template import RequestContext 
 from OctaHomeCore.menumodels import *
 from django.shortcuts import render_to_response
 
@@ -23,9 +24,10 @@ def getUniqueJsPartials(devices):
 	return allJsPartials
 
 
-@register.simple_tag()
-def get_menu_with_name(name):
+@register.simple_tag(takes_context=True)
+def get_menu_with_name(context, name):
+	request = context['request']
 	menuClass = Menu.getMenuForName(name)
 	menu = menuClass()
 	items = menu.buildMenu()
-	return render_to_response(menu.ViewPartial, {'Items':items})
+	return render_to_response(menu.ViewPartial, {'Items':items}, context_instance = RequestContext(request))
