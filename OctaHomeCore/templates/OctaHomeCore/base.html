@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load url from future %}
+{% load my_filters %}
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
@@ -52,7 +53,8 @@
 	<body data-spy="scroll" data-target=".bs-docs-sidebar" data-twttr-rendered="true">
 		<!-- Navbar
 		================================================== -->
-		<header class="navbar navbar-fixed-top" role="banner">
+		{% get_menu_with_name "TopNavBar" %}
+		<header class="navbar navbar-fixed-top" role="banner" style="display:none;">
 			<div class="container">
 				<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 					<!-- Brand and toggle get grouped for better mobile display -->

@@ -1,4 +1,6 @@
 from django import template
+from OctaHomeCore.menumodels import *
+from django.shortcuts import render_to_response
 
 register = template.Library()
 
@@ -19,3 +21,11 @@ def getUniqueJsPartials(devices):
 				allJsPartials.append(jsPartial)
 	
 	return allJsPartials
+
+
+@register.simple_tag()
+def get_menu_with_name(name):
+	menuClass = Menu.getMenuForName(name)
+	menu = menuClass()
+	items = menu.buildMenu()
+	return render_to_response(menu.ViewPartial, {'Items':items})
