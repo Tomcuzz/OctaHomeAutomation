@@ -11,7 +11,25 @@ from models import *
 from Lights.models import *
 from DeviceInput.models import *
 import datetime
+from OctaHomeCore.baseviews import *
+from OctaHomeCore.menumodels import *
 
+#Nav Bar Item
+class CoreSystemsTopNavBarItem(TopNavBarItem):
+	Priority = 30
+	DisplayName = "Core Systems"
+	Link = "#"
+
+class AlarmTopNavBarItem(TopNavBarItem):
+	ParentItem = "Core Systems"
+	Priority = 20
+	DisplayName = "Alarm"
+	
+	@property
+	def Link(self):
+		return reverse('Alarm')
+
+#View Object
 class handleAlarmView(viewRequestHandler):
 	def getTemplate(self):
 		if self.Page == "None":

@@ -10,11 +10,13 @@ class Menu(object):
 		allMenuItems = getFinalSubClasses(MenuItem)
 		
 		menuItems = []
+		menuItemNames = []
 		
 		for aMenuItem in allMenuItems:
 			aMenuItemInst = aMenuItem()
-			if aMenuItemInst.MenuName == self.Name and aMenuItemInst.isShown():
+			if aMenuItemInst.MenuName == self.Name and aMenuItemInst.isShown() and aMenuItemInst.DisplayName not in menuItemNames:
 				menuItems.append(aMenuItemInst)
+				menuItemNames.append(aMenuItemInst.DisplayName)
 		
 		return menuItems
 	
@@ -65,9 +67,11 @@ class MenuItem(object):
 	
 	def buildItemWithMenuItems(self, items):
 		subItems = []
+		subItemNames = []
 		for item in items:
-			if item.ParentItem == self.DisplayName:
+			if item.ParentItem == self.DisplayName and item.DisplayName not in subItemNames:
 				subItems.append(item.buildItemWithMenuItems(items))
+				subItemNames.append(item.DisplayName)
 		subItems.sort(key=operator.itemgetter('priority'))
 		return {'item':self, 'priority':self.Priority, 'subitems':subItems}
 
@@ -85,117 +89,11 @@ class TopNavBarItem(MenuItem):
 
 
 
-class CoreSystemsTopNavBarItem(TopNavBarItem):
-	Priority = 30
-	DisplayName = "Core Systems"
-	Link = "#"
 
-class LightsTopNavBarItem(TopNavBarItem):
-	ParentItem = "Core Systems"
-	Priority = 10
-	DisplayName = "Lights"
-	
-	@property
-	def Link(self):
-		return reverse('Lights')
 
-class AlarmTopNavBarItem(TopNavBarItem):
-	ParentItem = "Core Systems"
-	Priority = 20
-	DisplayName = "Alarm"
-	
-	@property
-	def Link(self):
-		return reverse('Alarm')
 
-class SecurityTopNavBarItem(TopNavBarItem):
-	ParentItem = "Core Systems"
-	Priority = 30
-	DisplayName = "Security"
-	
-	@property
-	def Link(self):
-		return reverse('Security')
 
-class CurtainsTopNavBarItem(TopNavBarItem):
-	ParentItem = "Core Systems"
-	Priority = 40
-	DisplayName = "Curtains"
-	
-	@property
-	def Link(self):
-		return reverse('Curtains')
 
-class TempControlTopNavBarItem(TopNavBarItem):
-	ParentItem = "Core Systems"
-	Priority = 50
-	DisplayName = "Temperature"
-	
-	@property
-	def Link(self):
-		return reverse('TempControl')
 
-class AudioVisualTopNavBarItem(TopNavBarItem):
-	ParentItem = "Core Systems"
-	Priority = 60
-	DisplayName = "Audio/Visual"
-	
-	@property
-	def Link(self):
-		return reverse('AudioVisual')
 
-class FoodTopNavBarItem(TopNavBarItem):
-	Priority = 40
-	DisplayName = "Food"
-	Link = "#"
-
-class MealsTopNavBarItem(TopNavBarItem):
-	ParentItem = "Food"
-	Priority = 20
-	DisplayName = "Meals"
-	
-	@property
-	def Link(self):
-		return reverse('Meals')
-
-class RecipesTopNavBarItem(TopNavBarItem):
-	ParentItem = "Food"
-	Priority = 20
-	DisplayName = "Recipes"
-	
-	@property
-	def Link(self):
-		return reverse('Recipes')
-
-class FridgeTopNavBarItem(TopNavBarItem):
-	ParentItem = "Food"
-	Priority = 20
-	DisplayName = "Fridge"
-	
-	@property
-	def Link(self):
-		return reverse('Fridge')
-
-class NetworkingTopNavBarItem(TopNavBarItem):
-	Priority = 50
-	DisplayName = "Networking"
-	Link = "#"
-
-class ProxmoxTopNavBarItem(TopNavBarItem):
-	ParentItem = "Networking"
-	Priority = 10
-	DisplayName = "Proxmox"
-	
-	@property
-	def Link(self):
-		return reverse('Proxmox')
-
-class DnsAdminTopNavBarItem(TopNavBarItem):
-	ParentItem = "Networking"
-	Priority = 20
-	DisplayName = "Dns Admin"
-	
-	@property
-	def Link(self):
-		return reverse('DnsAdmin')
 	

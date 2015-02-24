@@ -2,7 +2,24 @@ from OctaHomeCore.baseviews import *
 from OctaHomeCore.devicemodels import *
 from models import *
 import json
+from OctaHomeCore.menumodels import *
 
+#Nav Bar Item
+class CoreSystemsTopNavBarItem(TopNavBarItem):
+	Priority = 30
+	DisplayName = "Core Systems"
+	Link = "#"
+
+class LightsTopNavBarItem(TopNavBarItem):
+	ParentItem = "Core Systems"
+	Priority = 10
+	DisplayName = "Lights"
+	
+	@property
+	def Link(self):
+		return reverse('Lights')
+
+#View Object
 class handleLightView(viewRequestHandler):
 	def getViewParameters(self):
 		if self.Page == 'AddLight':

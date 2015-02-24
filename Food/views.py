@@ -1,27 +1,73 @@
-from django.http import HttpResponse, HttpResponseNotFound
-from django.shortcuts import render
-from django.shortcuts import redirect
+from OctaHomeCore.baseviews import *
+from OctaHomeCore.menumodels import *
 
-def RecipesMain(request):
-	if not request.user.is_authenticated():
-		return redirect('/Login?next=%s' % request.path)
-	else:
+#Nav Bar Item
+class FoodTopNavBarItem(TopNavBarItem):
+	Priority = 40
+	DisplayName = "Food"
+	Link = "#"
+
+class MealsTopNavBarItem(TopNavBarItem):
+	ParentItem = "Food"
+	Priority = 20
+	DisplayName = "Meals"
+	
+	@property
+	def Link(self):
+		return reverse('Meals')
+
+class RecipesTopNavBarItem(TopNavBarItem):
+	ParentItem = "Food"
+	Priority = 20
+	DisplayName = "Recipes"
+	
+	@property
+	def Link(self):
+		return reverse('Recipes')
+
+class FridgeTopNavBarItem(TopNavBarItem):
+	ParentItem = "Food"
+	Priority = 20
+	DisplayName = "Fridge"
+	
+	@property
+	def Link(self):
+		return reverse('Fridge')
+
+
+#View Object
+class handleRecipesView(viewRequestHandler):
+	def getViewParameters(self):
 		title = "Under Construction"
 		stuff = "This Page Is Currently Under Construction"
-		return render(request, 'OctaHomeFood/Recipes.html', {'PageAreaTitle':title, 'PageAreaContent': stuff})
+		return {'PageAreaTitle':title, 'PageAreaContent': stuff}
+	
+	def getTemplate(self):
+		return 'OctaHomeFood/Recipes'
+	
+	def getSidebarUrlName(self):
+		return 'Recipes'
 
-def MealsMain(request):
-	if not request.user.is_authenticated():
-		return redirect('/Login?next=%s' % request.path)
-	else:
+class handleMealsView(viewRequestHandler):
+	def getViewParameters(self):
 		title = "Under Construction"
 		stuff = "This Page Is Currently Under Construction"
-		return render(request, 'OctaHomeFood/Meals.html', {'PageAreaTitle':title, 'PageAreaContent': stuff})
+		return {'PageAreaTitle':title, 'PageAreaContent': stuff}
+	
+	def getTemplate(self):
+		return 'OctaHomeFood/Meals'
+	
+	def getSidebarUrlName(self):
+		return 'Meals'
 
-def FridgeMain(request):
-	if not request.user.is_authenticated():
-		return redirect('/Login?next=%s' % request.path)
-	else:
+class handleFridgeView(viewRequestHandler):
+	def getViewParameters(self):
 		title = "Under Construction"
 		stuff = "This Page Is Currently Under Construction"
-		return render(request, 'OctaHomeFood/Meals.html', {'PageAreaTitle':title, 'PageAreaContent': stuff})
+		return {'PageAreaTitle':title, 'PageAreaContent': stuff}
+	
+	def getTemplate(self):
+		return 'OctaHomeFood/Meals'
+	
+	def getSidebarUrlName(self):
+		return 'Fridge'

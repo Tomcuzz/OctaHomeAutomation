@@ -2,9 +2,24 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseNotFound, Http404
 from django.db import connections
 from DnsAdmin.models import *
+from OctaHomeCore.menumodels import *
 
-# Create your views here.
+#Nav Bar Item
+class NetworkingTopNavBarItem(TopNavBarItem):
+	Priority = 50
+	DisplayName = "Networking"
+	Link = "#"
 
+class DnsAdminTopNavBarItem(TopNavBarItem):
+	ParentItem = "Networking"
+	Priority = 20
+	DisplayName = "Dns Admin"
+	
+	@property
+	def Link(self):
+		return reverse('DnsAdmin')
+
+#View Object
 def DnsAdminMain(request):
 	domains = []
 	subLinks = [{'title':'All Domains', 'address': '/DnsAdmin/', 'active': ''}]

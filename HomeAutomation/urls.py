@@ -1,6 +1,14 @@
 from django.conf.urls import patterns, include, url
 from OctaHomeCore.authviews import *
 
+from Alarm.views import *
+from Curtains.views import *
+from TempControl.views import *
+from AudioVisual.views import *
+from Security.views import *
+
+
+
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
 # admin.autodiscover()
@@ -14,6 +22,7 @@ modulePatterns = [
     url(r'^HomeStats/', include('HomeStats.urls')),
 	url(r'^Lights/', include('Lights.urls')),
     url(r'^TempControl/', include('TempControl.urls')),
+    url(r'^Food/', include('Food.urls')),
     url(r'^Proxmox/', 'Proxmox.views.ProxmoxMain', name='Proxmox'),
     url(r'^DnsAdmin/', 'DnsAdmin.views.DnsAdminMain', name='DnsAdmin'),
     url(r'^Settings/', include('Settings.urls')),
@@ -23,9 +32,6 @@ modulePatterns = [
     url(r'^Alarm$', 'Proxmox.views.ProxmoxMain', name='Alarm'),
     url(r'^Curtains$', 'Proxmox.views.ProxmoxMain', name='Curtains'),
     url(r'^AudioVisual$', 'Proxmox.views.ProxmoxMain', name='AudioVisual'),
-    url(r'^Meals$', 'Proxmox.views.ProxmoxMain', name='Meals'),
-    url(r'^Recipes$', 'Proxmox.views.ProxmoxMain', name='Recipes'),
-    url(r'^Fridge$', 'Proxmox.views.ProxmoxMain', name='Fridge'),
     url(r'^DeviceInput$', 'Proxmox.views.ProxmoxMain', name='DeviceInput'),
     url(r'^api$', 'Proxmox.views.ProxmoxMain', name='Api'),
     
