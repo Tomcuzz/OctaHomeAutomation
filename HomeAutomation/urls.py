@@ -1,14 +1,6 @@
 from django.conf.urls import patterns, include, url
 from OctaHomeCore.authviews import *
 
-from Alarm.views import *
-from Curtains.views import *
-from TempControl.views import *
-from AudioVisual.views import *
-from Security.views import *
-
-
-
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
 # admin.autodiscover()
@@ -21,17 +13,17 @@ modulePatterns = [
     
     url(r'^HomeStats/', include('HomeStats.urls')),
 	url(r'^Lights/', include('Lights.urls')),
+    url(r'^Alarm/', include('Alarm.urls')),
+    url(r'^Security/', include('Security.urls')),
+    url(r'^Curtains/', include('Curtains.urls')),
     url(r'^TempControl/', include('TempControl.urls')),
+    url(r'^AudioVisual/', include('AudioVisual.urls')),
     url(r'^Food/', include('Food.urls')),
     url(r'^Proxmox/', 'Proxmox.views.ProxmoxMain', name='Proxmox'),
     url(r'^DnsAdmin/', 'DnsAdmin.views.DnsAdminMain', name='DnsAdmin'),
     url(r'^Settings/', include('Settings.urls')),
     
     #Old Holders
-    url(r'^Security$', 'Proxmox.views.ProxmoxMain', name='Security'),
-    url(r'^Alarm$', 'Proxmox.views.ProxmoxMain', name='Alarm'),
-    url(r'^Curtains$', 'Proxmox.views.ProxmoxMain', name='Curtains'),
-    url(r'^AudioVisual$', 'Proxmox.views.ProxmoxMain', name='AudioVisual'),
     url(r'^DeviceInput$', 'Proxmox.views.ProxmoxMain', name='DeviceInput'),
     url(r'^api$', 'Proxmox.views.ProxmoxMain', name='Api'),
     
