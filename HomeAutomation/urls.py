@@ -9,7 +9,8 @@ modulePatterns = [
     url(r'^Login/', handleLoginView.as_view(), name='Login'),
     url(r'^LogOut/', handleLogOutView.as_view(), name='LogOut'),
     
-    url(r'^Core/', include('OctaHomeCore.urls')),
+    url(r'^Core/', include('OctaHomeCore.coreurls')),
+    url(r'^Device/', include('OctaHomeCore.deviceurls')),
     
     url(r'^HomeStats/', include('HomeStats.urls')),
 	url(r'^Lights/', include('Lights.urls')),

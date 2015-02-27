@@ -134,6 +134,38 @@ class Device(PolymorphicModel):
 		return device
 	
 	@classmethod
+	def getSectionName(cls):
+		return 'All Devices'
+	
+	@classmethod
+	def getSectionSlug(cls):
+		return 'All'
+	
+	@classmethod
+	def getDevicesWithTypeSlug(cls, typeSlug, kwargs={}):
+		objects = []
+		
+		if typeSlug == cls.getSectionSlug():
+			objects.extend(cls.getDevices(kwargs))
+		else:
+			for aClass in cls.__subclasses__():
+				objects.extend(aClass.getDevicesWithTypeSlug(typeSlug, kwargs))
+		
+		return objects
+	
+	@classmethod
+	def getSectionNameForSlug(cls, typeSlug):
+		if typeSlug == cls.getSectionSlug():
+			return cls.getSectionName()
+		else:
+			for aClass in cls.__subclasses__():
+				title = aClass.getSectionNameForSlug(typeSlug)
+				if title != '':
+					return title
+			return ''
+		
+	
+	@classmethod
 	def getClassNames(cls):
 		classNames = []
 		for deviceClass in getNonAbstractSubClasses(cls):
@@ -169,10 +201,6 @@ class Device(PolymorphicModel):
 		if kwargs.has_key('port'):
 			self.Port = int(kwargs['port'])
 		return self
-	
-	@classmethod
-	def getSectionName(cls):
-		return None
 	
 	def getSuperClassNames(self):
 		name = []
