@@ -1,14 +1,11 @@
 from django.conf.urls import patterns, include, url
-from OctaHomeCore.authviews import *
 
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
 # admin.autodiscover()
 
 modulePatterns = [
-    url(r'^Login/', handleLoginView.as_view(), name='Login'),
-    url(r'^LogOut/', handleLogOutView.as_view(), name='LogOut'),
-    
+    url(r'^Auth/', include('OctaHomeCore.authurls')),
     url(r'^Core/', include('OctaHomeCore.coreurls')),
     url(r'^Device/', include('OctaHomeCore.deviceurls')),
     

@@ -1,0 +1,35 @@
+{% extends 'OctaHomeCore/baseWithNavBar.html' %}
+
+{% block title %} Settings - Account {% endblock %}
+
+{% block AccountNavBarActive %} active {% endblock %}
+
+{% block PageArea %}
+	<div class="page-header">
+		<h1>Add Control Device Users</h1>
+	</div>
+	<div>
+		<script>
+			function validateForm() {
+				var name=document.forms["CreateDeviceUserForm"]["name"].value;
+				if (name==null || name=="") {
+					alert("Name must be filled out");
+					return false;
+				}
+			}
+		</script>
+		<form action="{% url 'SettingsPage' page='AddDeviceUsersComplete' %}" method="POST" onsubmit="return validateForm()" name="CreateDeviceUserForm">
+			<fieldset>
+				<input type="hidden" name="csrfmiddlewaretoken" value="{{csrfmiddlewaretoken}}">
+				<label>Name:</label>
+				<input type="text" name="name" class="form-control" style="width: 200px;" placeholder="Event Name..." maxlength="30" required pattern="[^]{3,30}">
+				<br>
+				<button type="submit" class="btn btn-default">Add Control Device User</button>
+			</fieldset>
+		</form>
+		</table>
+	</div>
+{% endblock %}
+
+{% block ExtraJavaScript %}
+{% endblock %}

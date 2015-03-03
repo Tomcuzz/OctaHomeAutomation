@@ -1,0 +1,88 @@
+{% extends 'OctaHomeCore/baseWithNavBar.html' %}
+
+{% block title %} Settings - Account {% endblock %}
+
+{% block AccountNavBarActive %} active {% endblock %}
+
+{% block PageArea %}
+	<div class="page-header">
+		<h1>Control Device Users</h1>
+	</div>
+	<div>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>id</th>
+					<th>Name</th>
+					<th>User</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for device in devices %}
+					<tr>
+						<td>{{ device.id }}</td>
+						<td>{{ device.Name }}</td>
+						<td>{{ device.User.username }}</td>
+						<td>
+							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#reset{{ device.id }}">Reset</button>
+							<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete{{ device.id }}">Delete</button>
+						</td>
+					</tr>
+
+					<!-- ResetModal -->
+					<div class="modal fade" id="reset{{ device.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+									<h4 class="modal-title" id="myModalLabel">Reset Device User</h4>
+								</div>
+						  		<div class="modal-body">
+							  		<p>Warning! This will stop the login of this device and create a new login code. Are you sure you would like to continue?</p>
+								</div>
+						  		<div class="modal-footer">
+							  		<form action="{% url 'SettingsPage' page='ResetDeviceUsers' %}" method="post" style="display: inline-block;">
+							  			<input type="hidden" name="csrfmiddlewaretoken" value="{{csrfmiddlewaretoken}}">
+										<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+										<button class="btn btn-danger" type="submit" name="deviceId" value="{{ device.id }}" style="margin-left:5px;">Reset</button>
+									</form>
+								</div>
+						  	</div>
+						</div>
+					</div>
+					<!-- DeleteModal -->
+					<div class="modal fade" id="delete{{ device.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+									<h4 class="modal-title" id="myModalLabel">Delete Device User</h4>
+								</div>
+						  		<div class="modal-body">
+							  		<p>Warning! This will stop the login of this device and create a new login code. Are you sure you would like to continue?</p>
+								</div>
+						  		<div class="modal-footer">
+						  			<form action="{% url 'SettingsCommand' command='DeleteDeviceUsers' %}" method="post" style="display: inline-block;">
+							  			<input type="hidden" name="csrfmiddlewaretoken" value="{{csrfmiddlewaretoken}}">
+										<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+							  			<button class="btn btn-danger" type="submit" name="deviceId" value="{{ device.id }}" style="margin-left:5px;">Delete</button>
+							  		</form>
+								</div>
+						  	</div>
+						</div>
+					</div>
+				{% endfor %}
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td><a href="{% url 'SettingsPage' page='AddDeviceUsers' %}"><button class="btn btn-primary">+</button></a></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+{% endblock %}
+
+{% block ExtraJavaScript %}
+{% endblock %}

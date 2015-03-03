@@ -53,6 +53,48 @@ class handleLoginView(viewRequestHandler):
 	def isPageSecured(self):
 		return False
 
+class handleDeviceLoginView(viewRequestHandler):
+	def handleRequest(self):
+		if self.Request.user.is_authenticated():
+			return super(handleLoginView, self).handleRequest()
+			
+		if self.Post.has_key('loginToken'):
+			loginItems = self.Post['loginToken'].split(",")
+			if len(loginItems) == 2:
+				device = DeviceUser.objects.get(pk=loginItems[0])
+				if device is not None and device.User is not None and device.checkToken(loginItems[1]):
+					login(self.Request, device.User)
+		
+		return super(handleLoginView, self).handleRequest()
+	
+	def getTemplate(self):
+		if self.Request.user != None and self.Request.user.is_authenticated():
+			if self.Post.has_key('next') and self.Post['next'] != '':
+				self.redirect(self.Post['next'])
+			else:
+				self.redirect(reverse('Home'))
+			return ''
+		return 'OctaHomeCore/pages/Account/Login'
+	
+	def getViewParameters(self):
+		parameters = {}
+		if self.Post.has_key('next'):
+			parameters.update({ 'next':self.Post['next'] })
+		
+		if self.loginToken != '' and self.Post.has_key('username'):
+			parameters.update({ 'username':self.Post['username'], 'logintoken':self.loginToken })
+		
+		return parameters
+	
+	def getSideBar(self):
+		return []
+	
+	def getSidebarUrlName(self):
+		return ''
+	
+	def isPageSecured(self):
+		return False
+
 class handleLogOutView(viewRequestHandler):
 	def handleRequest(self):
 		logout(self.Request)

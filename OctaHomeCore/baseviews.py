@@ -143,7 +143,7 @@ class viewRequestHandler(requestHandler):
 		self.Redirect = path
 	
 	def handleAuthenticationFailue(self):
-		return redirect('/Login?next=%s' % self.Request.path)
+		return redirect(reverse('Login') + '?next=' + self.Request.path)
 	###################
 	# Sidebar Methods #
 	###################

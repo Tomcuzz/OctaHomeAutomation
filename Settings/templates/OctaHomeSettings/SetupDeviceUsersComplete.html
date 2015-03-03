@@ -1,0 +1,30 @@
+{% extends 'OctaHomeCore/baseWithNavBar.html' %}
+
+{% block title %} Settings - Account {% endblock %}
+
+{% block AccountNavBarActive %} active {% endblock %}
+
+{% block PageArea %}
+	<div class="page-header">
+		<h1>{{title}} Control Device Users Complete</h1>
+	</div>
+	<div>
+		{% if deviceToken != "" %}
+			<p>Please Scan Here To Login</p>
+			<div id="tokenqr"></div>
+		{% else %}
+			<p>There Has Been A Problem</p>
+		{% endif %}
+		<br>
+		<a href="{% url 'SettingsPage' page='DeviceUsers' %}"><button class="btn btn-primary">Continue</button></a>
+	</div>
+{% endblock %}
+
+{% block ExtraJavaScript %}
+<script type="text/javascript" src="{{STATIC_URL}}js/jquery.qrcode.min.js"></script>
+<script>
+	if ("{{deviceToken}}" != ""){
+		$('#tokenqr').qrcode({width: 170,height: 170,text: "{{deviceToken}}"});
+	}
+</script>
+{% endblock %}
