@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from OctaHomeCore.baseviews import *
 from OctaHomeCore.models import *
+from django.views.decorators.csrf import csrf_exempt
 
 class handleLoginView(viewRequestHandler):
 	loginToken = ''
@@ -54,6 +55,10 @@ class handleLoginView(viewRequestHandler):
 		return False
 
 class handleDeviceLoginView(viewRequestHandler):
+	@csrf_exempt
+	def post(self, request, *args, **kwargs):
+		return super(handleLoginView, self).post(self, request, *args, **kwargs)
+		
 	def handleRequest(self):
 		if self.Request.user.is_authenticated():
 			return super(handleLoginView, self).handleRequest()
