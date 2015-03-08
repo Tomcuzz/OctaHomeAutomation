@@ -48,9 +48,9 @@ class handleSettingsView(viewRequestHandler):
 			if self.Post.has_key('name'):
 				device = DeviceUser.objects.create(Name=self.Post['name'], User=self.Request.user)
 				if self.Request.is_secure():
-					host = 'https://' + self.Request.get_host()
+					host = 'https://' + self.Request.get_host() + "/"
 				else:
-					host = 'http://' + self.Request.get_host()
+					host = 'http://' + self.Request.get_host() + "/"
 				parameters = {'title':'Add', 'deviceToken':device.createDeviceSetupToken(host)}
 		elif self.Page == 'ResetDeviceUsers':
 			if self.Post.has_key('deviceId') and self.Post['deviceId'] != '':
