@@ -6,6 +6,7 @@ from django.conf.urls import patterns, include, url
 
 modulePatterns = [
     url(r'^Auth/', include('OctaHomeCore.authurls')),
+    url(r'^App/', include('OctaHomeAppInterface.urls')),
     url(r'^Core/', include('OctaHomeCore.coreurls')),
     url(r'^Device/', include('OctaHomeCore.deviceurls')),
     

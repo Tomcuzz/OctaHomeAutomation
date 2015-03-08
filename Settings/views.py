@@ -6,6 +6,7 @@ from OctaHomeCore.menumodels import *
 from OctaHomeCore.weathermodels import *
 from OctaHomeCore.helpers import *
 from OctaHomeCore.authmodels import *
+from OctaHomeAppInterface.models import *
 
 class SettingsTopNavBarItem(TopNavBarItem):
 	Priority = 90
@@ -46,7 +47,11 @@ class handleSettingsView(viewRequestHandler):
 		elif self.Page == 'AddDeviceUsersComplete':
 			if self.Post.has_key('name'):
 				device = DeviceUser.objects.create(Name=self.Post['name'], User=self.Request.user)
-				parameters = {'title':'Add', 'deviceToken':device.createDeviceSetupToken()}
+				if self.Request.is_secure():
+					host = 'https://' + self.Request.get_host()
+				else:
+					host = 'http://' + self.Request.get_host()
+				parameters = {'title':'Add', 'deviceToken':device.createDeviceSetupToken(host)}
 		elif self.Page == 'ResetDeviceUsers':
 			if self.Post.has_key('deviceId') and self.Post['deviceId'] != '':
 				device = DeviceUser.objects.get(pk=self.Post['deviceId'])

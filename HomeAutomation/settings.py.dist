@@ -147,6 +147,7 @@ INSTALLED_APPS = (
     'polymorphic',
     #My Pages
     'OctaHomeCore',
+    'OctaHomeAppInterface',
     'Settings',
     'Home',
     'HomeStats',

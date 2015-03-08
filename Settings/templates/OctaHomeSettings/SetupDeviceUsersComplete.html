@@ -23,8 +23,8 @@
 {% block ExtraJavaScript %}
 <script type="text/javascript" src="{{STATIC_URL}}js/jquery.qrcode.min.js"></script>
 <script>
-	if ("{{deviceToken}}" != ""){
-		$('#tokenqr').qrcode({width: 170,height: 170,text: "{{deviceToken}}"});
+	if ('{{deviceToken|escape|safe}}' != ""){
+		$('#tokenqr').qrcode({width: 170,height: 170,text: '{{deviceToken|escape|safe}}'});
 	}
 </script>
 {% endblock %}
