@@ -1,6 +1,7 @@
 from django.contrib.auth import login
 from OctaHomeCore.baseviews import *
 from OctaHomeCore.models import *
+from models import *
 
 class handleDeviceLoginView(viewRequestHandler):
 	def handleRequest(self):
