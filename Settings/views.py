@@ -1,4 +1,5 @@
 from django.conf import settings
+import json
 
 from OctaHomeCore.baseviews import *
 from OctaHomeCore.models import *
@@ -51,12 +52,18 @@ class handleSettingsView(viewRequestHandler):
 					host = 'https://' + self.Request.get_host() + "/"
 				else:
 					host = 'http://' + self.Request.get_host() + "/"
-				parameters = {'title':'Add', 'deviceToken':device.createDeviceSetupToken(host)}
+				items = device.createDeviceSetupToken(host)
+				parameters = {'title':'Add', 'credentials':items, 'deviceToken':json.dumps(items)}
 		elif self.Page == 'ResetDeviceUsers':
 			if self.Post.has_key('deviceId') and self.Post['deviceId'] != '':
 				device = DeviceUser.objects.get(pk=self.Post['deviceId'])
 				if device.User == self.Request.user or self.Request.user.is_superuser:
-					parameters = {'title':'Reset', 'deviceToken':device.createDeviceSetupToken()}
+					if self.Request.is_secure():
+						host = 'https://' + self.Request.get_host() + "/"
+					else:
+						host = 'http://' + self.Request.get_host() + "/"
+					items = device.createDeviceSetupToken(host)
+					parameters = {'title':'Reset', 'credentials':items, 'deviceToken':json.dumps(items)}
 				else:
 					parameters = {'title':'Reset'}
 		

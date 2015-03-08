@@ -8,7 +8,6 @@ import string
 import random
 import hashlib
 import time
-import json
 
 from authy.api import AuthyApiClient
 
@@ -22,7 +21,7 @@ class DeviceUser(OctaBaseModel):
 	def createDeviceSetupToken(self, host):
 		self.Secret = ''.join(random.choice(string.ascii_uppercase) for i in range(30))
 		self.save()
-		return json.dumps({"host":host, "user":self.id, "password":self.Secret })
+		return {"host":host, "user":self.id, "password":self.Secret }
 	
 	def checkToken(self, token):
 		salt = time.strftime("%H:%M-%d/%m/%Y")
