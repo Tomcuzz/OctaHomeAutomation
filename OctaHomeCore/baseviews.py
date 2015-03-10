@@ -6,6 +6,7 @@ from django.middleware.csrf import get_token
 from models import *
 from OctaHomeCore.locationmodels import *
 import django.core.serializers
+import json
 
 class requestHandler(View):
 	Request = {}
@@ -199,7 +200,7 @@ class commandRequestHandler(requestHandler):
 	def commandNeeded(self):
 		return True
 	
-	def runCommand(self, command):
+	def runCommand(self):
 		pass
 	
 	#Subclass methods
@@ -223,7 +224,10 @@ class commandRequestHandler(requestHandler):
 		return HttpResponse(result)
 	
 	def returnJSONResult(self, result):
-		return HttpResponse(django.core.serializers.serialize('json', result), content_type="application/json")
+		try:
+			return HttpResponse(django.core.serializers.serialize('json', result), content_type="application/json")
+		except Exception as e:
+			return HttpResponse(json.dumps(result), content_type="application/json")
 	
 	def redirect(self, path):
 		return redirect(path)

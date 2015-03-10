@@ -2,6 +2,7 @@ from django.contrib.auth import login
 from OctaHomeCore.baseviews import *
 from OctaHomeCore.models import *
 from models import *
+import json
 
 class handleDeviceLoginCommand(commandRequestHandler):
 	def runCommand(self):
