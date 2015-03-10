@@ -2,5 +2,5 @@ from django.conf.urls import url
 from views import *
 
 urlpatterns = [
-    url(r'^Auth/', handleDeviceLoginView.as_view(), name='DeviceLogin')
+	url(r'^Auth/(?P<command>\w+)/$', handleDeviceLoginCommand.as_view(), name='DeviceLogin')
 ]
