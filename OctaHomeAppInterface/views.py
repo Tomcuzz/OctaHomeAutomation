@@ -1,10 +1,13 @@
-from django.contrib.auth import login
+from django.contrib.auth import authenticate, login
 from OctaHomeCore.baseviews import *
 from OctaHomeCore.models import *
 from models import *
 import json
 
 class handleDeviceLoginCommand(commandRequestHandler):
+	def isPageSecured(self):
+		return False
+	
 	def runCommand(self):
 		if self.Command == 'Login':
 			if self.Post.has_key('loginToken'):
@@ -29,10 +32,35 @@ class handleDeviceLoginCommand(commandRequestHandler):
 					for device in devices:
 						returnDevices.append({'id':device.id, 'name':device.Name})
 					return self.returnJSONResult({ 'status':'ok', 'error':'None', 'devices':returnDevices })
-				elif user is not None:
+				else:
 					return self.returnJSONResult({ 'status':'error', 'error':'LoginFail' })
 			else:
 				return self.returnJSONResult({ 'status':'error', 'error':'NoCredentials' })
+		
+		
+		elif self.Command == 'NewDeviceForUser':
+			if self.Post.has_key('username') and self.Post.has_key('password') and (self.Post.has_key('deviceId') or self.Post.has_key('deviceName')):
+				user = authenticate(username=self.Post['username'], password=self.Post['password'])
+				if user is not None:
+					if self.Post.has_key('deviceId'):
+						device = DeviceUser.objects.get(pk=self.Post['deviceId'])
+					else:
+						device = DeviceUser.objects.create(Name=self.Post['name'], User=self.Request.user)
+					
+					if device.User == user or user.is_superuser:
+						if self.Request.is_secure():
+							host = 'https://' + self.Request.get_host() + "/"
+						else:
+							host = 'http://' + self.Request.get_host() + "/"
+						items = device.createDeviceSetupToken(host)
+						return self.returnJSONResult({ 'status':'ok', 'error':'None', 'host':items['host'], 'user':items['user'], 'password':items['password']})
+					else:
+						return self.returnJSONResult({ 'status':'error', 'error':'LoginFail' })
+				else:
+					return self.returnJSONResult({ 'status':'error', 'error':'LoginFail' })
+			else:
+				return self.returnJSONResult({ 'status':'error', 'error':'NoCredentials' })
+		
 		
 		else:
 			return self.returnJSONResult({ 'status':'error', 'error':'CommandNotFound' })
