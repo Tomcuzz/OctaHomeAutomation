@@ -148,7 +148,6 @@ INSTALLED_APPS = (
     #My Pages
     'OctaHomeCore',
     'OctaHomeAppInterface',
-    'Settings',
     'Home',
     'HomeStats',
     'Lights',

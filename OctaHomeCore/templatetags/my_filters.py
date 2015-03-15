@@ -1,7 +1,7 @@
 from django import template
 from django.template import RequestContext 
 from OctaHomeCore.menumodels import *
-from django.shortcuts import render_to_response
+from django.template.loader import render_to_string
 
 register = template.Library()
 
@@ -30,4 +30,4 @@ def get_menu_with_name(context, name):
 	menuClass = Menu.getMenuForName(name)
 	menu = menuClass()
 	items = menu.buildMenu()
-	return render_to_response(menu.ViewPartial, {'Items':items}, context_instance = RequestContext(request))
+	return render_to_string(menu.ViewPartial, {'Items':items}, RequestContext(request))

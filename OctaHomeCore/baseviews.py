@@ -8,6 +8,29 @@ from OctaHomeCore.locationmodels import *
 import django.core.serializers
 import json
 
+class NamedSubclassableView(object):
+	Name = ""
+	
+	@classmethod
+	def getObjectForName(cls, className):
+		for aClass in cls.__subclasses__():
+			if aClass.Name == className:
+				return aClass
+			else:
+				toCheck = aClass.getObjectSubclassesForName(className)
+				if toCheck is not None:
+					return toCheck
+	
+	@classmethod
+	def getObjectSubclassesForName(cls, className):
+		for aClass in cls.__subclasses__():
+			if aClass.Name == className:
+				return aClass
+			else:
+				toCheck = aClass.getObjectSubclassesForName(className)
+				if toCheck is not None:
+					return toCheck
+
 class requestHandler(View):
 	Request = {}
 	Get = {}
@@ -131,7 +154,7 @@ class viewRequestHandler(requestHandler):
 		if self.Redirect != '':
 			return redirect(self.Redirect)
 		elif self.template != '':
-			standardParams = {'csrfmiddlewaretoken':get_token(self.Request), 'room':self.Request.GET.get('room', 'All'), 'links': self.getSideBar()}
+			standardParams = {'csrfmiddlewaretoken':get_token(self.Request), 'room':self.Request.GET.get('room', 'All'), 'sideBarName': self.getSideBarName()}
 			standardParams.update(parameters)
 			if contentType == None:
 				return render(self.Request, self.template, standardParams)
@@ -148,6 +171,9 @@ class viewRequestHandler(requestHandler):
 	###################
 	# Sidebar Methods #
 	###################
+	def getSideBarName(self):
+		return ""
+	
 	def getSideBar(self):
 		currentRoom = self.getCurrentRoom()
 		currentHouse = self.getCurrentHome()

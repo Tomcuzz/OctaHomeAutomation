@@ -14,7 +14,7 @@ class Menu(object):
 		
 		for aMenuItem in allMenuItems:
 			aMenuItemInst = aMenuItem()
-			if aMenuItemInst.MenuName == self.Name and aMenuItemInst.isShown() and aMenuItemInst.DisplayName not in menuItemNames:
+			if aMenuItemInst.MenuName == self.Name and aMenuItemInst.isShown() and aMenuItemInst.DisplayName not in menuItemNames and aMenuItemInst.DisplayName != "":
 				menuItems.append(aMenuItemInst)
 				menuItemNames.append(aMenuItemInst.DisplayName)
 		
@@ -36,14 +36,18 @@ class Menu(object):
 			if aMenu.Name == menuName:
 				return aMenu
 			else:
-				return aMenu.getMenuSubclassesForName(menuName)
+				toCheck = aMenu.getMenuSubclassesForName(menuName)
+				if toCheck != None:
+					return toCheck
 	@classmethod
 	def getMenuSubclassesForName(cls, menuName):
 		for aMenu in cls.__subclasses__():
 			if aMenu.Name == menuName:
 				return menuName
 			else:
-				return aMenu.getMenuSubclassesForName(menuName)
+				toCheck = aMenu.getMenuSubclassesForName(menuName)
+				if toCheck != None:
+					return toCheck
 
 class TopNavBar(Menu):
 	Name = "TopNavBar"
@@ -62,8 +66,19 @@ class MenuItem(object):
 	def Link(self):
 		return ""
 	
+	@property
+	def OnClickLink(self):
+		return ""
+	
+	@property
+	def LinkId(self):
+		return ""
+	
 	def isShown(self):
 		return True
+	
+	def isActive(self):
+		return False
 	
 	def buildItemWithMenuItems(self, items):
 		subItems = []

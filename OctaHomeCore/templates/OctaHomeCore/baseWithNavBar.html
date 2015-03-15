@@ -1,46 +1,15 @@
 {% extends 'OctaHomeCore/base.html' %}
+{% load my_filters %}
 
 {% block PageContent %}
 	<!-- Docs nav
 	================================================== -->
 	<div class="col-md-3 bs-docs-sidebar">
-		<div class="bs-sidebar" role="complementary">
-			<ul class="nav bs-sidenav">
-				{% block NavBarItems %}
-					{% for link in links %}
-						<li class="{{link.active}}">
-							<a	{% if link.address %}
-									href="{{link.address}}"
-								{% endif %}
-								{% if link.onclick %}
-									onClick="{{link.onclick}}"
-								{% endif %}
-								{% if link.id %}
-									id="{{link.id}}"
-								{% endif %}
-								>{{link.title}}</a>
-							{% if link.sublinks %}
-								<ul class="nav">
-									{% for sublink in link.sublinks %}
-										<li class="{{sublink.active}}">
-											<a href="{% if sublink.address %} {{sublink.address}} {% else %} javascript:{{sublink.onclick}}; {% endif %} " {% if sublink.onclick %}onClick="{{sublink.onclick}}"{% endif %}>{{sublink.title}}</a>
-											{% if sublink.sublinks %}
-												<ul class="nav">
-												{% for subsublink in sublink.sublinks %}
-													<li class="{{subsublink.active}}"><a href="{% if subsublink.address %} {{subsublink.address}} {% else %} javascript:{{subsublink.onclick}}; {% endif %} " {% if subsublink.onclick %}onClick="{{subsublink.onclick}}"{% endif %}>{{subsublink.title}}</a>
-													</li>
-												{% endfor %}
-												</ul>
-											{% endif %}
-										</li>
-									{% endfor %}
-								</ul>
-							{% endif %}
-						</li>
-					{% endfor %}
-				{% endblock %}
-			</ul>
-		</div>
+		{% block NavBarItems %}
+			{% if sideBarName and sideBarName != "" %}
+				{% get_menu_with_name sideBarName %}
+			{% endif %}
+		{% endblock %}
 	</div>
 	<div class="col-md-9 pageArea">
 		<!-- Page Content

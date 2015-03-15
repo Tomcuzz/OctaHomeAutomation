@@ -1,6 +1,6 @@
 from django.conf.urls import url
-from views import *
 from settingviews import *
+from inputoutputviews import *
 
 urlpatterns = [
 	url(r'^command/(?P<command>\w+)/$', handleSettingsCommand.as_view(), name='SettingsCommand'),

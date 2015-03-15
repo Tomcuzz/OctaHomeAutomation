@@ -1,0 +1,8 @@
+{# Expects Verables ['Items'] #}
+<div class="bs-sidebar" role="complementary">
+	<ul class="nav bs-sidenav">
+		{% for item in Items %}
+			{% include item.item.ViewPartial with Item=item %}
+		{% endfor %}
+	</ul>
+</div>

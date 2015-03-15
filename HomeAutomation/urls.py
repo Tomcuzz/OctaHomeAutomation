@@ -20,7 +20,7 @@ modulePatterns = [
     url(r'^Food/', include('Food.urls')),
     url(r'^Proxmox/', 'Proxmox.views.ProxmoxMain', name='Proxmox'),
     url(r'^DnsAdmin/', 'DnsAdmin.views.DnsAdminMain', name='DnsAdmin'),
-    url(r'^Settings/', include('Settings.urls')),
+    url(r'^Settings/', include('OctaHomeCore.settingsurls')),
     
     #Old Holders
     url(r'^DeviceInput$', 'Proxmox.views.ProxmoxMain', name='DeviceInput'),
