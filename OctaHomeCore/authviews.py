@@ -2,7 +2,7 @@ from django.contrib.auth import authenticate, login, logout
 from OctaHomeCore.baseviews import *
 from OctaHomeCore.models import *
 from OctaHomeCore.menumodels import *
-from Settings.settingviews import *
+from OctaHomeCore.settingviews import *
 
 class handleLoginView(viewRequestHandler):
 	loginToken = ''
