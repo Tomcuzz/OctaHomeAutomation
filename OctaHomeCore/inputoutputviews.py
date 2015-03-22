@@ -1,5 +1,5 @@
 from OctaHomeCore.menumodels import *
-from Settings.settingviews import *
+from OctaHomeCore.settingviews import *
 
 class EventsSettingsNavBarItem(SettingsSideNavBarItem):
 	Priority = 20
