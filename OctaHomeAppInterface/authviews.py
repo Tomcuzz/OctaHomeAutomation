@@ -2,7 +2,7 @@ from django.contrib.auth import authenticate, login
 from OctaHomeCore.baseviews import *
 from OctaHomeCore.models import *
 from OctaHomeCore.menumodels import *
-from Settings.settingviews import *
+from OctaHomeCore.settingviews import *
 from models import *
 import json
 
