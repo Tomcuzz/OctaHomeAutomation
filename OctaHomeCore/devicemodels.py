@@ -55,7 +55,7 @@ class Device(PolymorphicModel):
 			return False
 	
 	def getState(self):
-		return {"Name":self.Name, "Rooms":self.getRoomIds(), "IsOn":{"DisplayName":"On/Off", "Type":"Bool", "value":self.IsOn}, "IpAddress":self.IpAddress, "Port":self.Port}
+		return {"Id":self.id, "Name":self.Name, "Type":self.__class__.__name__, "Rooms":self.getRoomIds(), "IsOn":{"DisplayName":"On/Off", "Type":"Bool", "value":self.IsOn}}
 	
 	def setName(self, name):
 		self.Name = name

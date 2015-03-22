@@ -104,7 +104,7 @@ class RGBLight(LightDevice):
 			return "None"
 	
 	def setIsOn(self, setOn):
-		if setOn == 'On':
+		if setOn == 'True':
 			if self.R != 0 and self.G != 0 and self.B != 0:
 				self.setRGB(self.R, self.G, self.B)
 			else:
