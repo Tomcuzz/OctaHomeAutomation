@@ -31,6 +31,14 @@ class LightDevice(OutputDevice):
 		result.extend(["OctaHomeLights/_LightJs.html"])
 		return 	result
 	
+	@classmethod
+	def getSectionName(cls):
+		return 'Lights'
+	
+	@classmethod
+	def getSectionSlug(cls):
+		return 'Lights'
+	
 	########
 	# Meta #
 	########

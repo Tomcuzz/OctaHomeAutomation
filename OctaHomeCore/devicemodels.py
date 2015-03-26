@@ -2,25 +2,26 @@ from django.db import models
 from polymorphic import PolymorphicModel
 from OctaHomeCore.locationmodels import *
 from OctaHomeCore.messagemodels import *
+from OctaHomeCore.basemodels import *
 from helpers import *
+
+class DeviceGroup(OctaBaseModel):
+	Devices = models.ManyToManyField('Device', blank=True, null=True)
+	
+	########
+	# Meta #
+	########
+	class Meta:
+		db_table = u'DeviceGroups'
+
 
 ################
 # Device Types #
 ################
-class Device(PolymorphicModel):
-	######################
-	# Display Parameters #
-	######################
-	ViewPartial = ''
-	
-	@property
-	def JsPartials(self):
-		return ['']
-	
+class Device(OctaSubclassableModel):
 	##############
 	# Parameters #
 	##############
-	Name = models.CharField(max_length=30)
 	Rooms = models.ManyToManyField('Room', blank=True, null=True, related_name="%(app_label)s_%(class)s_Devices")
 	IsOn = models.BooleanField(default=False)
 	Logs = models.ManyToManyField('LogItem', blank=True, null=True, related_name="%(app_label)s_%(class)s_Devices")
@@ -55,7 +56,7 @@ class Device(PolymorphicModel):
 			return False
 	
 	def getState(self):
-		return {"Id":self.id, "Name":self.Name, "Type":self.__class__.__name__, "Rooms":self.getRoomIds(), "IsOn":{"DisplayName":"On/Off", "Type":"Bool", "value":self.IsOn}}
+		return {"Id":self.id, "Name":self.Name, "Type":self.__class__.__name__, "Sections":self.__class__.getSectionNameArray(), "Rooms":self.getRoomIds(), "IsOn":{"DisplayName":"On/Off", "Type":"Bool", "value":self.IsOn}}
 	
 	def setName(self, name):
 		self.Name = name
@@ -136,6 +137,25 @@ class Device(PolymorphicModel):
 	@classmethod
 	def getSectionName(cls):
 		return 'All Devices'
+	
+	@classmethod
+	def getSuperClasses(cls):
+		c = list(cls.__bases__)
+		for base in c:
+			if base.__name__ == 'Device':
+				break
+			c.extend(base.getSuperClasses())
+		return c
+	
+	@classmethod
+	def getSectionNameArray(cls):
+		nameArray = []
+		for aClass in cls.getSuperClasses():
+			if aClass.getSectionName() not in nameArray:
+				nameArray.append(aClass.getSectionName())
+			if aClass.getSectionName() == 'All Devices':
+				break
+		return nameArray
 	
 	@classmethod
 	def getSectionSlug(cls):

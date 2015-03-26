@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from authviews import *
-from deviceviews import *
+from mainviews import *
 
 urlpatterns = [
 	url(r'^Auth/(?P<command>\w+)/$', handleDeviceLoginCommand.as_view(), name='DeviceLogin'),
