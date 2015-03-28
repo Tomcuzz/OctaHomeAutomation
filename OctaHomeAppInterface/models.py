@@ -26,7 +26,6 @@ class DeviceUser(OctaBaseModel):
 	def checkToken(self, token):
 		salt = time.strftime("%H:%M-%d/%m/%Y")
 		hashpassword = hashlib.sha512(self.Secret.encode('utf-8') + salt.encode('utf-8')).hexdigest().upper()
-		
 		if (hashpassword == token):
 			return True
 		else:

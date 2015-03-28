@@ -5,6 +5,42 @@ from OctaHomeCore.menumodels import *
 from OctaHomeCore.settingviews import *
 from models import *
 import json
+import base64
+
+class appSecrityClass(object):
+	def securityFails(self, request):
+		if 'HTTP_AUTHORIZATION' in request.META:
+			auth = request.META['HTTP_AUTHORIZATION'].split()
+			if len(auth) == 2:
+				if auth[0].lower() == "basic":
+					uname, passwd = base64.b64decode(auth[1]).split(':')
+					device = DeviceUser.objects.get(pk=int(uname))
+					if device is not None and device.User is not None and device.checkToken(passwd):
+						device.User.backend = 'django.contrib.auth.backends.ModelBackend'
+						login(request, device.User)
+						return False
+		return True
+	
+	def handleAuthenticationFailue(self):
+		response = HttpResponse()
+		response.status_code = 401
+		response['WWW-Authenticate'] = 'Basic realm=""'
+		return response
+
+class handleBaseAppCommand(commandRequestHandler):
+	def securityFails(self):
+		if self.isSecuredArea:
+			if not self.isUserAuthenticated:
+				return appSecrityClass().securityFails(self.Request)
+			else:
+				return False
+		else:
+			return False
+	
+	def handleAuthenticationFailue(self):
+		return appSecrityClass().handleAuthenticationFailue()
+	
+
 
 class handleDeviceLoginCommand(commandRequestHandler):
 	def isPageSecured(self):
