@@ -24,7 +24,7 @@ class appSecrityClass(object):
 	def handleAuthenticationFailue(self):
 		response = HttpResponse()
 		response.status_code = 401
-		response['WWW-Authenticate'] = 'Basic realm=""'
+		response['WWW-Authenticate'] = 'Basic realm=OctaHome'
 		return response
 
 class handleBaseAppCommand(commandRequestHandler):
