@@ -3,7 +3,17 @@
 <tr>
 	<td>{{alight.id}}</td>
 	<td>{{alight.Name | replaceUnderscores}}</td>
-	<td>{{alight.Room.Name | replaceUnderscores}}</td>
+	<td>
+		{% if alight.Rooms.all|length > 0 %}
+		<ul style="padding-left: 20px;">
+			{% for room in alight.Rooms.all %}
+				<li>{{ room.Name }}</li>
+			{% endfor %}
+		</ul>
+		{% else %}
+			None
+		{% endif %}
+	</td>
 	<td>
 		<p class="text-danger">R= 
 		<s id="rgbR{{alight.id}}" name="light{{alight.id}}{{alight|getClassName}}Red" data-type="text" data-pk="1" data-url="{% url 'SingleDeviceCommand' command='setR' deviceType=alight|getClassName deviceId=alight.id %}" data-original-title="Set Red Level">{{alight.getDisplayR}}</s>, </p>
