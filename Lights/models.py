@@ -53,6 +53,7 @@ class RGBLight(LightDevice):
 	##############
 	# Parameters #
 	##############
+	Colour = models.ColourField()
 	R = models.IntegerField(default=0)
 	G = models.IntegerField(default=0)
 	B = models.IntegerField(default=0)
@@ -63,7 +64,7 @@ class RGBLight(LightDevice):
 	#################
 	def listActions(self):
 		result = super(RGBLight, self).listActions()
-		result.extend(["setRGB", "setR", "setG", "setB", "setScroll"])
+		result.extend(["setColour", "setRGB", "setR", "setG", "setB", "setScroll"])
 		return result
 	
 	def	handleAction(self, action, parameters):
@@ -88,6 +89,7 @@ class RGBLight(LightDevice):
 	
 	def getState(self):
 		result = super(RGBLight, self).getState()
+		result.update({"Colour":{"DisplayName":"Colour", "Type":"Colour", "value":self.Colour}})
 		result.update({"R":{"DisplayName":"Red Level", "Type":"Int", "MinValue":0, "MaxValue":255, "value":self.R}})
 		result.update({"G":{"DisplayName":"Green Level", "Type":"Int", "MinValue":0, "MaxValue":255, "value":self.G}})
 		result.update({"B":{"DisplayName":"Blue Level", "Type":"Int", "MinValue":0, "MaxValue":255, "value":self.B}})
@@ -118,6 +120,10 @@ class RGBLight(LightDevice):
 			self.save()
 			return True
 		
+	
+	def setColour(self, colour):
+		self.Colour = colour
+	
 	def setR(self, r):
 		if self.checkColourInt(r):
 			return self.setRGB(r, self.G, self.B)
