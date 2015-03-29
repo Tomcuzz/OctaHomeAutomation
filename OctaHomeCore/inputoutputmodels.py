@@ -1,16 +1,15 @@
 from django.db import models
-from polymorphic import PolymorphicModel
-from OctaHomeCore.devicemodels import *
+from OctaHomeCore.models import *
+from basemodels import *
 import json
 
 ################
 # Input/Output #
 ################
-class TriggerEvent(PolymorphicModel):
+class TriggerEvent(OctaBaseModel):
 	##############
 	# Parameters #
 	##############
-	Name = models.CharField(max_length=30)
 	ActionGroups = models.ManyToManyField('ActionGroup', related_name="TriggerEvents")
 	
 	##################
@@ -27,11 +26,10 @@ class TriggerEvent(PolymorphicModel):
 		db_table = 'TriggerEvents'
 
 
-class ActionGroup(PolymorphicModel):
+class ActionGroup(OctaBaseModel):
 	##############
 	# Parameters #
 	##############
-	Name = models.CharField(max_length=30)
 	AGCondition = models.ManyToManyField('AGCondition', related_name="ActionGroups")
 	Actions = models.ManyToManyField('Action', related_name="ActionGroups")
 	
@@ -60,21 +58,7 @@ class ActionGroup(PolymorphicModel):
 		db_table = 'ActionGroup'
 
 
-class AGCondition(PolymorphicModel):
-	##############
-	# Parameters #
-	##############
-	Name = models.CharField(max_length=30)
-	
-	######################
-	# Display Parameters #
-	######################
-	ViewPartial = ''
-	
-	@property
-	def JsPartials(self):
-		return ['']
-	
+class AGCondition(OctaSubclassableModel):
 	##################
 	# Object Methods #
 	##################
@@ -110,25 +94,12 @@ class DeviceOnOffAGCondition(AGCondition):
 	class Meta:
 		db_table = 'DeviceOnOffAGCondition'
 
-class Action(PolymorphicModel):
+class Action(OctaSubclassableModel):
 	##############
 	# Parameters #
 	##############
-	Name = models.CharField(max_length=30)
-	TypeName = "Base Action"
 	Parameters = models.TextField()
 	RunIsAsync = models.BooleanField(default=False)
-	
-	######################
-	# Display Parameters #
-	######################
-	ViewPartial = ''
-	@property
-	def JsPartials(self):
-		return ['']
-	@property
-	def AdditionPartials(self):
-		return ['']
 	
 	##############################
 	# Parameters Getters/Setters #
@@ -138,9 +109,6 @@ class Action(PolymorphicModel):
 	def setParameters(self, array):
 		self.parameters = json.dumps(array)
 	
-	##################
-	# Object Methods #
-	##################
 	def run(self, currentRunType = False):
 		if self.RunIsAsync == False or self.RunIsAsync == currentRunType:
 			self.runSynchronously()
@@ -166,11 +134,28 @@ class DeviceAction(Action):
 	# Parameters #
 	##############
 	Devices = models.ManyToManyField('Device')
-	TypeName = "Device Action"
+	
+	######################
+	# Display Parameters #
+	######################
+	@classmethod
+	def getTypeName(cls):
+		return "Device Action"
+	
+	UserCreatable = False
 	
 	##################
 	# Object Methods #
 	##################
+	def setUp(self, kwargs={}):
+		super(self, DeviceAction).setUp()
+		if kwargs.has_key('deviceIds'):
+			for deviceId in kwargs['Name'].split(','):
+				device = Device.objects.get(pk=deviceId)
+				if device != None:
+					self.Devices.add(device)
+		
+	
 	def runSynchronously(self):
 		for device in self.Devices:
 			functionName = self.getParameters()[device.Name]['name']
@@ -186,3 +171,36 @@ class DeviceAction(Action):
 	########
 	class Meta:
 		db_table = u'DeviceActions'
+
+class OnOffDeviceAction(DeviceAction):
+	
+	UserCreatable = True
+	
+	##############
+	# Parameters #
+	##############
+	ON = 0
+	OFF = 1
+	TOGGLE = 2
+	SET_STATES = (
+		(ON, 'On'),
+		(OFF, 'Off'),
+		(TOGGLE, 'Toggle'),
+	)
+	SetState = models.PositiveIntegerField(max_length=2, choices=SET_STATES, default=OFF)
+	
+	def runSynchronously(self):
+		for device in self.Devices:
+			if self.SetState == self.ON:
+				device.setIsOn('On')
+			elif self.SetState == self.TOGGLE:
+				device.setIsOn('Toggle')
+			else:
+				device.setIsOn('Off')
+	
+	########
+	# Meta #
+	########
+	class Meta:
+		db_table = u'OnOffDeviceActions'
+	

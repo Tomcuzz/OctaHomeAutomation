@@ -8,7 +8,7 @@ import time
 import datetime
 from dateutil.relativedelta import *
 from subprocess import call
-from SharedFunctions.deviceControl import *
+#from SharedFunctions.deviceControl import *
 
 
 @task

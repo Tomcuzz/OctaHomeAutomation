@@ -1,0 +1,63 @@
+{% extends 'OctaHomeCore/base.html' %}
+
+{% load my_filters %}
+
+{% block title %} Add Device {% endblock %}
+
+{% block AccountNavBarActive %} active {% endblock %}
+
+{% block PageArea %}
+	<div class="page-header">
+		<h1>Add Device</h1>
+	</div>
+	<script>
+		function validateForm() {
+			var name=document.forms["CreateActionForm"]["name"].value;
+			if (name==null || name=="") {
+				alert("Name must be filled out");
+				return false;
+			}
+		}
+	</script>
+		<form action="{% url 'SettingsCommand' command='addActionComplete' %}" method="POST" onsubmit="return validateForm()" name="CreateActionForm">
+			<fieldset>
+				<input type="hidden" name="csrfmiddlewaretoken" value="{{csrfmiddlewaretoken}}">
+				<label>Name:</label>
+				<input type="text" name="name" class="form-control" style="width: 200px;" placeholder="Event Name..." maxlength="30" required pattern="[^]{3,30}">
+				<br>
+				<label>Action Type:</label>
+				<select name="type" class="form-control" style="max-width: 200px;" id="type">
+					{% for type in types %}
+						{% if type.UserCreatable %}
+							<option value="{{ type|getClassName }}">{{ type.getTypeName }}</option>
+						{% endif %}
+					{% endfor %}
+				</select>
+				{% for type in types %}
+					<div class="typeSection" id="{{ type|getClassName }}Section" style="display: none;">
+						{% for template in type.AdditionPartials %}
+							{% if type.UserCreatable %}
+								{% include template %}
+							{% endif %}
+						{% endfor %}
+					</div>
+				{% endfor %}
+				<br>
+				<br>
+				<button type="submit" class="btn btn-default">Add Action</button>
+			</fieldset>
+		</form>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				var typeSelectBox = '#type';
+				$(typeSelectBox).change(function() {
+					$(".typeSection").hide();
+					var typeToShowId = "#" + $(typeSelectBox).children("option").filter(":selected").attr("value") + "Section";
+					$(typeToShowId).show();
+                });
+			});
+		</script>
+{% endblock %}
+
+{% block ExtraJavaScript %}
+{% endblock %}

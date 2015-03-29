@@ -1,6 +1,6 @@
 {% extends 'OctaHomeCore/baseWithNavBar.html' %}
 
-{% block title %} Settings - Account {% endblock %}
+{% block title %} Settings - Action {% endblock %}
 
 {% block AccountNavBarActive %} active {% endblock %}
 
@@ -14,7 +14,6 @@
 				<tr>
 					<th>id</th>
 					<th>Name</th>
-					<th>Type</th>
 					<th>Action Groups</th>
 					<th>Actions</th>
 				</tr>
@@ -24,7 +23,6 @@
 					<tr>
 						<td>{{ action.id }}</td>
 						<td>{{ action.Name }}</td>
-						<td>{{ action.TypeName }}</td>
 						<td>
 							<ul style="padding-left: 20px;">
 								{% for actionGroup in action.ActionGroups.all %}
@@ -40,7 +38,6 @@
 					</tr>
 				{% endfor %}
 				<tr>
-					<td></td>
 					<td></td>
 					<td></td>
 					<td></td>

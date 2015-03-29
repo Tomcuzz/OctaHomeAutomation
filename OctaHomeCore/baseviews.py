@@ -6,6 +6,30 @@ from django.middleware.csrf import get_token
 from models import *
 from OctaHomeCore.locationmodels import *
 import django.core.serializers
+import json
+
+class NamedSubclassableView(object):
+	Name = ""
+	
+	@classmethod
+	def getObjectForName(cls, className):
+		for aClass in cls.__subclasses__():
+			if aClass.Name == className:
+				return aClass
+			else:
+				toCheck = aClass.getObjectSubclassesForName(className)
+				if toCheck is not None:
+					return toCheck
+	
+	@classmethod
+	def getObjectSubclassesForName(cls, className):
+		for aClass in cls.__subclasses__():
+			if aClass.Name == className:
+				return aClass
+			else:
+				toCheck = aClass.getObjectSubclassesForName(className)
+				if toCheck is not None:
+					return toCheck
 
 class requestHandler(View):
 	Request = {}
@@ -130,7 +154,7 @@ class viewRequestHandler(requestHandler):
 		if self.Redirect != '':
 			return redirect(self.Redirect)
 		elif self.template != '':
-			standardParams = {'csrfmiddlewaretoken':get_token(self.Request), 'room':self.Request.GET.get('room', 'All'), 'links': self.getSideBar()}
+			standardParams = {'csrfmiddlewaretoken':get_token(self.Request), 'room':self.Request.GET.get('room', 'All'), 'sideBarName': self.getSideBarName()}
 			standardParams.update(parameters)
 			if contentType == None:
 				return render(self.Request, self.template, standardParams)
@@ -143,10 +167,13 @@ class viewRequestHandler(requestHandler):
 		self.Redirect = path
 	
 	def handleAuthenticationFailue(self):
-		return redirect('/Login?next=%s' % self.Request.path)
+		return redirect(reverse('Login') + '?next=' + self.Request.path)
 	###################
 	# Sidebar Methods #
 	###################
+	def getSideBarName(self):
+		return ""
+	
 	def getSideBar(self):
 		currentRoom = self.getCurrentRoom()
 		currentHouse = self.getCurrentHome()
@@ -199,7 +226,7 @@ class commandRequestHandler(requestHandler):
 	def commandNeeded(self):
 		return True
 	
-	def runCommand(self, command):
+	def runCommand(self):
 		pass
 	
 	#Subclass methods
@@ -223,7 +250,10 @@ class commandRequestHandler(requestHandler):
 		return HttpResponse(result)
 	
 	def returnJSONResult(self, result):
-		return HttpResponse(django.core.serializers.serialize('json', result), content_type="application/json")
+		try:
+			return HttpResponse(django.core.serializers.serialize('json', result), content_type="application/json")
+		except Exception as e:
+			return HttpResponse(json.dumps(result), content_type="application/json")
 	
 	def redirect(self, path):
 		return redirect(path)

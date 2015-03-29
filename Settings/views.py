@@ -1,8 +1,21 @@
 from django.conf import settings
+import json
 
 from OctaHomeCore.baseviews import *
 from OctaHomeCore.models import *
+from OctaHomeCore.menumodels import *
 from OctaHomeCore.weathermodels import *
+from OctaHomeCore.helpers import *
+from OctaHomeCore.authmodels import *
+from OctaHomeAppInterface.models import *
+
+class SettingsTopNavBarItem(TopNavBarItem):
+	Priority = 90
+	DisplayName = "Settings"
+	
+	@property
+	def Link(self):
+		return "/Settings/"
 
 class handleSettingsView(viewRequestHandler):
 	def getViewParameters(self):
@@ -27,6 +40,33 @@ class handleSettingsView(viewRequestHandler):
 			parameters = {'triggerEvents': TriggerEvent.objects.all(), 'aGConditions':AGCondition.objects.all(), 'actions':Action.objects.all()}
 		elif self.Page == 'AddAGCondition':
 			parameters = {'actiongroups':ActionGroup.objects.all()}
+		elif self.Page == 'AddAction':
+			parameters = {'types':getAllSubClasses(Action)}
+		
+		elif self.Page == 'DeviceUsers':
+			parameters = {'devices':DeviceUser.objects.filter(User=self.Request.user)}
+		elif self.Page == 'AddDeviceUsersComplete':
+			if self.Post.has_key('name'):
+				device = DeviceUser.objects.create(Name=self.Post['name'], User=self.Request.user)
+				if self.Request.is_secure():
+					host = 'https://' + self.Request.get_host() + "/"
+				else:
+					host = 'http://' + self.Request.get_host() + "/"
+				items = device.createDeviceSetupToken(host)
+				parameters = {'title':'Add', 'credentials':items, 'deviceToken':json.dumps(items)}
+		elif self.Page == 'ResetDeviceUsers':
+			if self.Post.has_key('deviceId') and self.Post['deviceId'] != '':
+				device = DeviceUser.objects.get(pk=self.Post['deviceId'])
+				if device.User == self.Request.user or self.Request.user.is_superuser:
+					if self.Request.is_secure():
+						host = 'https://' + self.Request.get_host() + "/"
+					else:
+						host = 'http://' + self.Request.get_host() + "/"
+					items = device.createDeviceSetupToken(host)
+					parameters = {'title':'Reset', 'credentials':items, 'deviceToken':json.dumps(items)}
+				else:
+					parameters = {'title':'Reset'}
+		
 		#else:
 			#return 'pages/Settings/EditUser'
 		
@@ -57,6 +97,15 @@ class handleSettingsView(viewRequestHandler):
 		elif self.Page == 'AddAction':
 			return 'OctaHomeSettings/AddAction'
 		
+		elif self.Page == 'DeviceUsers':
+			return 'OctaHomeSettings/DeviceUsers'
+		elif self.Page == 'AddDeviceUsers':
+			return 'OctaHomeSettings/AddDeviceUsers'
+		elif self.Page == 'AddDeviceUsersComplete':
+			return 'OctaHomeSettings/SetupDeviceUsersComplete'
+		elif self.Page == 'ResetDeviceUsers':
+			return 'OctaHomeSettings/SetupDeviceUsersComplete'
+		
 		else:
 			return 'OctaHomeSettings/EditUser'
 	
@@ -66,7 +115,8 @@ class handleSettingsView(viewRequestHandler):
 			{'title': 'Events',  					'address': reverse('SettingsPage', kwargs={'page':'Events'}),  		'active': self.getSideBarActiveState('Events',			self.Page)},
 			{'title': 'Action Groups', 				'address': reverse('SettingsPage', kwargs={'page':'ActionGroups'}), 'active': self.getSideBarActiveState('ActionGroups', 	self.Page)},
 			{'title': 'Action Group Conditions', 	'address': reverse('SettingsPage', kwargs={'page':'AGConditions'}), 'active': self.getSideBarActiveState('AGConditions', 	self.Page)},
-			{'title': 'Actions', 					'address': reverse('SettingsPage', kwargs={'page':'Actions'}), 		'active': self.getSideBarActiveState('Actions',			self.Page)}
+			{'title': 'Actions', 					'address': reverse('SettingsPage', kwargs={'page':'Actions'}), 		'active': self.getSideBarActiveState('Actions',			self.Page)},
+			{'title': 'Device Logins',				'address': reverse('SettingsPage', kwargs={'page':'DeviceUsers'}), 	'active': self.getSideBarActiveState('DeviceUsers',		self.Page)}
 		]
 		
 		if self.Request.user.is_superuser:
@@ -313,5 +363,13 @@ class handleSettingsCommand(commandRequestHandler):
 				return self.redirect(reverse('SettingsPage', kwargs={'page':'Actions'}))
 			else:
 				return self.handleUserError('Not All Values Given')
+		elif self.Command == 'DeleteDeviceUsers':
+			if self.Post.has_key('deviceId') and self.Post['deviceId'] != '':
+				device = DeviceUser.objects.get(pk=self.Post['deviceId'])
+				if device.User == self.Request.user or self.Request.user.is_superuser:
+					device.delete()
+					return self.redirect(reverse('SettingsPage', kwargs={'page':'DeviceUsers'}))
+				else:
+					return self.handleUserError('Permissions Denied')
 		else:
 			return self.handleUserError('Command Not Found')

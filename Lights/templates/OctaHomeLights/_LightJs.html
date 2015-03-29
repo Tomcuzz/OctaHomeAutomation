@@ -9,7 +9,7 @@
 	}
 	
 	function onOffTurnOff(id, type) {
-		url = Urls.SingleDeviceCommand('json', 'setIsOn', type, id) + "?value=Off"
+		url = Urls.SingleDeviceCommand('json', 'setIsOn', type, id) + "?value=False"
 		httpGet(url);
 		lightObject = "light" + id + "OnOff";
 		lightState = "light" + id + "State";
@@ -20,7 +20,7 @@
 	}
 	
 	function onOffTurnOn(id, type) {
-		url = Urls.SingleDeviceCommand('json', 'setIsOn', type, id) + "?value=On"
+		url = Urls.SingleDeviceCommand('json', 'setIsOn', type, id) + "?value=True"
 		httpGet(url);
 		lightObject = "light" + id + "OnOff";
 		lightDropDown = "light" + id + "DropDown";

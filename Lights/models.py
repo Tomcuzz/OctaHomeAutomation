@@ -31,6 +31,14 @@ class LightDevice(OutputDevice):
 		result.extend(["OctaHomeLights/_LightJs.html"])
 		return 	result
 	
+	@classmethod
+	def getSectionName(cls):
+		return 'Lights'
+	
+	@classmethod
+	def getSectionSlug(cls):
+		return 'Lights'
+	
 	########
 	# Meta #
 	########
@@ -106,7 +114,7 @@ class RGBLight(LightDevice):
 			return "None"
 	
 	def setIsOn(self, setOn):
-		if setOn == 'On':
+		if setOn == 'True':
 			if self.R != 0 and self.G != 0 and self.B != 0:
 				self.setRGB(self.R, self.G, self.B)
 			else:
@@ -114,6 +122,20 @@ class RGBLight(LightDevice):
 			self.isOn = True
 			self.save()
 			return True
+		elif setOn == 'Toggle':
+			if self.isOn == True:
+				if self.R != 0 and self.G != 0 and self.B != 0:
+					self.setRGB(self.R, self.G, self.B)
+				else:
+					self.setRGB(255, 255, 255)
+				self.isOn = True
+				self.save()
+				return True
+			else:
+				self.setRGB(0, 0, 0)
+				self.isOn = False
+				self.save()
+				return True
 		else:
 			self.setRGB(0, 0, 0)
 			self.isOn = False

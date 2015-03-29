@@ -2,6 +2,7 @@ from django.contrib.auth.models import *
 from django.contrib.auth.backends import ModelBackend
 from django.conf import settings as djsetting
 from django.utils.translation import ugettext_lazy as _
+from OctaHomeCore.basemodels import *
 
 import string
 import random

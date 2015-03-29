@@ -25,3 +25,13 @@ def getAllSubClasses(cls):
 	for subclass in cls.__subclasses__():
 		classes.extend(getAllSubClasses(subclass))
 	return classes
+
+def getFinalSubClasses(cls):
+	classes = []
+	for subclass in cls.__subclasses__():
+		if len(subclass.__subclasses__()) > 0:
+			classes.extend(getFinalSubClasses(subclass))
+		else:
+			classes.append(subclass)
+	
+	return classes

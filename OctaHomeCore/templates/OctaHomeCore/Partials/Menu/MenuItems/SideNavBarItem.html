@@ -1,0 +1,20 @@
+{# Expects Verables ['Item'] #}
+<li class="{{link.active}}">
+	<a	{% if Item.item.Link %}
+			href="{{ Item.item.Link }}"
+		{% endif %}
+		{% if Item.item.OnClickLink %}
+			onClick="{{Item.item.OnClickLink}}"
+		{% endif %}
+		{% if Item.item.LinkId %}
+			id="{{Item.item.LinkId}}"
+		{% endif %}
+		>{{ Item.item.DisplayName }}</a>
+	{% if Item.subitems|length > 0 %}
+		<ul class="nav">
+			{% for item in Item.subitems %}
+				{% include item.item.ViewPartial with Item=item %}
+			{% endfor %}
+		</ul>
+	{% endif %}
+</li>
