@@ -1,3 +1,4 @@
+import re
 from django.db import models
 from OctaHomeCore.devicemodels import *
 from OctaHomeCore.inputoutputmodels import *
@@ -61,10 +62,7 @@ class RGBLight(LightDevice):
 	##############
 	# Parameters #
 	##############
-	Colour = models.ColourField()
-	R = models.IntegerField(default=0)
-	G = models.IntegerField(default=0)
-	B = models.IntegerField(default=0)
+	Colour = models.TextField(default="#000000")
 	Scroll = models.ForeignKey(LightScrollMode, blank=True, null=True, related_name="RGBLights")
 	
 	#################
@@ -72,7 +70,7 @@ class RGBLight(LightDevice):
 	#################
 	def listActions(self):
 		result = super(RGBLight, self).listActions()
-		result.extend(["setColour", "setRGB", "setR", "setG", "setB", "setScroll"])
+		result.extend(["setColour", "setScroll"])
 		return result
 	
 	def	handleAction(self, action, parameters):
@@ -82,12 +80,8 @@ class RGBLight(LightDevice):
 			else:
 				return False
 		elif parameters.has_key('value') and action in ["setR", "setG", "setB", "setLightScrollScene"]:
-			if action == "setR":
-				return self.setR(parameters['value'])
-			elif action == "setG":
-				return self.setG(parameters['value'])
-			elif action == "setB":
-				return self.setB(parameters['value'])
+			if action == "setColour":
+				return self.setColour(parameters['value'])
 			elif action == "setLightScrollScene":
 				return self.setScroll(parameters['value'])
 			else:
@@ -98,9 +92,6 @@ class RGBLight(LightDevice):
 	def getState(self):
 		result = super(RGBLight, self).getState()
 		result.update({"Colour":{"DisplayName":"Colour", "Type":"Colour", "value":self.Colour}})
-		result.update({"R":{"DisplayName":"Red Level", "Type":"Int", "MinValue":0, "MaxValue":255, "value":self.R}})
-		result.update({"G":{"DisplayName":"Green Level", "Type":"Int", "MinValue":0, "MaxValue":255, "value":self.G}})
-		result.update({"B":{"DisplayName":"Blue Level", "Type":"Int", "MinValue":0, "MaxValue":255, "value":self.B}})
 		result.update({"Scroll":{"DisplayName":"Scroll Mode", "Type":"Mode", "ModeType":"LightScrollMode", "value":self.getScroll()}})
 		return result
 		
@@ -115,24 +106,24 @@ class RGBLight(LightDevice):
 	
 	def setIsOn(self, setOn):
 		if setOn == 'True':
-			if self.R != 0 and self.G != 0 and self.B != 0:
-				self.setRGB(self.R, self.G, self.B)
+			if self.Colour != "#000000" and self.Colour != "#000" and self.Colour != "":
+				self.setColour(self.Colour)
 			else:
-				self.setRGB(255, 255, 255)
+				self.setColour("#FFFFFF")
 			self.isOn = True
 			self.save()
 			return True
 		elif setOn == 'Toggle':
 			if self.isOn == True:
-				if self.R != 0 and self.G != 0 and self.B != 0:
-					self.setRGB(self.R, self.G, self.B)
+				if self.Colour != "#000000" and self.Colour != "#000" and self.Colour != "":
+					self.setColour(self.Colour)
 				else:
-					self.setRGB(255, 255, 255)
+					self.setColour("#FFFFFF")
 				self.isOn = True
 				self.save()
 				return True
 			else:
-				self.setRGB(0, 0, 0)
+				self.setColour("#000000")
 				self.isOn = False
 				self.save()
 				return True
@@ -144,57 +135,15 @@ class RGBLight(LightDevice):
 		
 	
 	def setColour(self, colour):
+		if not re.match('^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$', colour):
+			return False
+		
 		self.Colour = colour
-	
-	def setR(self, r):
-		if self.checkColourInt(r):
-			return self.setRGB(r, self.G, self.B)
-		else:
-			return False
-	
-	def setG(self, g):
-		if self.checkColourInt(g):
-			return self.setRGB(self.R, g, self.B)
-		else:
-			return False
-	
-	def setB(self, b):
-		if self.checkColourInt(b):
-			return self.setRGB(self.R, self.G, b)
-		else:
-			return False
-	
-	def getDisplayR(self):
-		if self.IsOn > 0:
-			return self.R
-		else:
-			return 0
-	
-	def getDisplayG(self):
-		if self.IsOn > 0:
-			return self.G
-		else:
-			return 0
-	
-	def getDisplayB(self):
-		if self.IsOn > 0:
-			return self.B
-		else:
-			return 0
+		return True
 	
 	def setScroll(self, scrollModeName):
 		self.Scroll = LightScrollMode.objects.get(Name=scrollModeName)
 		self.save()
-	
-	def setRGB(self, r, g, b):
-		pass
-	
-	def checkColourInt(self, colour):
-		colour = int(colour)
-		if 0 <= colour <= 255:
-			return True
-		else:
-			return False
 	
 	########
 	# Meta #
@@ -234,5 +183,5 @@ class ArduinoRGBLight(RGBLight):
 	# Meta #
 	########
 	class Meta:
-		db_table = u'ArdinoRGBLights'
+		db_table = u'ArduinoRGBLights'
 
