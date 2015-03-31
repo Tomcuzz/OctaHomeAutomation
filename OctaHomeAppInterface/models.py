@@ -4,6 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from OctaHomeCore.basemodels import *
 from OctaHomeCore.authmodels import *
 
+import datetime
 import string
 import random
 import hashlib
@@ -24,7 +25,7 @@ class DeviceUser(OctaBaseModel):
 		return {"host":host, "user":self.id, "password":self.Secret }
 	
 	def checkToken(self, token):
-		salt = time.strftime("%H:%M-%d/%m/%Y")
+		salt = datetime.datetime.utcnow().strftime("%H:%M-%d/%m/%Y")
 		hashpassword = hashlib.sha512(self.Secret.encode('utf-8') + salt.encode('utf-8')).hexdigest().upper()
 		if (hashpassword == token):
 			return True
