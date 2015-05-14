@@ -5,6 +5,13 @@
 
 {% block LightsNavBarActive %} active {% endblock %}
 
+{% block NavBarItems %}
+	{% if sideBarName and sideBarName != "" %}
+	<p>test</p>
+		{% get_menu_with_name_and_section "DeviceSideNavBar" sideBarName %}
+	{% endif %}
+{% endblock %}
+
 {% block PageArea %}
 	<div class="page-header">
 		<h1>{{title}}</h1>
@@ -21,7 +28,7 @@
 		</thead>
 		<tbody>
 			{% for aDevice in devices %}
-				{% include aDevice.ViewPartial|add:".html" with alight=aDevice %}
+				{% include aDevice.ViewPartial|add:".html" with aDevice=aDevice %}
 			{% endfor %}
 			<tr>
 				<td></td>

@@ -79,7 +79,7 @@ class RGBLight(LightDevice):
 				return self.setRGB(parameters['R'], parameters['G'], parameters['B'])
 			else:
 				return False
-		elif parameters.has_key('value') and action in ["setR", "setG", "setB", "setLightScrollScene"]:
+		elif parameters.has_key('value') and action in ["setColour", "setLightScrollScene"]:
 			if action == "setColour":
 				return self.setColour(parameters['value'])
 			elif action == "setLightScrollScene":
@@ -110,26 +110,26 @@ class RGBLight(LightDevice):
 				self.setColour(self.Colour)
 			else:
 				self.setColour("#FFFFFF")
-			self.isOn = True
+			self.IsOn = True
 			self.save()
 			return True
 		elif setOn == 'Toggle':
-			if self.isOn == True:
+			if self.IsOn == True:
 				if self.Colour != "#000000" and self.Colour != "#000" and self.Colour != "":
 					self.setColour(self.Colour)
 				else:
 					self.setColour("#FFFFFF")
-				self.isOn = True
+				self.IsOn = True
 				self.save()
 				return True
 			else:
 				self.setColour("#000000")
-				self.isOn = False
+				self.IsOn = False
 				self.save()
 				return True
 		else:
-			self.setRGB(0, 0, 0)
-			self.isOn = False
+			self.setColour("#000000")
+			self.IsOn = False
 			self.save()
 			return True
 		
@@ -139,6 +139,7 @@ class RGBLight(LightDevice):
 			return False
 		
 		self.Colour = colour
+		self.save()
 		return True
 	
 	def setScroll(self, scrollModeName):

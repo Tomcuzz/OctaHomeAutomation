@@ -1,5 +1,6 @@
 from OctaHomeCore.baseviews import *
 from OctaHomeCore.devicemodels import *
+from OctaHomeCore.locationmodels import *
 from Lights.models import *
 import json
 from OctaHomeCore.menumodels import *
@@ -18,6 +19,25 @@ class DeviceTopNavBarItem(TopNavBarItem):
 	@property
 	def Link(self):
 		return reverse('GenericDeviceSection', kwargs={'deviceType':'All'})
+
+#Side Bar Menu
+class DeviceSideBarMenuObjectProvider(RoomClassMenuObjectProvider):
+	def getUrlForHouse(self, house):
+		if self.SectionName != "":
+			return reverse('GenericDeviceSection', kwargs={'deviceType':self.SectionName, 'house':house.pk})
+		else:
+			return reverse('GenericDeviceSection', kwargs={'deviceType':'All', 'house':house.pk})
+	
+	def getUrlForRoom(self, room):
+		if self.SectionName != "":
+			return reverse('GenericDeviceSection', kwargs={'deviceType':self.SectionName, 'house':room.Home.pk, 'room':room.pk})
+		else:
+			return reverse('GenericDeviceSection', kwargs={'deviceType':'All', 'house':room.Home.pk, 'room':room.pk})
+
+class DeviceSideBarMenu(Menu):
+	Name = "DeviceSideNavBar"
+	ViewPartial = "OctaHomeCore/Partials/Menu/MenuArea/SideNavBar.html"
+	MenuObjectProvider = DeviceSideBarMenuObjectProvider()
 
 
 #View Object
@@ -51,10 +71,9 @@ class handleGenericDeviceView(viewRequestHandler):
 	def getTemplate(self):
 		return 'OctaHomeCore/pages/Device/Main'
 	
-	def getSidebarUrlName(self):
-		return 'GenericDeviceSection'
-		if self.Kwarguments.has_key('DeviceType'):
-			return self.Kwarguments['DeviceType']
+	def getSideBarName(self):
+		if self.Kwarguments.has_key('deviceType'):
+			return self.Kwarguments['deviceType']
 		else:
 			return 'All'
 

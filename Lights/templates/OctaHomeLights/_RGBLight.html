@@ -1,12 +1,12 @@
 {% load my_filters %}
 
 <tr>
-	<td>{{alight.id}}</td>
-	<td>{{alight.Name | replaceUnderscores}}</td>
+	<td>{{aDevice.id}}</td>
+	<td>{{aDevice.Name | replaceUnderscores}}</td>
 	<td>
-		{% if alight.Rooms.all|length > 0 %}
+		{% if aDevice.Rooms.all|length > 0 %}
 		<ul style="padding-left: 20px;">
-			{% for room in alight.Rooms.all %}
+			{% for room in aDevice.Rooms.all %}
 				<li>{{ room.Name }}</li>
 			{% endfor %}
 		</ul>
@@ -16,29 +16,29 @@
 	</td>
 	<td>
 		<p class="text-danger">R= 
-		<s id="rgbR{{alight.id}}" name="light{{alight.id}}{{alight|getClassName}}Red" data-type="text" data-pk="1" data-url="{% url 'SingleDeviceCommand' command='setR' deviceType=alight|getClassName deviceId=alight.id %}" data-original-title="Set Red Level">{{alight.getDisplayR}}</s>, </p>
+		<s id="rgbR{{aDevice.id}}" name="light{{aDevice.id}}{{aDevice|getClassName}}Red" data-type="text" data-pk="1" data-url="{% url 'SingleDeviceCommand' command='setR' deviceType=aDevice|getClassName deviceId=aDevice.id %}" data-original-title="Set Red Level">{{aDevice.getDisplayR}}</s>, </p>
 		<p class="text-success">G= 
-		<s id="rgbG{{alight.id}}" name="light{{alight.id}}{{alight|getClassName}}Green" data-type="text" data-pk="1" data-url="{% url 'SingleDeviceCommand' command='setG' deviceType=alight|getClassName deviceId=alight.id %}" data-original-title="Set Green Level">{{alight.getDisplayG}}</s>, </p>
+		<s id="rgbG{{aDevice.id}}" name="light{{aDevice.id}}{{aDevice|getClassName}}Green" data-type="text" data-pk="1" data-url="{% url 'SingleDeviceCommand' command='setG' deviceType=aDevice|getClassName deviceId=aDevice.id %}" data-original-title="Set Green Level">{{aDevice.getDisplayG}}</s>, </p>
 		<p class="text-info">B= 
-		<s id="rgbB{{alight.id}}" name="light{{alight.id}}{{alight|getClassName}}Blue" data-type="text" data-pk="1" data-url="{% url 'SingleDeviceCommand' command='setB' deviceType=alight|getClassName deviceId=alight.id %}" data-original-title="Set Blue Level">{{alight.getDisplayB}}</s></p>
+		<s id="rgbB{{aDevice.id}}" name="light{{aDevice.id}}{{aDevice|getClassName}}Blue" data-type="text" data-pk="1" data-url="{% url 'SingleDeviceCommand' command='setB' deviceType=aDevice|getClassName deviceId=aDevice.id %}" data-original-title="Set Blue Level">{{aDevice.getDisplayB}}</s></p>
 	</td>
 	<td>
 		<div class="btn-group">
-			{% if alight.IsOn != True %}
-				<button class="btn btn-success" name="light{{alight.id}}{{alight|getClassName}}OnOff" onClick="RGBSwitchState('{{alight.id}}', '{{alight|getClassName}}')">Turn On</button>
+			{% if aDevice.IsOn != True %}
+				<button class="btn btn-success" name="light{{aDevice.id}}{{aDevice|getClassName}}OnOff" onClick="RGBSwitchState('{{aDevice.id}}', '{{aDevice|getClassName}}')">Turn On</button>
 			{% else %}
-				<button class="btn btn-danger" name="light{{alight.id}}{{alight|getClassName}}OnOff" onClick="RGBSwitchState('{{alight.id}}', '{{alight|getClassName}}')">Turn Off</button>
+				<button class="btn btn-danger" name="light{{aDevice.id}}{{aDevice|getClassName}}OnOff" onClick="RGBSwitchState('{{aDevice.id}}', '{{aDevice|getClassName}}')">Turn Off</button>
 			{% endif %}
 			<div class="btn-group">
-				<button type="button" class="btn btn-primary colourPopover" id="setColorButton" onClick="changeColour('{{alight.id}}', '{{alight|getClassName}}')" data-toggle="popover" title="Set Colour" data-content="<div id='{{alight.id}}{{alight|getClassName}}colorpicker' style='width:195px; height:195px;'></div>">Set Colour</button>
+				<button type="button" class="btn btn-primary colourPopover" id="setColorButton" onClick="changeColour('{{aDevice.id}}', '{{aDevice|getClassName}}')" data-toggle="popover" title="Set Colour" data-content="<div id='{{aDevice.id}}{{aDevice|getClassName}}colorpicker' style='width:195px; height:195px;'></div>">Set Colour</button>
 			</div>
 			<div class="btn-group">
 				<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">Scroll Mode<span class="caret"></span></button>
 				<ul class="dropdown-menu">
 					<li role="presentation" class="dropdown-header">Scroll Modes</li>
-					<li><a href="#" onClick="setScroll('{{alight.id}}', 'Off')">Off<i name="Light{{alight.id}}ScrollOff" class="{% if alight.Scroll == "Off" %}icon-ok{% endif %}pull-right"></i></a></li>
+					<li><a href="#" onClick="setScroll('{{aDevice.id}}', 'Off')">Off<i name="Light{{aDevice.id}}ScrollOff" class="{% if aDevice.Scroll == "Off" %}icon-ok{% endif %}pull-right"></i></a></li>
 					{% for scrollMode in scrollModes %}
-						<li><a href="#" onClick="setScroll('{{alight.id}}', '{{scrollMode.Name}}')">{{scrollMode.Name}}<i name="Light{{alight.id}}Scroll{{scrollMode.Name}}" class="{% if alight.Scroll == "{{scrollMode.Name}}" %}icon-ok{% endif %}pull-right"></i></a></li>
+						<li><a href="#" onClick="setScroll('{{aDevice.id}}', '{{scrollMode.Name}}')">{{scrollMode.Name}}<i name="Light{{aDevice.id}}Scroll{{scrollMode.Name}}" class="{% if aDevice.Scroll == "{{scrollMode.Name}}" %}icon-ok{% endif %}pull-right"></i></a></li>
 					{% endfor %}
 				</ul>
 			</div>

@@ -1,12 +1,12 @@
 {% load my_filters %}
 
 <tr>
-	<td>{{alight.id}}</td>
-	<td>{{alight.Name | replaceUnderscores}}</td>
+	<td>{{aDevice.id}}</td>
+	<td>{{aDevice.Name | replaceUnderscores}}</td>
 	<td>
-		{% if alight.Rooms.all|length > 0 %}
+		{% if aDevice.Rooms.all|length > 0 %}
 		<ul style="padding-left: 20px;">
-			{% for room in alight.Rooms.all %}
+			{% for room in aDevice.Rooms.all %}
 				<li>{{ room.Name }}</li>
 			{% endfor %}
 		</ul>
@@ -14,16 +14,16 @@
 			None
 		{% endif %}
 	</td>
-	{% if alight.IsOn %}
-		<td name="light{{alight.id}}State" class="text-success">{{alight.LightState}}</td>
+	{% if aDevice.IsOn %}
+		<td name="light{{aDevice.id}}State" class="text-success">{{aDevice.LightState}}</td>
 	{% else %}
-		<td name="light{{alight.id}}State" class="text-danger">{{alight.LightState}}</td>
+		<td name="light{{aDevice.id}}State" class="text-danger">{{aDevice.LightState}}</td>
 	{% endif %}
 	<td>
-		{% if alight.IsOn %}
-			<button class="btn btn-danger" name="light{{alight.id}}OnOff" onClick="onOffSwitchState('{{alight.id}}', '{{alight|getClassName}}')">{{alight.getSuperClassNames}}Turn Off</button>
+		{% if aDevice.IsOn %}
+			<button class="btn btn-danger" name="light{{aDevice.id}}OnOff" onClick="onOffSwitchState('{{aDevice.id}}', '{{aDevice|getClassName}}')">{{aDevice.getSuperClassNames}}Turn Off</button>
 		{% else %}
-			<button class="btn btn-success" name="light{{alight.id}}OnOff" onClick="onOffSwitchState('{{alight.id}}', '{{alight|getClassName}}')">{{alight.getSuperClassNames}}Turn On</button>
+			<button class="btn btn-success" name="light{{aDevice.id}}OnOff" onClick="onOffSwitchState('{{aDevice.id}}', '{{aDevice|getClassName}}')">{{aDevice.getSuperClassNames}}Turn On</button>
 		{% endif %}
 	</td>
 </tr>

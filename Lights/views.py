@@ -17,7 +17,7 @@ class LightsTopNavBarItem(TopNavBarItem):
 	
 	@property
 	def Link(self):
-		return reverse('Lights')
+		return reverse('GenericDeviceSection', kwargs={'deviceType':'Lights'}) #reverse('Lights')
 
 #View Object
 class handleLightView(viewRequestHandler):

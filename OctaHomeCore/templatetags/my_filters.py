@@ -31,3 +31,12 @@ def get_menu_with_name(context, name):
 	menu = menuClass()
 	items = menu.buildMenu()
 	return render_to_string(menu.ViewPartial, {'Items':items}, RequestContext(request))
+
+@register.simple_tag(takes_context=True)
+def get_menu_with_name_and_section(context, name, section):
+	request = context['request']
+	menuClass = Menu.getMenuForName(name)
+	menu = menuClass()
+	menu.MenuObjectProvider.SectionName = section
+	items = menu.buildMenu()
+	return render_to_string(menu.ViewPartial, {'Items':items}, RequestContext(request))

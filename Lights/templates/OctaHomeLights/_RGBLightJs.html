@@ -66,7 +66,7 @@
 		
 		statusurl = Urls.SingleDeviceCommand('json', 'getState', type, id);
 		$.getJSON(statusurl, function (json) {
-			var currentPickerColour = rgbToHex(json["R"]["value"], json["G"]["value"], json["B"]["value"]);
+			var currentPickerColour = json["Colour"]["value"];
 						
 			var pickerId = '#' + id + type + "colorpicker";
 			
@@ -78,9 +78,9 @@
 	
 	function callback(color) {
 		var colour = convertHexToRGB(color);
-		var postUrl = Urls.SingleDeviceCommand('json', 'setRGB', window.lastLightType, window.lastLightId);
+		var postUrl = Urls.SingleDeviceCommand('json', 'setColour', window.lastLightType, window.lastLightId);
 		
-		var dataString = 'R=' + colour[0] + '&G=' + colour[1] + '&B=' + colour[2] + '&csrfmiddlewaretoken={{csrfmiddlewaretoken}}'; 
+		var dataString = 'value=' + color + '&csrfmiddlewaretoken={{csrfmiddlewaretoken}}'; 
 		
 		
 		lightObject = "light" + window.lastLightId + window.lastLightType + "OnOff";
