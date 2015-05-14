@@ -37,9 +37,10 @@
 		
 		statusurl = Urls.SingleDeviceCommand('json', 'getState', type, id)
 		$.getJSON(statusurl, function (json) {
-			document.getElementsByName(lightRedLevel)[0].innerHTML = json["R"]["value"];
-			document.getElementsByName(lightGreenLevel)[0].innerHTML = json["G"]["value"];
-			document.getElementsByName(lightBlueLevel)[0].innerHTML = json["B"]["value"];
+			var colour = convertHexToRGB(json["Colour"]["value"]);
+			document.getElementsByName(lightRedLevel)[0].innerHTML = colour[0];
+			document.getElementsByName(lightGreenLevel)[0].innerHTML = colour[1];
+			document.getElementsByName(lightBlueLevel)[0].innerHTML = colour[2];
 		});
 		document.getElementsByName(lightObject)[0].innerHTML = "Turn Off";
 		document.getElementsByName(lightObject)[0].className = "btn btn-danger";
@@ -88,8 +89,8 @@
 		lightRedLevel = "light" + window.lastLightId + window.lastLightType + "Red";
 		lightGreenLevel = "light" + window.lastLightId + window.lastLightType + "Green";
 		lightBlueLevel = "light" + window.lastLightId + window.lastLightType + "Blue";
-		document.getElementsByName(lightObject)[0].innerHTML = "Turn On";
-		document.getElementsByName(lightObject)[0].className = "btn btn-success";
+		document.getElementsByName(lightObject)[0].innerHTML = "Turn Off";
+		document.getElementsByName(lightObject)[0].className = "btn btn-danger";
 		document.getElementsByName(lightRedLevel)[0].innerHTML = colour[0];
 		document.getElementsByName(lightGreenLevel)[0].innerHTML = colour[1];
 		document.getElementsByName(lightBlueLevel)[0].innerHTML = colour[2];
