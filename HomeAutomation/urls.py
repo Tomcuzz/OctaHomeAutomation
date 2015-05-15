@@ -1,5 +1,7 @@
 from django.conf.urls import patterns, include, url
 
+#from *.OctaFiles.Menus import *
+
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
 # admin.autodiscover()
@@ -11,7 +13,6 @@ modulePatterns = [
     url(r'^Device/', include('OctaHomeCore.deviceurls')),
     
     url(r'^HomeStats/', include('HomeStats.urls')),
-	url(r'^Lights/', include('Lights.urls')),
     url(r'^Alarm/', include('Alarm.urls')),
     url(r'^Security/', include('Security.urls')),
     url(r'^Curtains/', include('Curtains.urls')),

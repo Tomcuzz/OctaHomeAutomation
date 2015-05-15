@@ -6,12 +6,11 @@ class CoreSystemsTopNavBarItem(TopNavBarItem):
 	DisplayName = "Core Systems"
 	Link = "#"
 
-
-class SecurityTopNavBarItem(TopNavBarItem):
+class LightsTopNavBarItem(TopNavBarItem):
 	ParentItem = "Core Systems"
-	Priority = 30
-	DisplayName = "Security"
+	Priority = 10
+	DisplayName = "Lights"
 	
 	@property
 	def Link(self):
-		return reverse('GenericDeviceSection', kwargs={'deviceType':'Security'})
+		return reverse('GenericDeviceSection', kwargs={'deviceType':'Lights'})
