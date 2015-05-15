@@ -6,12 +6,11 @@ class CoreSystemsTopNavBarItem(TopNavBarItem):
 	DisplayName = "Core Systems"
 	Link = "#"
 
-
-class SecurityTopNavBarItem(TopNavBarItem):
+class TempControlTopNavBarItem(TopNavBarItem):
 	ParentItem = "Core Systems"
-	Priority = 30
-	DisplayName = "Security"
+	Priority = 50
+	DisplayName = "Temperature"
 	
 	@property
 	def Link(self):
-		return reverse('GenericDeviceSection', kwargs={'deviceType':'Security'})
+		return reverse('TempControl')

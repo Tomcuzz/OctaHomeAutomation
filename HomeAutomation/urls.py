@@ -14,7 +14,6 @@ modulePatterns = [
     
     url(r'^HomeStats/', include('HomeStats.urls')),
     url(r'^Alarm/', include('Alarm.urls')),
-    url(r'^Security/', include('Security.urls')),
     url(r'^Curtains/', include('Curtains.urls')),
     url(r'^TempControl/', include('TempControl.urls')),
     url(r'^AudioVisual/', include('AudioVisual.urls')),

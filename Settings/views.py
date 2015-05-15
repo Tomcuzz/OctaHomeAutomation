@@ -9,14 +9,6 @@ from OctaHomeCore.helpers import *
 from OctaHomeCore.authmodels import *
 from OctaHomeAppInterface.models import *
 
-class SettingsTopNavBarItem(TopNavBarItem):
-	Priority = 90
-	DisplayName = "Settings"
-	
-	@property
-	def Link(self):
-		return "/Settings/"
-
 class handleSettingsView(viewRequestHandler):
 	def getViewParameters(self):
 		parameters = {}
