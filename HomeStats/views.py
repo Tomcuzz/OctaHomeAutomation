@@ -56,11 +56,6 @@ class handleHomeStatsView(viewRequestHandler):
 		paramerters = {'Stats':stats}
 		
 		return paramerters
-	
-	def getContentType(self):
-		if self.Kwarguments.has_key('protocal'):
-			if self.Kwarguments['protocal'] == 'cisco':
-				return "text/xml"
 		
 		return None
 	

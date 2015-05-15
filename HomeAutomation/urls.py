@@ -6,7 +6,9 @@ from django.conf.urls import patterns, include, url
 # from django.contrib import admin
 # admin.autodiscover()
 
-modulePatterns = [
+urlpatterns = [
+	url(r'^jsreverse/$', 'django_js_reverse.views.urls_js', name='js_reverse'),
+	
     url(r'^Auth/', include('OctaHomeCore.authurls')),
     url(r'^App/', include('OctaHomeAppInterface.urls')),
     url(r'^Core/', include('OctaHomeCore.coreurls')),
@@ -14,9 +16,7 @@ modulePatterns = [
     
     url(r'^HomeStats/', include('HomeStats.urls')),
     url(r'^Alarm/', include('Alarm.urls')),
-    url(r'^Curtains/', include('Curtains.urls')),
     url(r'^TempControl/', include('TempControl.urls')),
-    url(r'^AudioVisual/', include('AudioVisual.urls')),
     url(r'^Food/', include('Food.urls')),
     url(r'^Proxmox/', 'Proxmox.views.ProxmoxMain', name='Proxmox'),
     url(r'^DnsAdmin/', 'DnsAdmin.views.DnsAdminMain', name='DnsAdmin'),
@@ -28,11 +28,5 @@ modulePatterns = [
     
     url(r'^', include('Home.urls')),
 ]
-
-urlpatterns = patterns('',
-	url(r'^jsreverse/$', 'django_js_reverse.views.urls_js', name='js_reverse'),
-    url(r'^(?P<protocal>(html|xml|json|cisco)+)/', include(modulePatterns)),
-    url(r'^', include(modulePatterns)),
-)
 
 handler404 = 'ErrorPages.views.Error404'

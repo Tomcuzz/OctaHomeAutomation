@@ -50,8 +50,6 @@ class handleSettingsView(viewRequestHandler):
 		if self.securityFails():
 			return self.handleAuthenticationFailue()
 		
-		templateExtension = self.Protocal
-		
 		if self.Kwarguments.has_key('page'):
 			if self.Kwarguments['page'] == 'None':
 				self.Page = "EditUser"
@@ -68,7 +66,7 @@ class handleSettingsView(viewRequestHandler):
 		
 		self.template = self.getTemplate()
 		if self.template != "":
-			self.template = self.template + "." + templateExtension
+			self.template = self.template + ".html"
 		
 		content = self.getViewParameters()
 		contentType = self.getContentType()

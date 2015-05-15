@@ -4,14 +4,14 @@
 	<Prompt>Please Select A Service</Prompt>
 	<MenuItem>
 		<Name>Lights</Name>
-		<URL>http://192.168.1.101{% url 'Lights' protocal='cisco' %}</URL>
+		<URL>http://192.168.1.101{% url 'Lights' %}</URL>
 	</MenuItem>
 	<MenuItem>
 		<Name>Alarm</Name>
-		<URL>http://192.168.1.101{% url 'Lights' protocal='cisco' %}</URL>
+		<URL>http://192.168.1.101{% url 'Lights' %}</URL>
 	</MenuItem>
 	<MenuItem>
 		<Name>Temperature</Name>
-		<URL>http://192.168.1.101{% url 'Lights' protocal='cisco' %}</URL>
+		<URL>http://192.168.1.101{% url 'Lights' %}</URL>
 	</MenuItem>
 </CiscoIPPhoneMenu>

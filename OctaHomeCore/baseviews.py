@@ -36,7 +36,6 @@ class requestHandler(View):
 	Get = {}
 	Post = {}
 	AllRequestParams = {}
-	Protocal = 'html'
 	isSecuredArea = True
 	isUserAuthenticated = False
 	Arguments = []
@@ -48,7 +47,6 @@ class requestHandler(View):
 		self.Kwarguments = kwargs
 		self.Get = self.getGetVeriables()
 		self.AllRequestParams = self.getAllRequestParams()
-		self.Protocal = self.getProtocol()
 		self.isSecuredArea = self.isPageSecured()
 		self.isUserAuthenticated = self.Request.user.is_authenticated()
 		return self.handleRequest()
@@ -60,7 +58,6 @@ class requestHandler(View):
 		self.Get = self.getGetVeriables()
 		self.Post = self.getPostVeriables()
 		self.AllRequestParams = self.getAllRequestParams()
-		self.Protocal = self.getProtocol()
 		self.isSecuredArea = self.isPageSecured()
 		self.isUserAuthenticated = self.Request.user.is_authenticated()
 		return self.handleRequest()
@@ -84,16 +81,7 @@ class requestHandler(View):
 		pass
 	
 	def isPageSecured(self):			#Override to unsecure page
-		if self.Protocal == 'cisco':
-			return False
-		else:
-			return True
-	
-	def getProtocol(self):
-		if self.Kwarguments.has_key('protocal'):
-			return self.Kwarguments['protocal']
-		else:
-			return 'html'
+		return True
 	
 	def handleAuthenticationFailue(self):
 		pass
@@ -125,10 +113,7 @@ class viewRequestHandler(requestHandler):
 		return ''
 	
 	def getContentType(self):
-		if self.Protocal == 'cisco':
-			return "text/xml"
-		else:
-			return None
+		return None
 	
 	####################
 	# Subclass methods #
@@ -136,15 +121,13 @@ class viewRequestHandler(requestHandler):
 	def handleRequest(self):
 		if self.securityFails():
 			return self.handleAuthenticationFailue()
-			
-		templateExtension = self.Protocal
 		
 		if self.Kwarguments.has_key('page'):
 			self.Page = self.Kwarguments['page']
 		
 		self.template = self.getTemplate()
 		if self.template != "":
-			self.template = self.template + "." + templateExtension
+			self.template = self.template + ".html"
 		
 		content = self.getViewParameters()
 		contentType = self.getContentType()

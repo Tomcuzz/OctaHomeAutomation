@@ -5,7 +5,7 @@
 	{% for light in lights %}
 		<MenuItem>
 			<Name>{{ light.Name }}</Name>
-			<URL>http://192.168.1.101{% url 'Lights' protocal='cisco' house=light.Room.Home.id room=light.Room.id lightType=light.getObjectType|last lightId=light.id %}</URL>
+			<URL>http://192.168.1.101{% url 'Lights' house=light.Room.Home.id room=light.Room.id lightType=light.getObjectType|last lightId=light.id %}</URL>
 		</MenuItem>
 	{% endfor %}
 </CiscoIPPhoneMenu>
