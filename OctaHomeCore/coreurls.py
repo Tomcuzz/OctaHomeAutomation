@@ -14,5 +14,5 @@ for app in settings.INSTALLED_APPS:
 		pass
 
 urlpatterns = [
-	url(r'^messages/(?P<command>\w+)/$', handleMessageCommand.as_view(), name='MessagesCommand'),
+	url(r'^Messages/(?P<command>\w+)/$', handleMessageCommand.as_view(), name='MessagesCommand'),
 ]

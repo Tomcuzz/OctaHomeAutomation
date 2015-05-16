@@ -26,7 +26,7 @@
 	}
 	
 	function checkForLogs() {
-		var logUrl = Urls.MessagesCommand('json', 'LastHourLogs');
+		var logUrl = Urls.MessagesCommand('LastHourLogs');
 		$.getJSON(logUrl, function (json) {
 			var x;
 			for (x in json) {
@@ -39,7 +39,7 @@
 	}
 	
 	function checkForNotifications() {
-		var notificationUrl = Urls.MessagesCommand('json', 'AllNewNotifications');
+		var notificationUrl = Urls.MessagesCommand('AllNewNotifications');
 		$.getJSON(notificationUrl, function (json) {
 			var x;
 			for (x in json) {
@@ -52,7 +52,7 @@
 	}
 	
 	function checkForWarnings() {
-		var warningUrl = Urls.MessagesCommand('json', 'AllNewWarnings');
+		var warningUrl = Urls.MessagesCommand('AllNewWarnings');
 		$.getJSON(warningUrl, function (json) {
 			var x;
 			for (x in json) {
@@ -65,7 +65,7 @@
 	}
 	
 	function checkForErrors() {
-		var errorUrl = Urls.MessagesCommand('json', 'AllNewErrors');
+		var errorUrl = Urls.MessagesCommand('AllNewErrors');
 		$.getJSON(errorUrl, function (json) {
 			var x;
 			for (x in json) {
@@ -134,17 +134,17 @@
 	
 	
 	function dismissNotification(id) {
-		var errorUrl = Urls.MessagesCommand('json', 'DismissNotification') + "?value=" + id;
+		var errorUrl = Urls.MessagesCommand('DismissNotification') + "?value=" + id;
 		$.get(errorUrl,{},function(result){});
 	}
 	
 	function dismissWarning(id) {
-		var errorUrl = Urls.MessagesCommand('json', 'DismissWarning') + "?value=" + id;
+		var errorUrl = Urls.MessagesCommand('DismissWarning') + "?value=" + id;
 		$.get(errorUrl,{},function(result){});
 	}
 	
 	function dismissError(id) {
-		var errorUrl = Urls.MessagesCommand('json', 'DismissError') + "?value=" + id;
+		var errorUrl = Urls.MessagesCommand('DismissError') + "?value=" + id;
 		$.get(errorUrl,{},function(result){});
 	}
 	
