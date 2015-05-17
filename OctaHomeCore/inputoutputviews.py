@@ -1,39 +1,4 @@
-from OctaHomeCore.menumodels import *
 from OctaHomeCore.settingviews import *
-
-class EventsSettingsNavBarItem(SettingsSideNavBarItem):
-	Priority = 20
-	DisplayName = "Events"
-	
-	@property
-	def Link(self):
-		return reverse('SettingsPage', kwargs={'page':'Events'})
-
-class ActionGroupsSettingsNavBarItem(SettingsSideNavBarItem):
-	Priority = 30
-	DisplayName = "Action Groups"
-	
-	@property
-	def Link(self):
-		return reverse('SettingsPage', kwargs={'page':'ActionGroups'})
-
-class AGConditionsSettingsNavBarItem(SettingsSideNavBarItem):
-	Priority = 40
-	DisplayName = "Action Group Conditions"
-	
-	@property
-	def Link(self):
-		return reverse('SettingsPage', kwargs={'page':'AGConditions'})
-
-class ActionsSettingsNavBarItem(SettingsSideNavBarItem):
-	Priority = 50
-	DisplayName = "Actions"
-	
-	@property
-	def Link(self):
-		return reverse('SettingsPage', kwargs={'page':'Actions'})
-
-
 
 class ActionGroupsSettingsPage(SettingsPage):
 	Name = "ActionGroups"

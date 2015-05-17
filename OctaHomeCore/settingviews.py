@@ -1,37 +1,21 @@
 from django.conf import settings
+from django.utils import importlib
 import json
 
 from OctaHomeCore.baseviews import *
 from OctaHomeCore.basemodels import *
 from OctaHomeCore.models import *
 from OctaHomeCore.menumodels import *
-from OctaHomeCore.weathermodels import *
 from OctaHomeCore.helpers import *
-from OctaHomeCore.authmodels import *
 from OctaHomeCore.authviews import *
 from OctaHomeAppInterface.models import *
-
-class SettingsTopNavBarItem(TopNavBarItem):
-	Priority = 90
-	DisplayName = "Settings"
-	
-	@property
-	def Link(self):
-		return "/Settings/"
-
-
-class SettingsSideNavBar(Menu):
-	Name = "SettingsSideNavBar"
-	ViewPartial = "OctaHomeCore/Partials/Menu/MenuArea/SideNavBar.html"
-
-class SettingsSideNavBarItem(MenuItem):
-	MenuName = "SettingsSideNavBar"
-	ViewPartial = "OctaHomeCore/Partials/Menu/MenuItems/SideNavBarItem.html"
-
 
 class SettingsPage(NamedSubclassableView):
 	ViewPartial = ""
 	ViewHandler = None
+	
+	def hasAuthorisation(self):
+		return True
 	
 	def getViewParameters(self):
 		return {}
@@ -42,11 +26,16 @@ class SettingsCommand(NamedSubclassableView):
 	def RunCommand(self):
 		return ""
 
-
-
 class handleSettingsView(viewRequestHandler):
 	SettingsPage = None
 	def handleRequest(self):
+		#Import All Settings page files so that they appear
+		for app in settings.INSTALLED_APPS:
+			try:
+				importlib.import_module(app + ".OctaFiles.settings")
+			except: 
+				pass
+		
 		if self.securityFails():
 			return self.handleAuthenticationFailue()
 		
@@ -63,6 +52,11 @@ class handleSettingsView(viewRequestHandler):
 			settingsPageClass = EditUserSettingsPage
 		self.SettingsPage = settingsPageClass()
 		self.SettingsPage.ViewHandler = self
+		
+		if self.SettingsPage.hasAuthorisation() == False:
+			self.template = "OctaHomeCore/Settings/AuthorisationFailure.html"
+			contentType = self.getContentType()
+			return self.returnView({}, contentType)
 		
 		self.template = self.getTemplate()
 		if self.template != "":

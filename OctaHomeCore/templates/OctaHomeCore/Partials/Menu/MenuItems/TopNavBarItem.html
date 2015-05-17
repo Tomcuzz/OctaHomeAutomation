@@ -9,7 +9,7 @@
 		</ul>
 	</li>
 {% else %}
-	<li class="{% block HomeNavBarActive %}{% endblock %}">
+	<li class="{% if Item.item.isActive %}active{% endif %}">
 		<a href="{{ Item.item.Link }}">{{ Item.item.DisplayName }}</a>
 	</li>
 {% endif %}

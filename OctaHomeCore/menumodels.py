@@ -6,6 +6,7 @@ from helpers import *
 class BaseMenuObjectProvider(object):
 	MenuName = ""
 	SectionName = ""
+	Request = None #Django request object
 	
 	def AllItems(self, menuName):
 		self.MenuName = menuName
@@ -23,6 +24,7 @@ class StaticClassMenuObjectProvider(BaseMenuObjectProvider):
 		
 		for aMenuItem in allMenuItems:
 			aMenuItemInst = aMenuItem()
+			aMenuItemInst.Request = self.Request
 			if aMenuItemInst.MenuName == self.MenuName and aMenuItemInst.isShown() and aMenuItemInst.DisplayName not in menuItemNames and aMenuItemInst.DisplayName != "":
 				menuItems.append(aMenuItemInst)
 				menuItemNames.append(aMenuItemInst.DisplayName)
@@ -50,6 +52,7 @@ class RoomClassMenuObjectProvider(BaseMenuObjectProvider):
 			houseObject.DisplayName = house.Name
 			houseObject.LinkValue = self.getUrlForHouse(house)
 			houseObject.ViewPartial = self.ItemPartial
+			houseObject.Request = self.Request
 			
 			sideBarRooms = []
 			for room in house.Rooms.all():
@@ -57,6 +60,7 @@ class RoomClassMenuObjectProvider(BaseMenuObjectProvider):
 				roomObject.DisplayName = room.Name
 				roomObject.LinkValue = self.getUrlForRoom(room)
 				roomObject.ViewPartial = self.ItemPartial
+				roomObject.Request = self.Request
 				sideBarRooms.append(roomObject)
 			
 			houseObject.SubItems = sideBarRooms
@@ -79,11 +83,13 @@ class RoomClassMenuObjectProvider(BaseMenuObjectProvider):
 class Menu(object):
 	Name = ""
 	ViewPartial = ""
+	Request = None #Django request object
 	
 	MenuObjectProvider = StaticClassMenuObjectProvider()
 	
 	
 	def buildMenu(self):
+		self.MenuObjectProvider.Request = self.Request
 		items = self.MenuObjectProvider.AllItems(self.Name)
 		menuItems = []
 		for item in items:
@@ -124,6 +130,7 @@ class MenuItem(object):
 	Priority = 0
 	DisplayName = ""
 	ViewPartial = ""
+	Request = None #Django request object
 	
 	@property
 	def Link(self):
@@ -141,6 +148,8 @@ class MenuItem(object):
 		return True
 	
 	def isActive(self):
+		if self.Link == self.Request.path:
+			return True
 		return False
 	
 	def buildItemWithMenuItems(self, items):
@@ -159,7 +168,6 @@ class DynamicMenuItem(MenuItem):
 	OnClickLinkValue = ""
 	LinkIdValue = ""
 	IsShownValue = True
-	IsActiveValue = False
 	SubItems = []
 	
 	@property
@@ -177,9 +185,6 @@ class DynamicMenuItem(MenuItem):
 	def isShown(self):
 		return self.IsShownValue
 	
-	def isActive(self):
-		return self.IsActiveValue
-	
 	def buildItemWithMenuItems(self, items):
 		subItems = []
 		for item in self.SubItems:
@@ -190,21 +195,8 @@ class DynamicMenuItem(MenuItem):
 class TopNavBarItem(MenuItem):
 	MenuName = "TopNavBar"
 	ViewPartial = "OctaHomeCore/Partials/Menu/MenuItems/TopNavBarItem.html"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	
+	def isActive(self):
+		if self.Request.path.startswith(self.Link):
+			return True
+		return False

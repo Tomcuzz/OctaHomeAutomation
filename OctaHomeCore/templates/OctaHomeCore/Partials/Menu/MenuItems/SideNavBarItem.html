@@ -1,5 +1,5 @@
 {# Expects Verables ['Item'] #}
-<li class="{{link.active}}">
+<li class="{% if Item.item.isActive %}active{% endif %}">
 	<a	{% if Item.item.Link %}
 			href="{{ Item.item.Link }}"
 		{% endif %}

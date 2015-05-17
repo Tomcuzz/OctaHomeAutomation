@@ -9,7 +9,7 @@ from django.conf import settings
 #Import All Menu files so that they appear
 for app in settings.INSTALLED_APPS:
 	try:
-		myothermodule = importlib.import_module(app + ".OctaFiles.menus")
+		importlib.import_module(app + ".OctaFiles.menus")
 	except: 
 		pass
 
