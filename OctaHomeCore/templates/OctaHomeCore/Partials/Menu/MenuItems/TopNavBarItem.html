@@ -1,6 +1,6 @@
 {# Expects Verables ['Item'] #}
 {% if Item.subitems|length > 0 %}
-	<li class="dropdown">
+	<li class="dropdown {% if Item.item.isActive %}active{% endif %}">
 		<a href="" class="dropdown-toggle" data-toggle="dropdown">{{ Item.item.DisplayName }} <b class="caret"></b></a>
 		<ul class="dropdown-menu">
 			{% for item in Item.subitems %}
