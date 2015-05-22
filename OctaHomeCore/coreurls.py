@@ -5,7 +5,6 @@ from django.db import models
 from django.utils import importlib
 from django.conf import settings
 
-
 #Import All Menu files so that they appear
 for app in settings.INSTALLED_APPS:
 	try:
