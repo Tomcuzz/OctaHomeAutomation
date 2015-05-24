@@ -14,6 +14,15 @@ class SettingsPage(NamedSubclassableView):
 	ViewPartial = ""
 	ViewHandler = None
 	
+	
+	@classmethod
+	def imports(cls):
+		for app in settings.INSTALLED_APPS:
+			try:
+				importlib.import_module(app + ".OctaFiles.settings")
+			except: 
+				pass
+	
 	def hasAuthorisation(self):
 		return True
 	
@@ -29,13 +38,6 @@ class SettingsCommand(NamedSubclassableView):
 class handleSettingsView(viewRequestHandler):
 	SettingsPage = None
 	def handleRequest(self):
-		#Import All Settings page files so that they appear
-		for app in settings.INSTALLED_APPS:
-			try:
-				importlib.import_module(app + ".OctaFiles.settings")
-			except: 
-				pass
-		
 		if self.securityFails():
 			return self.handleAuthenticationFailue()
 		
@@ -49,7 +51,7 @@ class handleSettingsView(viewRequestHandler):
 		
 		settingsPageClass = SettingsPage.getObjectForName(self.Page)
 		if settingsPageClass is None:
-			settingsPageClass = EditUserSettingsPage
+			settingsPageClass = SettingsPage.getObjectForName("EditUser")
 		self.SettingsPage = settingsPageClass()
 		self.SettingsPage.ViewHandler = self
 		

@@ -12,7 +12,12 @@ class NamedSubclassableView(object):
 	Name = ""
 	
 	@classmethod
+	def imports(cls):
+		pass
+	
+	@classmethod
 	def getObjectForName(cls, className):
+		cls.imports()
 		for aClass in cls.__subclasses__():
 			if aClass.Name == className:
 				return aClass
