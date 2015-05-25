@@ -5,5 +5,6 @@ class HomeStatsOctaUrls(OctaUrls):
 	@classmethod
 	def getUrls(cls):
 		return [
-			url(r'^DnsAdmin/', 'DnsAdmin.views.DnsAdminMain', name='DnsAdmin'),
+			url(r'^DnsAdmin/$', handleDnsAdminView.as_view(), name='DnsAdmin'),
+			url(r'^DnsAdmin/(?P<domain>\w+)/$', handleDnsAdminView.as_view(), name='DnsAdmin'),
 		]

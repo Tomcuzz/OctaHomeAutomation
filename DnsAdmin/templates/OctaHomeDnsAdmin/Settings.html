@@ -16,7 +16,8 @@
 				<th>#</th>
 				<th>Record Type</th>
 				<th>Area</th>
-				<th>Zone</th>
+				<th>Domain</th>
+				<th>Data</th>
 				<th>Actions</th>
 			</tr>
 		</thead>
@@ -43,12 +44,14 @@
 							</span>
 						</td>
 						<td>{{aZone.name}}</td>
+						<td>{{aZone.domain}}</td>
 						<td>{{aZone.rdata}}</td>
 						<td><button class="btn btn-danger" onclick="removeItem('{{aDomain.DomainName}}', '{{aZone.id}}')">Delete</button></td>
 					</tr>
 				{% endfor %}
 			{% endfor %}
 			<tr>
+				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>

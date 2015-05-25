@@ -157,7 +157,7 @@ class MenuItem(object):
 		return True
 	
 	def isActive(self):
-		if self.Link == self.Request.path:
+		if self.Link == self.Request.get_full_path():
 			return True
 		return False
 	
