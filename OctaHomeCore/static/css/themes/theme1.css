@@ -159,6 +159,7 @@ body {
 	width:100%;
 	padding: 10px;
 	padding-bottom: 0px;
+	pointer-events:initial;
 }
 
 .alert {
