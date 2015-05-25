@@ -1,8 +1,7 @@
 from django.contrib.auth.models import *
 from django.contrib.auth.backends import ModelBackend
 from django.utils.translation import ugettext_lazy as _
-from OctaHomeCore.basemodels import *
-from OctaHomeCore.authmodels import *
+from OctaHomeCore.models import *
 
 import datetime
 import string

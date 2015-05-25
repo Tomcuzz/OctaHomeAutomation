@@ -1,5 +1,5 @@
 from OctaHomeCore.OctaFiles.urls.base import *
-from OctaHomeCore.settingviews import *
+from OctaHomeCore.views.settings import *
 
 class SettingsOctaUrls(OctaUrls):
 	@classmethod

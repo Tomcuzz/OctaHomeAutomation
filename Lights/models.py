@@ -1,7 +1,6 @@
 import re
 from django.db import models
-from OctaHomeCore.devicemodels import *
-from OctaHomeCore.inputoutputmodels import *
+from OctaHomeCore.models import *
 from OctaHomeCore.communication_controller import *
 
 class LightScrollMode(DeviceMode):

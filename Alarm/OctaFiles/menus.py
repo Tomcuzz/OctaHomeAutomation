@@ -6,11 +6,11 @@ class CoreSystemsTopNavBarItem(TopNavBarItem):
 	DisplayName = "Core Systems"
 	Link = "#"
 
-class TempControlTopNavBarItem(TopNavBarItem):
+class AlarmTopNavBarItem(TopNavBarItem):
 	ParentItem = "Core Systems"
-	Priority = 50
-	DisplayName = "Temperature"
+	Priority = 20
+	DisplayName = "Alarm"
 	
 	@property
 	def Link(self):
-		return reverse('TempControl')
+		return reverse('Alarm')

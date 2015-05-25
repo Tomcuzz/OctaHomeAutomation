@@ -2,7 +2,7 @@ import datetime
 import json
 from django.db import models
 
-from OctaHomeCore.devicemodels import *
+from OctaHomeCore.models import *
 from OctaHomeCore.communication_controller import *
 
 class TempMonitorDevice(InputDevice):

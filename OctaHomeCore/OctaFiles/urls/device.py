@@ -1,6 +1,5 @@
 from OctaHomeCore.OctaFiles.urls.base import *
-from OctaHomeCore.devicecommands import *
-from OctaHomeCore.deviceviews import *
+from OctaHomeCore.views.device import *
 
 class DeviceOctaUrls(OctaUrls):
 	@classmethod

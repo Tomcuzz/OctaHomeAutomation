@@ -3,7 +3,7 @@ import json
 
 from OctaHomeCore.baseviews import *
 from OctaHomeCore.models import *
-from OctaHomeCore.menumodels import *
+from OctaHomeCore.OctaFiles.menus.base import *
 from OctaHomeCore.weathermodels import *
 from OctaHomeCore.helpers import *
 from OctaHomeCore.authmodels import *

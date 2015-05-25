@@ -1,7 +1,9 @@
 import operator
 from django.core.urlresolvers import reverse
-from locationmodels import *
-from helpers import *
+from OctaHomeCore.models import *
+from OctaHomeCore.helpers import *
+from django.conf import settings
+from django.utils import importlib
 
 class BaseMenuObjectProvider(object):
 	MenuName = ""
@@ -101,6 +103,13 @@ class Menu(object):
 	
 	@classmethod
 	def getMenuForName(cls, menuName):
+		#Import All Url files so that they appear
+		for app in settings.INSTALLED_APPS:
+			try:
+				importlib.import_module(app + ".OctaFiles.menus")
+			except: 
+				pass
+		
 		for aMenu in Menu.__subclasses__():
 			if aMenu.Name == menuName:
 				return aMenu

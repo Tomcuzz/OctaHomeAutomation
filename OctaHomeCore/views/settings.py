@@ -2,13 +2,9 @@ from django.conf import settings
 from django.utils import importlib
 import json
 
-from OctaHomeCore.baseviews import *
-from OctaHomeCore.basemodels import *
+from OctaHomeCore.views import *
 from OctaHomeCore.models import *
-from OctaHomeCore.menumodels import *
 from OctaHomeCore.helpers import *
-from OctaHomeCore.authviews import *
-from OctaHomeAppInterface.models import *
 
 class SettingsPage(NamedSubclassableView):
 	ViewPartial = ""

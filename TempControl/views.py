@@ -2,7 +2,7 @@ from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render
 from django.shortcuts import redirect
 
-from OctaHomeCore.baseviews import *
+from OctaHomeCore.views.base import *
 from models import *
 
 #View Object

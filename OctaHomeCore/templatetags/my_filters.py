@@ -1,6 +1,6 @@
 from django import template
 from django.template import RequestContext 
-from OctaHomeCore.menumodels import *
+from OctaHomeCore.OctaFiles.menus.base import *
 from django.template.loader import render_to_string
 
 register = template.Library()

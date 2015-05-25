@@ -3,8 +3,7 @@ from django.views.generic import View
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
 from django.middleware.csrf import get_token
-from models import *
-from OctaHomeCore.locationmodels import *
+from OctaHomeCore.models import *
 import django.core.serializers
 import json
 

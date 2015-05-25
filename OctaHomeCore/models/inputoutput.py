@@ -1,6 +1,5 @@
 from django.db import models
 from OctaHomeCore.models import *
-from basemodels import *
 import json
 
 ################

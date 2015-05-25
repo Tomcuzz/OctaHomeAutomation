@@ -4,20 +4,11 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 
 from DeviceInput.models import *
-from OctaHomeCore.baseviews import *
+from OctaHomeCore.views.base import *
 from OctaHomeCore.models import *
-from OctaHomeCore.menumodels import *
 
 from Lights.models import *
 from TempControl.models import *
-
-class HomeStatsTopNavBarItem(TopNavBarItem):
-	Priority = 20
-	DisplayName = "Home Stats"
-	
-	@property
-	def Link(self):
-		return reverse('HomeStats')
 
 class handleHomeStatsView(viewRequestHandler):
 	def getViewParameters(self):

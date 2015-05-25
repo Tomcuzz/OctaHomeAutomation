@@ -1,6 +1,6 @@
-from OctaHomeCore.settingviews import *
-from OctaHomeCore.authmodels import *
-from OctaHomeCore.weathermodels import *
+from OctaHomeCore.views.settings import *
+from OctaHomeCore.models.auth import *
+from OctaHomeCore.models.weather import *
 
 class EditUserSettingsPage(SettingsPage):
 	Name = "EditUser"

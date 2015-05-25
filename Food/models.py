@@ -1,6 +1,5 @@
 from django.db import models
-from OctaHomeCore.basemodels import *
-from OctaHomeCore.devicemodels import *
+from OctaHomeCore.models import *
 
 class Fridge(Device):
 	Contents = models.ManyToManyField('Ingredients', blank=True, null=True, related_name="Fridge")

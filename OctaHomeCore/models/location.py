@@ -1,5 +1,5 @@
 from django.db import models
-from weathermodels import *
+from OctaHomeCore.models import *
 
 ##################
 # Location Types #
@@ -37,7 +37,7 @@ class Home(models.Model):
 	Name = models.CharField(max_length=30)
 	Country = models.ForeignKey(Country, blank=True, null=True, related_name="Homes")
 	IsRemote = models.BooleanField(default=True)
-	WeatherLocation = models.ForeignKey(WeatherLocation, blank=True, null=True, related_name="Homes")
+	WeatherLocation = models.ForeignKey("WeatherLocation", blank=True, null=True, related_name="Homes")
 	
 	########
 	# Meta #

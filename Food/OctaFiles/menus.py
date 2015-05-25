@@ -1,4 +1,4 @@
-from OctaHomeCore.menumodels import *
+from OctaHomeCore.OctaFiles.menus.base import *
 
 #Nav Bar Item
 class FoodTopNavBarItem(TopNavBarItem):

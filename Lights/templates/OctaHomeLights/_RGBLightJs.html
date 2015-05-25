@@ -20,12 +20,12 @@
 		document.getElementsByName(lightGreenLevel)[0].innerHTML = "0";
 		document.getElementsByName(lightBlueLevel)[0].innerHTML = "0";
 		
-		url = Urls.SingleDeviceCommand('json', 'setIsOn', type, id) + "?value=False"
+		url = Urls.SingleDeviceCommand('setIsOn', type, id) + "?value=False"
 		httpGet(url);
 	}
 	
 	function RGBTurnOn(id, type) {
-		url = Urls.SingleDeviceCommand('json', 'setIsOn', type, id) + "?value=True"
+		url = Urls.SingleDeviceCommand('setIsOn', type, id) + "?value=True"
 		httpGet(url);
 		
 		lightObject = "light" + id + type + "OnOff";
@@ -35,7 +35,7 @@
 		lightGreenLevel = "light" + id + type + "Green";
 		lightBlueLevel = "light" + id + type + "Blue";
 		
-		statusurl = Urls.SingleDeviceCommand('json', 'getState', type, id)
+		statusurl = Urls.SingleDeviceCommand('getState', type, id)
 		$.getJSON(statusurl, function (json) {
 			var colour = convertHexToRGB(json["Colour"]["value"]);
 			document.getElementsByName(lightRedLevel)[0].innerHTML = colour[0];
@@ -65,7 +65,7 @@
 		window.lastLightId = id;
 		window.lastLightType = type;
 		
-		statusurl = Urls.SingleDeviceCommand('json', 'getState', type, id);
+		statusurl = Urls.SingleDeviceCommand('getState', type, id);
 		$.getJSON(statusurl, function (json) {
 			var currentPickerColour = json["Colour"]["value"];
 						
@@ -79,7 +79,7 @@
 	
 	function callback(color) {
 		var colour = convertHexToRGB(color);
-		var postUrl = Urls.SingleDeviceCommand('json', 'setColour', window.lastLightType, window.lastLightId);
+		var postUrl = Urls.SingleDeviceCommand('setColour', window.lastLightType, window.lastLightId);
 		
 		var dataString = 'value=' + color + '&csrfmiddlewaretoken={{csrfmiddlewaretoken}}'; 
 		

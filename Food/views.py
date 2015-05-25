@@ -1,4 +1,4 @@
-from OctaHomeCore.baseviews import *
+from OctaHomeCore.views.base import *
 
 #View Object
 class handleRecipesView(viewRequestHandler):

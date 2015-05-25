@@ -1,4 +1,4 @@
-from OctaHomeCore.settingviews import *
+from OctaHomeCore.views import *
 
 class ActionGroupsSettingsPage(SettingsPage):
 	Name = "ActionGroups"

@@ -1,9 +1,6 @@
 from django.db import models
-from polymorphic import PolymorphicModel
-from OctaHomeCore.locationmodels import *
-from OctaHomeCore.messagemodels import *
-from OctaHomeCore.basemodels import *
-from helpers import *
+from OctaHomeCore.models import *
+from OctaHomeCore.helpers import *
 
 class DeviceGroup(OctaBaseModel):
 	Devices = models.ManyToManyField('Device', blank=True, null=True)

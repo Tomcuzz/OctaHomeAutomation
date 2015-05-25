@@ -11,23 +11,7 @@ from models import *
 from Lights.models import *
 from DeviceInput.models import *
 import datetime
-from OctaHomeCore.baseviews import *
-from OctaHomeCore.menumodels import *
-
-#Nav Bar Item
-class CoreSystemsTopNavBarItem(TopNavBarItem):
-	Priority = 30
-	DisplayName = "Core Systems"
-	Link = "#"
-
-class AlarmTopNavBarItem(TopNavBarItem):
-	ParentItem = "Core Systems"
-	Priority = 20
-	DisplayName = "Alarm"
-	
-	@property
-	def Link(self):
-		return reverse('Alarm')
+from OctaHomeCore.views.base import *
 
 #View Object
 class handleAlarmView(viewRequestHandler):
@@ -43,19 +27,19 @@ class handleAlarmView(viewRequestHandler):
 		else:
 			raise Http404
 		
-	def getViewParameters():
+	def getViewParameters(self):
 		parameters = {}
 		if self.Page == "None":
 			if self.Page == "All":
-				parameters = {'alarms':Alarms.objects.all()}
+				parameters = {'alarms':Alarm.objects.all()}
 			elif self.Page == "System":
-				parameters = {'alarms':Alarms.objects.filter(user="System")}
+				parameters = {'alarms':Alarm.objects.filter(user="System")}
 			elif self.Page == "User":
-				parameters = {'alarms':Alarms.objects.filter(user=request.user.username)}
+				parameters = {'alarms':Alarm.objects.filter(user=request.user.username)}
 			elif self.Page == "AllUser":
-				parameters = {'alarms':Alarms.objects.filter(user="System")}
+				parameters = {'alarms':Alarm.objects.filter(user="System")}
 			else:
-				parameters = {'alarms':Alarms.objects.all()}
+				parameters = {'alarms':Alarm.objects.all()}
 			
 		elif self.Page == "AddAlarm":
 			parameters = {'todayDate':datetime.date.today().strftime("%d-%m-%Y"), 'tasks':Tasks.objects.all()}

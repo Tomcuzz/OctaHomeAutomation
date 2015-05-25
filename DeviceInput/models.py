@@ -1,6 +1,5 @@
 from django.db import models
-from OctaHomeCore.locationmodels import *
-from OctaHomeCore.devicemodels import *
+from OctaHomeCore.models import *
 
 class ButtonInputDevice(InputDevice):
 	ButtonOneAction = models.ForeignKey('OctaHomeCore.TriggerEvent', related_name="oneButtonActions", blank=True, null=True, on_delete=models.SET_NULL)

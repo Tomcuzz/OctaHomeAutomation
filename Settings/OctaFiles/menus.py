@@ -1,4 +1,4 @@
-from OctaHomeCore.menumodels import *
+from OctaHomeCore.OctaFiles.menus.base import *
 
 class SettingsTopNavBarItem(TopNavBarItem):
 	Priority = 90

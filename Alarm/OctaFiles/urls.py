@@ -5,5 +5,6 @@ class AlarmOctaUrls(OctaUrls):
 	@classmethod
 	def getUrls(cls):
 		return [
-			url(r'^Alarm/$', 'Proxmox.views.ProxmoxMain', name='Alarm'),
+		
+			url(r'^Alarm/$', handleAlarmView.as_view(), name='Alarm'),
 		]

@@ -1,5 +1,5 @@
-from baseviews import *
-from messagemodels import *
+from OctaHomeCore.views import *
+from OctaHomeCore.models import *
 import django.core.serializers
 import datetime
 from django.utils import timezone

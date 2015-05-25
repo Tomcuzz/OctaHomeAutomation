@@ -1,7 +1,6 @@
 from django.db import models
 from polymorphic import PolymorphicModel
-from OctaHomeCore.inputoutputmodels import *
-from OctaHomeCore.authmodels import *
+from OctaHomeCore.models import *
 
 import time
 import datetime

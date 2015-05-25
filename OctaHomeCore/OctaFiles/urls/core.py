@@ -1,4 +1,4 @@
-from OctaHomeCore.messagecommands import *
+from OctaHomeCore.views.message import *
 from OctaHomeCore.OctaFiles.urls.base import *
 from django.utils import importlib
 from django.conf import settings
