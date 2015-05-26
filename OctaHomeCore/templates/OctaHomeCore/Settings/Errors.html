@@ -1,0 +1,42 @@
+{% extends 'OctaHomeCore/baseWithNavBar.html' %}
+
+{% block title %} Settings - Account {% endblock %}
+
+{% block AccountNavBarActive %} active {% endblock %}
+
+{% block PageArea %}
+	<div class="page-header">
+		<h1>Errors</h1>
+	</div>
+	<div>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>id</th>
+					<th>Title</th>
+					<th>Message</th>
+					<th>Date</th>
+					<th>State</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for error in errors %}
+					<tr>
+						<td>{{ error.id }}</td>
+						<td>{{ error.Title }}</td>
+						<td>{{ error.Message }}</td>
+						<td>{{ error.Date }}</td>
+						{% if error.Dismissed %}
+							<td>Dismissed</td>
+						{% else %}
+							<td>Not Dismissed</td>
+						{% endif %}
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+{% endblock %}
+
+{% block ExtraJavaScript %}
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'OctaHomeCore/baseWithNavBar.html' %}
+
+{% block title %} Settings - Account {% endblock %}
+
+{% block AccountNavBarActive %} active {% endblock %}
+
+{% block PageArea %}
+	<div class="page-header">
+		<h1>Warnings</h1>
+	</div>
+	<div>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>id</th>
+					<th>Title</th>
+					<th>Message</th>
+					<th>Date</th>
+					<th>State</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for warning in warnings %}
+					<tr>
+						<td>{{ warning.id }}</td>
+						<td>{{ warning.Title }}</td>
+						<td>{{ warning.Message }}</td>
+						<td>{{ warning.Date }}</td>
+						{% if warning.Dismissed %}
+							<td>Dismissed</td>
+						{% else %}
+							<td>Not Dismissed</td>
+						{% endif %}
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+{% endblock %}
+
+{% block ExtraJavaScript %}
+{% endblock %}

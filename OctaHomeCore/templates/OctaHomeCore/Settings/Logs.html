@@ -1,0 +1,36 @@
+{% extends 'OctaHomeCore/baseWithNavBar.html' %}
+
+{% block title %} Settings - Account {% endblock %}
+
+{% block AccountNavBarActive %} active {% endblock %}
+
+{% block PageArea %}
+	<div class="page-header">
+		<h1>Logs</h1>
+	</div>
+	<div>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>id</th>
+					<th>Title</th>
+					<th>Message</th>
+					<th>Date</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for log in logs %}
+					<tr>
+						<td>{{ log.id }}</td>
+						<td>{{ log.Title }}</td>
+						<td>{{ log.Message }}</td>
+						<td>{{ log.Date }}</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+{% endblock %}
+
+{% block ExtraJavaScript %}
+{% endblock %}

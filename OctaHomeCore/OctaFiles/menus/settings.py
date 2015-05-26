@@ -73,8 +73,40 @@ class AddUserSettingsNavBarItem(SettingsSideNavBarItem):
 	def Link(self):
 		return reverse('SettingsPage', kwargs={'page':'AddUser'})
 
-class LogOutSettingsNavBarItem(SettingsSideNavBarItem):
+class LogsSettingsNavBarItem(SettingsSideNavBarItem):
 	Priority = 90
+	DisplayName = "Logs"
+	
+	@property
+	def Link(self):
+		return reverse('SettingsPage', kwargs={'page':'Logs'})
+
+class NotificationsSettingsNavBarItem(SettingsSideNavBarItem):
+	Priority = 100
+	DisplayName = "Notifications"
+	
+	@property
+	def Link(self):
+		return reverse('SettingsPage', kwargs={'page':'Notifications'})
+
+class WarningsSettingsNavBarItem(SettingsSideNavBarItem):
+	Priority = 110
+	DisplayName = "Warnings"
+	
+	@property
+	def Link(self):
+		return reverse('SettingsPage', kwargs={'page':'Warnings'})
+
+class ErrorsSettingsNavBarItem(SettingsSideNavBarItem):
+	Priority = 120
+	DisplayName = "Errors"
+	
+	@property
+	def Link(self):
+		return reverse('SettingsPage', kwargs={'page':'Errors'})
+
+class LogOutSettingsNavBarItem(SettingsSideNavBarItem):
+	Priority = 900
 	DisplayName = "Log Out"
 	
 	@property
