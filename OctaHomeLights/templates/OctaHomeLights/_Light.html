@@ -1,0 +1,29 @@
+{% load my_filters %}
+
+<tr>
+	<td>{{aDevice.id}}</td>
+	<td>{{aDevice.Name | replaceUnderscores}}</td>
+	<td>
+		{% if aDevice.Rooms.all|length > 0 %}
+		<ul style="padding-left: 20px;">
+			{% for room in aDevice.Rooms.all %}
+				<li>{{ room.Name }}</li>
+			{% endfor %}
+		</ul>
+		{% else %}
+			None
+		{% endif %}
+	</td>
+	{% if aDevice.IsOn %}
+		<td name="light{{aDevice.id}}State" class="text-success">{{aDevice.LightState}}</td>
+	{% else %}
+		<td name="light{{aDevice.id}}State" class="text-danger">{{aDevice.LightState}}</td>
+	{% endif %}
+	<td>
+		{% if aDevice.IsOn %}
+			<button class="btn btn-danger" name="light{{aDevice.id}}OnOff" onClick="onOffSwitchState('{{aDevice.id}}', '{{aDevice|getClassName}}')">{{aDevice.getSuperClassNames}}Turn Off</button>
+		{% else %}
+			<button class="btn btn-success" name="light{{aDevice.id}}OnOff" onClick="onOffSwitchState('{{aDevice.id}}', '{{aDevice|getClassName}}')">{{aDevice.getSuperClassNames}}Turn On</button>
+		{% endif %}
+	</td>
+</tr>

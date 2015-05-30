@@ -1,0 +1,15 @@
+{% load my_filters %}
+<CiscoIPPhoneMenu>
+	<Title>Home Automation System</Title>
+	<Prompt>Please Select A House</Prompt>
+	<MenuItem>
+		<Name>All</Name>
+		<URL>http://192.168.1.101{% url 'Lights' house='all' %}</URL>
+	</MenuItem>
+	{% for house in houses %}
+		<MenuItem>
+			<Name>{{ house.Name }}</Name>
+			<URL>http://192.168.1.101{% url 'Lights' house=house.id %}</URL>
+		</MenuItem>
+	{% endfor %}
+</CiscoIPPhoneMenu>

@@ -1,0 +1,535 @@
+{% extends 'pages/Proxmox/ProxmoxTemplate.html' %}
+{% load proxmox_name_convertion %}
+
+{% block ProxmoxTitle %}"{{Vz.name}}" Vz Container{% endblock %}
+
+{% block HomeHeadJavaScript %}
+	<script src="{{STATIC_URL}}js/Chart.js"></script>
+{% endblock %}
+
+{% block ProxmoxPageArea %}
+	<ul class="nav nav-tabs">
+		<li class="active"><a href="#summary" data-toggle="tab">Summary</a></li>
+		<li><a href="#stats" data-toggle="tab">Statistics</a></li>
+		<li><a href="#settings" data-toggle="tab">Settings</a></li>
+		<li><a href="#console" data-toggle="tab" onclick="consoleClicked()">Console</a></li>
+	</ul>
+	<div class="tab-content">
+		<div class="tab-pane active" id="summary">
+			<div class="col-md-4">
+				<h4>Server Status:</h4>
+				{% if Vz.status == "running" %}
+					<h4 id="state" class="text-success">Running</h4>
+				{% else %}
+					<h4 id="state" class="text-danger">Stopped</h4>
+				{% endif %}
+				<p></p>
+				<p></p>
+				<p></p>
+				<p></p>
+				<h4>Total Storage:</h4>
+				{% for storageDevice in StorageDevices.nodes %}
+					{% if storageDevice.node == Node %}
+						<p>{{Vz.disk|spaceToGB|floatformat:2}} GB Used / {{Vz.maxdisk|spaceToGB|floatformat:2}} GB Avalable</p>
+						<div class="progress">
+							<div class="progress-bar progress-bar-danger" style="width: {% widthratio Vz.disk|spaceToGB Vz.maxdisk|spaceToGB 100 %}%"></div>
+						</div>
+					{% endif %}
+				{% endfor %}
+				<h4>Uptime:</h4>
+				{% for uptimeItem in ServerStatuses.uptimes %}
+						{% if uptimeItem.node == Node %}
+							<p>Uptime: {{uptimeItem.uptime}}</p>
+						{% endif %}
+				{% endfor %}
+				<h4>Basic Controls:</h4>
+				<div>
+					<p>
+						{% if Vz.status == "running" %}
+								<button onclick="startClicked" id="startButton" type="button" type="button" class="btn btn-success" style="width: 32%" disabled>Start</button>
+
+								<button onclick="shutdownClicked()" id="shutdownButton" style="width: 34.3%; margin-left:-1px;" type="button" class="btn btn-warning">Shutdown</button>
+								<button onclick="stopClicked()" id="stopButton" type="button" style="width: 32%" class="btn btn-warning pull-right">Stop</button>
+						{% else %}
+								<button onclick="startClicked()" id="startButton" type="button" style="width: 32%" class="btn btn-success">Start</button>
+
+								<button onclick="shutdownClicked()" id="shutdownButton" style="width: 34%; margin-left:-1px;" type="button" class="btn btn-warning" disabled>Shutdown</button>
+								<button onclick="stopClicked()" id="stopButton" type="button" class="btn btn-warning pull-right" style="width: 32%" disabled>Stop</button>
+						{% endif %}
+						<p></p>
+						<button type="button" class="btn btn-info" style="width: 49.5%" data-toggle="modal" data-target="#migrateWindow">Migrate</button>
+						<button type="button" class="btn btn-danger pull-right" style="width: 49.5%" data-toggle="modal" data-target="#deleteWindow">Remove</button>
+					</p>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<h4>Domain Name:</h4>
+				<h4 id="state" class="text-success">{{Vz.name}}</h4>
+				<h4>IP Address:</h4>
+				<h4 id="state" class="text-success">{{Vz.ip}}</h4>
+			</div>
+			<div class="col-md-4">
+				<h4>Past Tasks:</h4>
+				<ul class="list-group" style="height: 300px !important; overflow: scroll;">
+				{% for task in tasks %}
+					{% if task.id == Vz.vmid %}
+						<li class="list-group-item">
+							{% if task.type == "vzcreate" %}
+								<h4 class="list-group-item-heading text-info">
+							{% elif task.type == "vzstart" %}
+								<h4 class="list-group-item-heading text-success">
+							{% elif task.type == "vzshutdown" %}
+								<h4 class="list-group-item-heading text-warning">
+							{% elif task.type == "vzstop" %}
+								<h4 class="list-group-item-heading text-warning">
+							{% elif task.type == "vncproxy" %}
+								<h4 class="list-group-item-heading text-info">
+							{% elif task.type == "vzdestroy" %}
+								<h4 class="list-group-item-heading text-danger">
+							{% elif task.type == "startall" %}
+								<h4 class="list-group-item-heading text-success">
+							{% elif task.type == "vzclone" %}
+								<h4 class="list-group-item-heading text-primary">
+							{% elif task.type == "vzmigrate" %}
+								<h4 class="list-group-item-heading text-primary">
+							{% else %}
+								<h4 class="list-group-item-heading">
+							{% endif %}
+							{% if task.id %}{{task.id}}{% else %}System{% endif %}: {{task.type|formatTaskType}}</h4>
+							{% if task.status == "OK" %}
+								<p class="list-group-item-text text-success">{{task.status}}</p>
+							{% else %}
+								<p class="list-group-item-text text-danger">{{task.status}}</p>
+							{% endif %}
+						</li>
+					{% endif %}
+				{% endfor %}
+				</ul>
+			</div>
+		</div>
+		<div class="tab-pane" id="stats">
+			<br>
+			<h4>CPU Usage:</h4>
+			<canvas id="cpuChart" width="900" height="200"></canvas>
+			<br>
+			<br>
+			<div class="btn-group">
+				<button class="btn btn-primary active" data-loading-text="Loading..." type="button" id="hourCpu">Hour</button>
+				<button class="btn btn-primary" data-loading-text="Loading..." type="button" id="dayCpu">Day</button>
+				<button class="btn btn-primary" data-loading-text="Loading..." type="button" id="weekCpu">Week</button>
+				<button class="btn btn-primary" data-loading-text="Loading..." type="button" id="monthCpu">Month</button>
+				<button class="btn btn-primary" data-loading-text="Loading..." type="button" id="yearCpu">Year</button>
+			</div>
+			<br>
+			<br>
+			<h4>RAM Usage:</h4>
+			<canvas id="ramChart" width="900" height="200"></canvas>
+			<br>
+			<br>
+			<div class="btn-group">
+				<button class="btn btn-primary active" data-loading-text="Loading..." type="button" id="hourRam">Hour</button>
+				<button class="btn btn-primary" data-loading-text="Loading..." type="button" id="dayRam">Day</button>
+				<button class="btn btn-primary" data-loading-text="Loading..." type="button" id="weekRam">Week</button>
+				<button class="btn btn-primary" data-loading-text="Loading..." type="button" id="monthRam">Month</button>
+				<button class="btn btn-primary" data-loading-text="Loading..." type="button" id="yearRam">Year</button>
+			</div>
+			<br>
+			<br>
+			<br>
+		</div>
+		<div class="tab-pane" id="settings">
+			
+		</div>
+		<div class="tab-pane" id="console">
+		<div id="ConsloleLoadAlert" class="alert alert-warning" style="margin-top:10px;">
+		Loading of server console may take a moment, press enter when screen appears.
+		</div>
+		<br>
+		 <div id="pveKVMConsole-1018-body" style="height: 500px; left: 0px; top: 0px; ">
+		 	<div id="vncviewer-applet" role="presentation" style="margin: 0px;height: 500px;">
+		 	</div>
+		 </div> 
+ </div>
+     <!-- Fields required for history management -->
+     <form id="history-form" class="x-hidden">
+     <input type="hidden" id="x-history-field">
+     </form>
+    
+  
+ <iframe frameborder="0" class="x-shim" src="about:blank" id="ext-gen1014" style="display: none; "></iframe><div id="ext-comp-1015" class="x-tip x-tip-default x-layer" style="position: absolute; display: none; left: 373px; top: 214px; " role="tooltip" aria-labelledby="component-1017"><div id="ext-comp-1015-body" class="x-tip-body  x-tip-body-default x-tip-body-default"></div><div class="x-tip-anchor x-tip-anchor-top" id="ext-gen1011" style="z-index: 1; "></div></div><div tabindex="-1" class="x-focus-element" id="ext-gen1035">
+		</div>
+	</div>
+	<!-- Modal -->
+	<div class="modal fade bs-modal-sm" id="migrateWindow" tabindex="-1" role="dialog" aria-labelledby="Migrate Container" aria-hidden="true">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">Migrate Container</h4>
+				</div>
+				<div class="modal-body">
+					<p>Please Select The Target:</p>
+					<select class="form-control" id="migrateTarget">
+						{% for aNode in ServerStatuses.uptimes %}
+							<option>{{aNode.node}}</option>
+						{% endfor %}
+					</select>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+					<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="submitMigrate()">Migrate Server</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Modal -->
+	<div class="modal fade bs-modal-sm" id="deleteWindow" tabindex="-1" role="dialog" aria-labelledby="Migrate Container" aria-hidden="true">
+		<div class="modal-dialog modal-sm">
+			<div class="alert alert-danger fade in">
+				<button type="button" class="close" data-dismiss="modal">×</button>
+				<h4>Warning!</h4>
+				<p>You Are About To Delete A Server!<br>
+				Are You Sure That You Want To Continue?<br>
+				This Action Can Not Be Undone!<br></p>
+				<p>
+				<button type="button" class="btn btn-danger" data-dismiss="modal" onclick="removeCT()">Delete Server</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+			</p>
+		</div>
+	</div>
+{% endblock %}
+
+{% block ExtraJavaScript %}
+	<script>
+		function submitMigrate() {
+			target = document.getElementById("migrateTarget").value;
+			$.get('{% url 'Proxmox' %}?command=migrateCT&node={{node}}&ct={{Vz.vmid}}&target=' + target, function(data){});
+			
+			window.location.href = "{% url 'Proxmox' %}";
+		}
+		function startClicked(){
+			$.get('{% url 'Proxmox' %}?command=startCT&node={{node}}&ct={{Vz.vmid}}', function(data){});
+			
+			document.getElementById("startButton").disabled = true;
+			document.getElementById("shutdownButton").disabled = false;
+			document.getElementById("stopButton").disabled = false;
+			document.getElementById("state").innerHTML = "Running";
+			document.getElementById("state").className = "text-success";
+		}
+		function shutdownClicked(){
+			$.get('{% url 'Proxmox' %}?command=shutdownCT&node={{node}}&ct={{Vz.vmid}}', function(data){});
+			
+			document.getElementById("startButton").disabled = false;
+			document.getElementById("shutdownButton").disabled = true;
+			document.getElementById("stopButton").disabled = true;
+			document.getElementById("state").innerHTML = "Stopped";
+			document.getElementById("state").className = "text-danger";
+		}
+		function stopClicked(){
+			$.get('{% url 'Proxmox' %}?command=stopCT&node={{node}}&ct={{Vz.vmid}}', function(data){});
+			
+			document.getElementById("startButton").disabled = false;
+			document.getElementById("shutdownButton").disabled = true;
+			document.getElementById("stopButton").disabled = true;
+			document.getElementById("state").innerHTML = "Stopped";
+			document.getElementById("state").className = "text-danger";
+		}
+		function removeCT() {
+			$.get('{% url 'Proxmox' %}?command=removeCT&node={{node}}&ct={{Vz.vmid}}', function(data){});
+			
+			window.location.href = "{% url 'Proxmox' %}";
+		}
+		function consoleClicked() {
+			$.get("/Proxmox/?command=consoleCT&node={{node}}&ct={{Vz.vmid}}", function(data){
+			    var $response = $(data);
+			    var vncviewerapplet=document.getElementById("vncviewer-applet");
+			    vncviewerapplet.innerHTML=data;
+			    
+				(elem=document.getElementById("ConsloleLoadAlert")).parentNode.removeChild(elem);
+			});
+	    }
+	    
+	    $( document ).ready(function() {
+	    	$.get('{% url 'Proxmox' %}?command=ctStats&node={{node}}&ct={{Vz.vmid}}&time=hour', function(data){
+	    		drawCPUTable(data);
+	    		drawRAMTable(data);
+	    	});
+	    });
+	    
+	    $('#hourCpu').click(function () {
+			deselectAllCpuChartButtons();
+			var btn = $(this)
+			btn.button('loading')
+			$.get('{% url 'Proxmox' %}?command=ctStats&node={{node}}&ct={{Vz.vmid}}&time=hour', function(data){
+	    		drawCPUTable(data);
+				btn.button('reset');
+				selectButton("hourCpu");
+	    	});
+		});
+	    $('#dayCpu').click(function () {
+	    	deselectAllCpuChartButtons();
+	    	var btn = $(this)
+			btn.button('loading')
+			$.get('{% url 'Proxmox' %}?command=ctStats&node={{node}}&ct={{Vz.vmid}}&time=day', function(data){
+	    		drawCPUTable(data);
+				btn.button('reset');
+				selectButton("dayCpu");
+	    	});
+		});
+		$('#weekCpu').click(function () {
+			deselectAllCpuChartButtons();
+	    	var btn = $(this)
+			btn.button('loading')
+			$.get('{% url 'Proxmox' %}?command=ctStats&node={{node}}&ct={{Vz.vmid}}&time=week', function(data){
+	    		drawCPUTable(data);
+				btn.button('reset');
+				selectButton("weekCpu");
+	    	});
+		});
+		$('#monthCpu').click(function () {
+			deselectAllCpuChartButtons();
+	    	var btn = $(this)
+			btn.button('loading')
+			$.get('{% url 'Proxmox' %}?command=ctStats&node={{node}}&ct={{Vz.vmid}}&time=month', function(data){
+	    		drawCPUTable(data);
+				btn.button('reset');
+				selectButton("monthCpu");
+	    	});
+		});
+		$('#yearCpu').click(function () {
+			deselectAllCpuChartButtons();
+	    	var btn = $(this)
+			btn.button('loading')
+			$.get('{% url 'Proxmox' %}?command=ctStats&node={{node}}&ct={{Vz.vmid}}&time=year', function(data){
+	    		drawCPUTable(data);
+				btn.button('reset');
+				selectButton("yearCpu");
+	    	});
+		});
+	    
+	    $('#hourRam').click(function () {
+			deselectAllRamChartButtons();
+			var btn = $(this)
+			btn.button('loading')
+			$.get('{% url 'Proxmox' %}?command=ctStats&node={{node}}&ct={{Vz.vmid}}&time=hour', function(data){
+	    		drawRAMTable(data);
+				btn.button('reset');
+				selectButton("hourRam");
+	    	});
+		});
+	    $('#dayRam').click(function () {
+			deselectAllRamChartButtons();
+	    	var btn = $(this)
+			btn.button('loading')
+			$.get('{% url 'Proxmox' %}?command=ctStats&node={{node}}&ct={{Vz.vmid}}&time=day', function(data){
+	    		drawRAMTable(data);
+				btn.button('reset');
+				selectButton("dayRam");
+	    	});
+		});
+		$('#weekRam').click(function () {
+			deselectAllRamChartButtons();
+	    	var btn = $(this)
+			btn.button('loading')
+			$.get('{% url 'Proxmox' %}?command=ctStats&node={{node}}&ct={{Vz.vmid}}&time=week', function(data){
+	    		drawRAMTable(data);
+				btn.button('reset');
+				selectButton("weekRam");
+	    	});
+		});
+		$('#monthRam').click(function () {
+			deselectAllRamChartButtons();
+	    	var btn = $(this)
+			btn.button('loading')
+			$.get('{% url 'Proxmox' %}?command=ctStats&node={{node}}&ct={{Vz.vmid}}&time=month', function(data){
+	    		drawRAMTable(data);
+				btn.button('reset');
+				selectButton("monthRam");
+	    	});
+		});
+		$('#yearRam').click(function () {
+			deselectAllRamChartButtons();
+	    	var btn = $(this)
+			btn.button('loading')
+			$.get('{% url 'Proxmox' %}?command=ctStats&node={{node}}&ct={{Vz.vmid}}&time=year', function(data){
+	    		drawRAMTable(data);
+				btn.button('reset');
+				selectButton("yearRam");
+	    	});
+		});
+	    
+	    function deselectAllCpuChartButtons() {
+		    document.getElementById("hourCpu").className = "btn btn-primary";
+		    document.getElementById("dayCpu").className = "btn btn-primary";
+		    document.getElementById("weekCpu").className = "btn btn-primary";
+		    document.getElementById("monthCpu").className = "btn btn-primary";
+		    document.getElementById("yearCpu").className = "btn btn-primary";
+	    }
+	    
+	    function deselectAllRamChartButtons() {
+		    document.getElementById("hourRam").className = "btn btn-primary";
+		    document.getElementById("dayRam").className = "btn btn-primary";
+		    document.getElementById("weekRam").className = "btn btn-primary";
+		    document.getElementById("monthRam").className = "btn btn-primary";
+		    document.getElementById("yearRam").className = "btn btn-primary";
+	    }
+	    
+	    function selectButton(selectedButton) {
+		    document.getElementById(selectedButton).className = "btn btn-primary active";
+	    }
+	    
+	    
+	    function drawCPUTable(jsonWebData) {
+	    	var webData = JSON.parse(jsonWebData);
+	    	
+	    	var axisLabels = [];
+	    	var object1Vdata = [];
+	    	
+	    	for(var i = 0; i < webData.length; i++) {
+				var obj = webData[i];
+				
+				var d = new Date();
+				d.setTime(obj["time"]+"000");
+				
+				var formatTime = d.getDate() + "-"
+				+ (d.getMonth()+1)  + "-" 
+                + d.getFullYear() + " "  
+                + d.getHours() + ":"  
+                + d.getMinutes();
+				
+				
+				axisLabels[i] = formatTime;
+				object1Vdata[i] = obj["cpu"];
+			}
+	    	
+	    	
+			var data = {
+				labels : axisLabels,
+				datasets : [
+					{
+						fillColor : "rgba(151,187,205,0.5)",
+						strokeColor : "rgba(151,187,205,1)",
+						pointColor : "rgba(151,187,205,1)",
+						pointStrokeColor : "#fff",
+						data : object1Vdata
+					}
+				]
+			};
+			
+			drawChart("#cpuChart", data)
+		}
+		
+		function drawRAMTable(jsonWebData) {
+	    	var webData = JSON.parse(jsonWebData);
+	    	
+	    	var axisLabels = [];
+	    	var object1Vdata = [];
+	    	
+	    	for(var i = 0; i < webData.length; i++) {
+				var obj = webData[i];
+				
+				var d = new Date();
+				d.setTime(obj["time"]+"000");
+				
+				var formatTime = d.getDate() + "-"
+				+ (d.getMonth()+1)  + "-"
+                + d.getFullYear() + " "
+                + d.getHours() + ":"
+                + d.getMinutes();
+				
+				
+				axisLabels[i] = formatTime;
+				object1Vdata[i] = obj["mem"] / 1073741824;
+			}
+	    	
+	    	
+			var data = {
+				labels : axisLabels,
+				datasets : [
+					{
+						fillColor : "rgba(151,187,205,0.5)",
+						strokeColor : "rgba(151,187,205,1)",
+						pointColor : "rgba(151,187,205,1)",
+						pointStrokeColor : "#fff",
+						data : object1Vdata
+					}
+				]
+			};
+			
+			drawChart("#ramChart", data)
+		}
+		
+		function drawChart(chart, data) {
+			//Get context with jQuery - using jQuery's .get() method.
+			var ctx = $(chart).get(0).getContext("2d");
+			//This will get the first returned node in the jQuery collection.
+			var myNewChart = new Chart(ctx);
+			
+			var options = getGraphOptions();
+			
+			//This will get the first returned node in the jQuery collection.
+			var myNewChart = new Chart(ctx).Line(data,options);
+		}
+		
+		function getGraphOptions() {
+		    var options = {
+				//Boolean - If we show the scale above the chart data			
+				scaleOverlay : false,
+				//Boolean - If we want to override with a hard coded scale
+				scaleOverride : false,
+				//** Required if scaleOverride is true **
+				//Number - The number of steps in a hard coded scale
+				scaleSteps : null,
+				//Number - The value jump in the hard coded scale
+				scaleStepWidth : null,
+				//Number - The scale starting value
+				scaleStartValue : null,
+				//String - Colour of the scale line	
+				scaleLineColor : "rgba(0,0,0,.1)",
+				//Number - Pixel width of the scale line	
+				scaleLineWidth : 1,
+				//Boolean - Whether to show labels on the scale	
+				scaleShowLabels : true,
+				//Interpolated JS string - can access value
+				scaleLabel : "<%=value%>",
+				//String - Scale label font declaration for the scale label
+				scaleFontFamily : "'Arial'",
+				//Number - Scale label font size in pixels	
+				scaleFontSize : 12,
+				//String - Scale label font weight style	
+				scaleFontStyle : "normal",
+				//String - Scale label font colour	
+				scaleFontColor : "#666",
+				///Boolean - Whether grid lines are shown across the chart
+				scaleShowGridLines : true,
+				//String - Colour of the grid lines
+				scaleGridLineColor : "rgba(0,0,0,.05)",
+				//Number - Width of the grid lines
+				scaleGridLineWidth : 1,	
+				//Boolean - Whether the line is curved between points
+				bezierCurve : true,
+				//Boolean - Whether to show a dot for each point
+				pointDot : true,
+				//Number - Radius of each point dot in pixels
+				pointDotRadius : 3,
+				//Number - Pixel width of point dot stroke
+				pointDotStrokeWidth : 1,
+				//Boolean - Whether to show a stroke for datasets
+				datasetStroke : true,
+				//Number - Pixel width of dataset stroke
+				datasetStrokeWidth : 2,
+				//Boolean - Whether to fill the dataset with a colour
+				datasetFill : true,
+				//Boolean - Whether to animate the chart
+				animation : true,
+				//Number - Number of animation steps
+				animationSteps : 60,
+				//String - Animation easing effect
+				animationEasing : "easeOutQuart",
+				//Function - Fires when the animation is complete
+				onAnimationComplete : null
+			};
+			return options;
+	    }
+	</script>
+{% endblock %}

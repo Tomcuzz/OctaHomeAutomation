@@ -1,0 +1,73 @@
+{% extends 'OctaHomeCore/baseWithNavBar.html' %}
+{% load my_filters %}
+
+{% block title %} DNS Admin {% endblock %}
+
+{% block AccountNavBarActive %} active {% endblock %}
+
+{% block PageArea %}
+	<div class="page-header">
+		<h1>DNS Admin</h1>
+	</div>
+	<h2>Areas:</h2>
+	<table id="buttonTable" class="table table-striped">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Record Type</th>
+				<th>Area</th>
+				<th>Domain</th>
+				<th>Data</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for aDomain in Domains %}
+				{% for aZone in aDomain.ZoneItems %}
+					<tr id="{{aDomain.DomainName}}{{aZone.id}}">
+						<td>{{aZone.id}}</td>
+						<td>
+							{% if aZone.rdtype == "A" %}
+								<span class="label label-success">
+							{% elif aZone.rdtype == "CNAME" %}
+								<span class="label label-primary">
+							{% elif aZone.rdtype == "NS" %}
+								<span class="label label-info">
+							{% elif aZone.rdtype == "AAAA" %}
+								<span class="label label-warning">
+							{% elif aZone.rdtype == "SOA" %}
+								<span class="label label-danger">
+							{% else %}
+								<span class="label label-default">
+							{% endif %}
+								{{aZone.rdtype}}
+							</span>
+						</td>
+						<td>{{aZone.name}}</td>
+						<td>{{aZone.domain}}</td>
+						<td>{{aZone.rdata}}</td>
+						<td><button class="btn btn-danger" onclick="removeItem('{{aDomain.DomainName}}', '{{aZone.id}}')">Delete</button></td>
+					</tr>
+				{% endfor %}
+			{% endfor %}
+			<tr>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td><a href="/DeviceInput/?page=addButtonDevice"><button class="btn btn-primary">+</button></a></td>
+			</tr>
+		</tbody>
+	</table>
+{% endblock %}
+
+{% block ExtraJavaScript %}
+	<script>
+		function removeItem(domain, record) {
+			$.get('{% url 'DnsAdmin' %}?command=removeZone&domain=' + domain + '&record=' + record, function(data){});
+			theRowName = domain + record;
+			(elem=document.getElementById(theRowName)).parentNode.removeChild(elem);
+		}
+	</script>
+{% endblock %}
