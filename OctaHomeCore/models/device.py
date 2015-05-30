@@ -1,5 +1,6 @@
 from django.db import models
 from OctaHomeCore.models import *
+from OctaHomeCore.models.location import *
 from OctaHomeCore.helpers import *
 
 class DeviceGroup(OctaBaseModel):

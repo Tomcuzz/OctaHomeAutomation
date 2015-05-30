@@ -43,19 +43,8 @@ fi
 
 pip install Django
 pip install django-celery
-easy_install django-celery
-pip install python-dateutil
 
-#Proxmoxer
-pip install proxmoxer
-pip install requests
-pip install paramiko
-#End Proxmoxer
-
-pip install astral
-pip install authy
-pip install django-js-reverse
-pip install django-polymorphic
+pip install -r ../OctaHomeCore/requirements.txt
 
 cp InitScript.txt /etc/init.d/homeautomation
 chmod +x /etc/init.d/homeautomation

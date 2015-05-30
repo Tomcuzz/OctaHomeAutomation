@@ -128,10 +128,10 @@ MIDDLEWARE_CLASSES = (
     'OctaHomeAppInterface.csrf.DisableCSRF'
 )
 
-ROOT_URLCONF = 'HomeAutomation.urls'
+ROOT_URLCONF = 'OctaHomeCore.runtime.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = 'HomeAutomation.wsgi.application'
+WSGI_APPLICATION = 'OctaHomeCore.runtime.wsgi.application'
 
 INSTALLED_APPS = (
     #Django stuff
