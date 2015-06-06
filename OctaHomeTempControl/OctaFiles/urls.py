@@ -1,5 +1,5 @@
 from OctaHomeCore.OctaFiles.urls.base import *
-from TempControl.views import *
+from OctaHomeTempControl.views import *
 
 class TempControlOctaUrls(OctaUrls):
 	@classmethod

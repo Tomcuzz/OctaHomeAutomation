@@ -6,7 +6,7 @@ class NetworkingTopNavBarItem(TopNavBarItem):
 	DisplayName = "Networking"
 	Link = "#"
 
-class ProxmoxTopNavBarItem(TopNavBarItem):
+class OctaHomeProxmoxTopNavBarItem(TopNavBarItem):
 	ParentItem = "Networking"
 	Priority = 10
 	DisplayName = "Proxmox"

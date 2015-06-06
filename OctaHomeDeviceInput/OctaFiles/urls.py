@@ -4,5 +4,5 @@ class DeviceInputOctaUrls(OctaUrls):
 	@classmethod
 	def getUrls(cls):
 		return [
-			url(r'^DeviceInput/$', 'Proxmox.views.ProxmoxMain', name='DeviceInput'),
+			url(r'^DeviceInput/$', 'OctaHomeProxmox.views.ProxmoxMain', name='DeviceInput'),
 		]

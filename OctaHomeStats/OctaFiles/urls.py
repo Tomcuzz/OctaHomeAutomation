@@ -1,5 +1,5 @@
 from OctaHomeCore.OctaFiles.urls.base import *
-from HomeStats.views import *
+from OctaHomeStats.views import *
 
 class HomeStatsOctaUrls(OctaUrls):
 	@classmethod

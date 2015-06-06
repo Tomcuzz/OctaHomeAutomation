@@ -2,9 +2,9 @@
 from django.http import HttpResponse, HttpResponseNotFound
 from celery.task import task
 from models import *
-from Lights.commands import *
+from OctaHomeLights.commands import *
 from Account.sideBar import *
-from Alarm.tasks import *
+from OctaHomeAlarm.tasks import *
 from tasks import *
 import SocketServer
 from wsgiref import handlers

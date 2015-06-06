@@ -1,8 +1,8 @@
 from celery.task import task
-from Alarm.models import *
-from Weather.views import *
-from Lights.models import *
-from DeviceInput.models import *
+from models import *
+from OctaHomeWeather.views import *
+from OctaHomeLights.models import *
+from OctaHomeDeviceInput.models import *
 import json
 import time
 import datetime

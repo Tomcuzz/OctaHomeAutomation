@@ -1,5 +1,5 @@
 from OctaHomeCore.OctaFiles.urls.base import *
-from Alarm.views import *
+from OctaHomeAlarm.views import *
 
 class AlarmOctaUrls(OctaUrls):
 	@classmethod

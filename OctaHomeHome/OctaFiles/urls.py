@@ -1,7 +1,7 @@
 from OctaHomeCore.OctaFiles.urls.base import *
-from Home.views import *
+from OctaHomeHome.views import *
 
-class HomeOctaUrls(OctaUrls):
+class OctaHomeHomeOctaUrls(OctaUrls):
 	@classmethod
 	def getUrls(cls):
 		return [

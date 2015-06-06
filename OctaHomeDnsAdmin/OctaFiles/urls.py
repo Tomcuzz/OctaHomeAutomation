@@ -1,5 +1,5 @@
 from OctaHomeCore.OctaFiles.urls.base import *
-from DnsAdmin.views import *
+from OctaHomeDnsAdmin.views import *
 
 class HomeStatsOctaUrls(OctaUrls):
 	@classmethod

@@ -3,12 +3,12 @@ from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render
 from django.shortcuts import redirect
 
-from DeviceInput.models import *
+from OctaHomeDeviceInput.models import *
 from OctaHomeCore.views.base import *
 from OctaHomeCore.models import *
 
-from Lights.models import *
-from TempControl.models import *
+from OctaHomeLights.models import *
+from OctaHomeTempControl.models import *
 
 class handleHomeStatsView(viewRequestHandler):
 	def getViewParameters(self):

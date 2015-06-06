@@ -5,11 +5,11 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from django.contrib.auth.models import User
 from django.db.models import Q
-from Alarm.tasks import *
-from Alarm.commands import *
+from tasks import *
+from commands import *
 from models import *
-from Lights.models import *
-from DeviceInput.models import *
+from OctaHomeLights.models import *
+from OctaHomeDeviceInput.models import *
 import datetime
 from OctaHomeCore.views.base import *
 

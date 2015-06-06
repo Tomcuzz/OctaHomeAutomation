@@ -1,5 +1,5 @@
 from OctaHomeCore.OctaFiles.urls.base import *
-from Food.views import *
+from OctaHomeFood.views import *
 
 class FoodOctaUrls(OctaUrls):
 	@classmethod

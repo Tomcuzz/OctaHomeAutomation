@@ -2,6 +2,7 @@ from OctaHomeCore.views import *
 from OctaHomeCore.models import *
 import json
 
+from OctaHomeLights.models import *
 ###############
 # View Object #
 ###############
