@@ -2,7 +2,6 @@ from django.db import models
 from OctaHomeCore.models import *
 
 class Fridge(Device):
-	Contents = models.ManyToManyField('Ingredients', blank=True, null=True, related_name="Fridge")
 	
 	class Meta:
 		db_table = u'Fridges'
@@ -17,9 +16,9 @@ class Ingredients(OctaBaseModel):
 		db_table = u'Ingredients'
 
 class FridgeIngredientStockLevel(OctaBaseModel):
-	Ingredient = models.ManyToManyField('Ingredient', blank=True, null=True, related_name="FridgeStockLevel")
-	Fridge = models.ManyToManyField('Fridge', blank=True, null=True, related_name="IngredientStock")
-	StockLevel = models.DecimalField(default=0)
+	Ingredient = models.ManyToManyField('Ingredients', blank=True, null=True, related_name="FridgeStockLevel")
+	Fridge = models.ManyToManyField('Fridge', blank=True, null=True, related_name="Contents")
+	StockLevel = models.DecimalField(default=0, decimal_places=5, max_digits=65)
 	ExpirationDate = models.DateTimeField()
 	
 	class Meta:

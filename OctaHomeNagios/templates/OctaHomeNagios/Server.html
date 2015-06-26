@@ -1,0 +1,36 @@
+{% extends 'OctaHomeCore/baseWithNavBar.html' %}
+{% load my_filters %}
+
+{% block title %} {{title}} {% endblock %}
+
+{% block LightsNavBarActive %} active {% endblock %}
+
+{% block NavBarItems %}
+	{% if sideBarName and sideBarName != "" %}
+		{% get_menu_with_name_and_section "DeviceSideNavBar" sideBarName %}
+	{% endif %}
+{% endblock %}
+
+{% block PageArea %}
+	<div class="page-header">
+		<h1>{{title}}</h1>
+	</div>
+	<table id="lightTable" class="table table-striped">
+		<thead>
+			<tr>
+				<th>Server</th>
+				<th>Room</th>
+				<th>Status</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for server in servers %}
+				<tr>
+					<td>{{ server.name }}</td>
+					<td></td>
+					<td>{{ server.status }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}

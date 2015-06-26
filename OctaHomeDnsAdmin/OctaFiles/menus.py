@@ -11,7 +11,7 @@ class NetworkingTopNavBarItem(TopNavBarItem):
 
 class DnsAdminTopNavBarItem(TopNavBarItem):
 	ParentItem = "Networking"
-	Priority = 20
+	Priority = 30
 	DisplayName = "Dns Admin"
 	
 	@property
