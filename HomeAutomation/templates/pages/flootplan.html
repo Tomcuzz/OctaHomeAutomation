@@ -1,0 +1,445 @@
+<html>
+	<canvas id="floorplan" width="802" height="302">
+	</canvas>
+	<script>
+		
+//		var serverResponse = '{
+//								"doors":[
+//									{"id":0, "name":"Front Door", "locked":True, "closed":True},
+//									{"id":1, "name":"Living Room Door", "locked":True, "closed":True},
+//									{"id":2, "name":"Bath Room Door", "locked":True, "closed":True},
+//									{"id":1, "name":"Living Room Door", "locked":True, "closed":True}
+//								],
+//								"water":[
+//									{"id":0, "name":"Kitchen Sink", "isOn":False, "temp":30},
+//									{"id":1, "name":"Bath Room Sink", "isOn":False, "temp":30},
+//									{"id":2, "name":"Shower", "isOn":False, "temp":30}
+//								],
+//								"lights":[
+//									{"id":0, "name":"Living Room", "isOn":False, "temp":30},
+//									{"id":1, "name":"Bath Room", "isOn":False, "temp":30},
+//									{"id":2, "name":"Halway", "isOn":False, "temp":30}
+//								]
+//							}';
+		
+		var c=document.getElementById("floorplan");
+		var ctx=c.getContext("2d");
+		
+		draw(ctx);
+		
+		function draw(ctx) {
+			drawFloorPlan(ctx);
+			
+			drawFrontDoor(ctx);
+			drawLivingRoomDoor(ctx);
+			drawBathRoomDoor(ctx);
+			drawBoilerCubordDoor(ctx);
+			
+			drawKitchenArea(ctx);
+			drawLivingRoomCubord(ctx);
+			
+			drawSofa(ctx);
+			//drawBed(ctx);
+			
+			drawBath(ctx);
+			drawBathRoomSink(ctx);
+		}
+		
+		function drawFloorPlan(ctx) {
+			ctx.beginPath();
+			
+			//Outer Walls
+			ctx.moveTo(1,1);
+			ctx.lineTo(600,1);
+			ctx.lineTo(600,50); //Window
+			ctx.lineTo(598,50); //Window
+			ctx.lineTo(598,250);//Window
+			ctx.lineTo(600,250);//Window
+			ctx.lineTo(600,300);
+			ctx.lineTo(1,300);
+			ctx.lineTo(1,250);
+			ctx.lineTo(1,1);
+			
+			//Halway
+			ctx.moveTo(5, 150);
+			ctx.lineTo(5, 295);
+			ctx.lineTo(100, 295);
+			ctx.lineTo(100, 150);
+			ctx.lineTo(5, 150);
+			
+			//Boiler Cubord
+			ctx.moveTo(105, 150);
+			ctx.lineTo(105, 215);
+			ctx.lineTo(155, 215);
+			ctx.lineTo(155, 150);
+			ctx.lineTo(105, 150);
+			
+			//Bathroom
+			ctx.moveTo(5, 5);
+			ctx.lineTo(5, 145);
+			ctx.lineTo(155, 145);
+			ctx.lineTo(155, 5);
+			ctx.lineTo(5, 5);
+			
+			//Kitchen/Living/bedroom
+			ctx.moveTo(160, 5);
+			ctx.lineTo(160, 220);
+			ctx.lineTo(105, 220);
+			ctx.lineTo(105, 295);
+			ctx.lineTo(595, 295);
+			ctx.lineTo(595, 250); //Window
+			ctx.lineTo(598, 250); //Window
+			ctx.lineTo(598, 50);//Window
+			ctx.lineTo(595, 50);//Window
+			ctx.lineTo(595, 5);
+			ctx.lineTo(160, 5);
+			
+			ctx.fillStyle='#cccccc';
+			ctx.stroke();
+			ctx.fill();
+		}
+		function drawKitchenArea(ctx) {
+			ctx.beginPath();
+			//Kitchen area
+			ctx.moveTo(161, 6);
+			ctx.lineTo(161, 190);
+			ctx.lineTo(200, 190);
+			ctx.lineTo(200, 45);
+			ctx.lineTo(324, 45);
+			ctx.lineTo(324, 140);
+			ctx.lineTo(364, 140);
+			ctx.lineTo(364, 6);
+			ctx.lineTo(161, 6);
+			ctx.fillStyle='#eeeeee';
+			ctx.stroke();
+			ctx.fill();
+			
+			ctx.beginPath();
+			//Kitchen Sink
+			ctx.moveTo(165, 60);
+			ctx.lineTo(165, 110);
+			ctx.lineTo(195, 110);
+			ctx.lineTo(195, 60);
+			ctx.lineTo(165, 60);
+			
+			ctx.fillStyle='#ffffff';
+			ctx.stroke();
+			ctx.fill();
+			
+			ctx.beginPath();
+			ctx.moveTo(167, 62);
+			ctx.lineTo(167, 83);
+			ctx.lineTo(193, 83);
+			ctx.lineTo(193, 62);
+			ctx.lineTo(167, 62);
+			ctx.stroke();
+			ctx.fill();
+			
+			ctx.beginPath();
+			ctx.moveTo(167, 87);
+			ctx.lineTo(167, 108);
+			ctx.lineTo(193, 108);
+			ctx.lineTo(193, 87);
+			ctx.lineTo(167, 87);
+			ctx.stroke();
+			ctx.fill();
+		}
+		function drawLivingRoomCubord(ctx) {
+			ctx.beginPath();
+			ctx.moveTo(325, 294);
+			ctx.lineTo(325, 270);
+			ctx.lineTo(575, 270);
+			ctx.lineTo(575, 294);
+			ctx.fillStyle='#eeeeee';
+			ctx.stroke();
+			ctx.fill();
+		}
+		
+		function drawFrontDoor(ctx) {
+			//Front Door Background Removal
+			ctx.beginPath();
+			ctx.moveTo(0, 250);
+			ctx.lineTo(0, 200);
+			ctx.lineTo(6,200);
+			ctx.lineTo(6,250);
+			ctx.fillStyle='#ffffff';
+			ctx.fill();
+			
+			ctx.beginPath();
+			//Check if door closed
+			if (true) {//Logic to be added later
+				//Front Door Closed
+				ctx.moveTo(0, 250);
+				ctx.lineTo(2, 250);
+				ctx.lineTo(2, 200);
+				ctx.lineTo(0, 200);
+				ctx.lineTo(6, 200);
+				ctx.lineTo(4, 200);
+				ctx.lineTo(4, 250);
+				ctx.lineTo(6, 250);
+				ctx.closePath();
+				ctx.fillStyle='#cccccc';
+				ctx.stroke();
+				ctx.fill();
+			} else {
+				//Front Door Open
+				ctx.moveTo(1, 250);
+				ctx.lineTo(34,213);
+				ctx.lineTo(35,215);
+				ctx.lineTo(5,250);
+				ctx.fillStyle='#cccccc';
+				ctx.stroke();
+				ctx.fill();
+				ctx.beginPath();
+				ctx.arc(0,250,50,Math.PI * 1.75,Math.PI*1.5,true);
+				ctx.stroke();
+			}
+		}
+		function drawLivingRoomDoor(ctx) {
+			ctx.beginPath();
+			
+			//Living Room Door Background Removal
+			ctx.moveTo(99, 230);
+			ctx.lineTo(99, 280);
+			ctx.lineTo(106, 280);
+			ctx.lineTo(106, 230);
+			
+			ctx.fillStyle='#ffffff';
+			ctx.fill();
+			
+			ctx.beginPath();
+			
+			//Check if door closed
+			if (true) {//Logic to be added later
+				//Living Room Door Closed
+				ctx.moveTo(99, 280);
+				ctx.lineTo(101, 280);
+				ctx.lineTo(101, 230);
+				ctx.lineTo(99, 230);
+				ctx.lineTo(106, 230);
+				ctx.lineTo(103, 230);
+				ctx.lineTo(103, 280);
+				ctx.lineTo(106, 280);
+				ctx.closePath();
+				ctx.fillStyle='#cccccc';
+				ctx.stroke();
+				ctx.fill();
+			} else {
+				ctx.moveTo(100, 280);
+				ctx.lineTo(134,244);
+				ctx.lineTo(136,246);
+				ctx.lineTo(105,280);
+				ctx.fillStyle='#cccccc';
+				ctx.stroke();
+				ctx.fill();
+				ctx.beginPath();
+				ctx.arc(100,280.5,50,Math.PI * 1.75,Math.PI*1.5,true);
+				ctx.stroke();
+			}
+		}
+		function drawBathRoomDoor(ctx) {
+			ctx.beginPath();
+			
+			//Bathroom Door Background Removal
+			ctx.moveTo(40, 144);
+			ctx.lineTo(40, 151);
+			ctx.lineTo(90, 151);
+			ctx.lineTo(90, 144);
+			
+			ctx.fillStyle='#ffffff';
+			ctx.fill();
+			
+			ctx.beginPath();
+			
+			//Check if door closed
+			if (true) {//Logic to be added later
+				//Bathroom Door Closed
+				ctx.moveTo(40, 144);
+				ctx.lineTo(40, 146);
+				ctx.lineTo(90, 146);
+				ctx.lineTo(90, 144);
+				ctx.lineTo(90, 151);
+				ctx.lineTo(90, 149);
+				ctx.lineTo(40, 149);
+				ctx.lineTo(40, 151);
+				ctx.closePath();
+				ctx.fillStyle='#cccccc';
+				ctx.stroke();
+				ctx.fill();
+			} else {
+				ctx.moveTo(90, 150);
+				ctx.lineTo(55, 181);
+				ctx.lineTo(53, 179);
+				ctx.lineTo(90, 145);
+				
+				ctx.fillStyle='#cccccc';
+				ctx.stroke();
+				ctx.fill();
+				ctx.beginPath();
+				ctx.arc(90,145,50,Math.PI * 1,Math.PI*0.75,true);
+				ctx.stroke();
+			}
+		}
+		function drawBoilerCubordDoor(ctx) {
+			ctx.beginPath();
+			
+			//Boiler Cubord Door Background Removal
+			ctx.moveTo(99, 160);
+			ctx.lineTo(99, 210);
+			ctx.lineTo(106,210);
+			ctx.lineTo(106,160);
+			
+			ctx.fillStyle='#ffffff';
+			ctx.fill();
+			
+			ctx.beginPath();
+			//Check if door closed
+			if (true) {//Logic to be added later
+				//Boiler Cubord Door Closed
+				ctx.moveTo(99, 160);
+				ctx.lineTo(101, 160);
+				ctx.lineTo(101, 210);
+				ctx.lineTo(99, 210);
+				ctx.lineTo(106, 210);
+				ctx.lineTo(103, 210);
+				ctx.lineTo(103, 160);
+				ctx.lineTo(106, 160);
+				ctx.closePath();
+				ctx.fillStyle='#cccccc';
+				ctx.stroke();
+				ctx.fill();
+			} else {
+				ctx.moveTo(100, 160);
+				ctx.lineTo(70, 195);
+				ctx.lineTo(72, 198);
+				ctx.lineTo(105, 160);
+				ctx.fillStyle='#cccccc';
+				ctx.stroke();
+				ctx.fill();
+				ctx.beginPath();
+				ctx.arc(105,160.5,50,Math.PI * 0.75,Math.PI*0.5,true);
+				ctx.stroke();
+			}
+		}
+		
+		function drawSofa(ctx) {
+			ctx.beginPath();
+			
+			ctx.fillStyle='#eeeeee';
+			ctx.moveTo(400.5, 269);
+			ctx.lineTo(400.5, 220.5);
+			ctx.lineTo(500.5, 220.5);
+			ctx.lineTo(500.5, 180.5);
+			ctx.lineTo(550.5, 180.5);
+			ctx.lineTo(550.5, 269);
+			
+			ctx.fill();
+			
+			ctx.moveTo(450.5, 220);
+			ctx.lineTo(450.5, 269);
+			
+			ctx.moveTo(500.5, 220);
+			ctx.lineTo(500.5, 269);
+			
+			ctx.moveTo(404.5, 267.5);
+			ctx.lineTo(446.5, 267.5);
+			ctx.lineTo(446.5, 257.5);
+			ctx.lineTo(404.5, 257.5);
+			ctx.closePath();
+			
+			ctx.moveTo(454.5, 267.5);
+			ctx.lineTo(496.5, 267.5);
+			ctx.lineTo(496.5, 257.5);
+			ctx.lineTo(454.5, 257.5);
+			ctx.closePath();
+			
+			ctx.moveTo(504.5, 267.5);
+			ctx.lineTo(546.5, 267.5);
+			ctx.lineTo(546.5, 257.5);
+			ctx.lineTo(504.5, 257.5);
+			ctx.closePath();
+			
+			ctx.stroke();
+		}
+		function drawBed(ctx) {
+			ctx.beginPath();
+			ctx.fillStyle='#eeeeee';
+			ctx.moveTo(420, 229);
+			ctx.lineTo(420, 100);
+			ctx.lineTo(530, 100);
+			ctx.lineTo(530, 229);
+			ctx.stroke();
+			ctx.fill();
+			
+			ctx.beginPath();
+			ctx.moveTo(419.5, 269);
+			ctx.lineTo(419.5, 229.5);
+			ctx.lineTo(530.5, 229.5);
+			ctx.lineTo(530.5, 269);
+			
+			ctx.moveTo(425.5, 265.5);
+			ctx.lineTo(425.5, 235.5);
+			ctx.lineTo(472.5, 235.5);
+			ctx.lineTo(472.5, 265.5);
+			ctx.closePath();
+			
+			ctx.moveTo(478.5, 265.5);
+			ctx.lineTo(478.5, 235.5);
+			ctx.lineTo(525.5, 235.5);
+			ctx.lineTo(525.5, 265.5);
+			ctx.closePath();
+			
+			ctx.fillStyle='#ffffff';
+			ctx.fill();
+			ctx.stroke();
+		}
+		function drawBath(ctx) {
+			ctx.beginPath();
+			
+			ctx.moveTo(6, 6);
+			ctx.lineTo(6, 54);
+			ctx.lineTo(154,54);
+			ctx.lineTo(154, 6);
+			ctx.closePath();
+			
+			ctx.fillStyle='#eeeeee';
+			ctx.stroke();
+			ctx.fill();
+			
+			ctx.beginPath();
+			
+			ctx.moveTo(35, 15);
+			ctx.lineTo(125, 15);
+			ctx.arc(125,30,15,Math.PI * 1.5 ,Math.PI/2,false);
+			ctx.lineTo(35, 45);
+			ctx.arc(35,30,15,Math.PI * 1.5 ,Math.PI/2,true);
+			
+			ctx.fillStyle='#ffffff';
+			ctx.stroke();
+			ctx.fill();
+		}
+		function drawBathRoomSink(ctx) {
+			ctx.beginPath();
+			
+			ctx.moveTo(110, 55);
+			ctx.lineTo(154, 55);
+			ctx.lineTo(154, 100);
+			ctx.lineTo(110, 100);
+			//ctx.lineTo(154, 6);
+			ctx.closePath();
+			
+			ctx.fillStyle='#eeeeee';
+			ctx.stroke();
+			ctx.fill();
+			
+			ctx.beginPath();
+			
+			ctx.arc(132.5,77.5,17,0 ,Math.PI*2,false);
+			
+			ctx.fillStyle='#ffffff';
+			ctx.stroke();
+			ctx.fill();
+		}
+		
+	</script>
+</html>
