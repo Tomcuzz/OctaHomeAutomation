@@ -248,6 +248,9 @@ class ArduinoRGBLight(RGBLight):
 	# Class Parameters #
 	####################
 	UserCreatable = True
+	@classmethod
+	def getTypeName(cls):
+		return "Arduino RGB Light"
 	
 	##################
 	# Object Methods #

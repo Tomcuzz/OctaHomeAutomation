@@ -187,6 +187,9 @@ class Device(OctaSubclassableModel):
 					return title
 			return ''
 		
+	@classmethod
+	def getTypeName(cls):
+		return cls.__name__
 	
 	@classmethod
 	def getClassNames(cls):
