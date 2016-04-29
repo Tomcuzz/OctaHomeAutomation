@@ -1,5 +1,6 @@
 from OctaHomeCore.views import *
 from OctaHomeCore.models import *
+from OctaHomeCore.helpers import *
 import json
 
 from OctaHomeLights.models import *
@@ -44,7 +45,7 @@ class handleGenericDeviceView(viewRequestHandler):
 
 class handleGenericAddDeviceView(viewRequestHandler):
 	def getViewParameters(self):
-		return {}
+		return {'types':getNonAbstractSubClasses(Device)}
 	
 	def getTemplate(self):
 		return 'OctaHomeCore/pages/Device/Add'
