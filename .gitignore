@@ -3,3 +3,4 @@ nohup.out
 *.pyc
 */migrations/*
 HomeAutomation/settings.py
+OctaHomeCore/runtime/settings.py
