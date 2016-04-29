@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 import getpass
-from OctaHomeCore.authmodels import *
+from OctaHomeCore.models.auth import *
 from django.contrib.auth import *
 
 class Command(BaseCommand):
