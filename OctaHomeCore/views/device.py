@@ -98,7 +98,7 @@ class handleAddDeviceCommand(commandRequestHandler):
 				if self.Post.has_key('next'):
 					return self.redirect(self.Post['next'])
 				else:
-					return self.returnOk()
+					return self.redirect(reverse('GenericDeviceSection'))
 			else:
 				return self.handleUserError('Error In Creation')
 		else:
