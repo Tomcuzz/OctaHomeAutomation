@@ -1,5 +1,6 @@
 import re
 from django.db import models
+from django.core.validators import MaxValueValidator, MinValueValidator
 from OctaHomeCore.models.device import *
 from OctaHomeCore.communication_controller import *
 
@@ -59,7 +60,7 @@ class DimmableLight(LightDevice):
 	##############
 	# Parameters #
 	##############
-	Level = models.PositiveSmallIntegerField(default=0, max_value=255)
+	Level = models.PositiveSmallIntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(255)])
 	
 	#################
 	# Class Methods #
