@@ -21,9 +21,9 @@ class LightScrollMode(DeviceMode):
 
 
 class LightDevice(OutputDevice):
-	####################
+	###################
 	# View Parameters #
-	####################
+	###################
 	ViewPartial = 'OctaHomeLights/_Light'
 	@property
 	def JsPartials(self):
@@ -45,11 +45,74 @@ class LightDevice(OutputDevice):
 	class Meta:
 		abstract = True
 
+class DimmableLight(LightDevice):
+	###################
+	# View Parameters #
+	###################
+	ViewPartial = 'OctaHomeLights/_Light'
+	@property
+	def JsPartials(self):
+		result = super(LightDevice, self).JsPartials
+		result.extend(["OctaHomeLights/_LightJs.html"])
+		return 	result
+	
+	##############
+	# Parameters #
+	##############
+	Level = models.PositiveSmallIntegerField(default=0, max_value=255)
+	
+	#################
+	# Class Methods #
+	#################
+	def listActions(self):
+		result = super(RGBLight, self).listActions()
+		result.extend(["setLevel"])
+		return result
+	
+	def	handleAction(self, action, parameters):
+		if action == "setLevel":
+			if parameters.has_key('Level'):
+				return self.setLevel(parameters['Level'])
+			else:
+				return False
+		else:
+			return super(DimmableLight, self).handleAction(action, parameters)
+	
+	def getState(self):
+		result = super(RGBLight, self).getState()
+		result.update({"Level":{"DisplayName":"Level", "Type":"Range", "value":self.Level, "MinValue":0, "MaxValue":255}})
+		return result
+	
+	##################
+	# Object Methods #
+	##################
+	def setLevel(self, level):
+		if not re.match('^([01]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])$', level):
+			return False
+		
+		try:
+			if self.Level == 0:
+				self.IsOn = False
+			else:
+				self.Level = level
+				self.IsOn = True
+		except:
+			return False
+		
+		self.save()
+		return True
+	
+	########
+	# Meta #
+	########
+	class Meta:
+		abstract = True
+
 
 class RGBLight(LightDevice):
-	####################
-	# Class Parameters #
-	####################
+	###################
+	# View Parameters #
+	###################
 	ViewPartial = 'OctaHomeLights/_RGBLight'
 	
 	@property
@@ -180,6 +243,11 @@ class RGBLight(LightDevice):
 		abstract = True
 
 class ArduinoRGBLight(RGBLight):
+	####################
+	# Class Parameters #
+	####################
+	UserCreatable = True
+	
 	##################
 	# Object Methods #
 	##################

@@ -17,6 +17,11 @@ class DeviceGroup(OctaBaseModel):
 # Device Types #
 ################
 class Device(OctaSubclassableModel):
+	####################
+	# Class Parameters #
+	####################
+	UserCreatable = False
+	
 	##############
 	# Parameters #
 	##############
