@@ -49,7 +49,7 @@ pip install -r ../OctaHomeCore/requirements.txt
 cp InitScript.txt /etc/init.d/homeautomation
 chmod +x /etc/init.d/homeautomation
 
-cp ../HomeAutomation/settings.py.dist ../HomeAutomation/settings.py
+cp ../OctaHomeCore/runtime/settings.py.dist ../OctaHomeCore/runtime/settings.py
 
 adminname=""
 adminemail=""
@@ -123,16 +123,16 @@ if [ "$proxmoxpassword" == "" ]; then
 fi
 
 
-sed -i "s/###ADMIN_NAME##('Joe Bloggs')###/'$adminname'/" ../HomeAutomation/settings.py
-sed -i "s/###ADMIN_EMAIL##('joebloggs@example.com')###/'$adminemail'/" ../HomeAutomation/settings.py
-sed -i "s/###DB_DATABASE##('HomeControl')###/'$database'/" ../HomeAutomation/settings.py
-sed -i "s/###DB_HOST##('127.0.0.1')###/'$host'/" ../HomeAutomation/settings.py
-sed -i "s/###DB_USER##('root')###/'$user'/" ../HomeAutomation/settings.py
-sed -i "s/###DB_PASSWORD##('password')###/'$password'/" ../HomeAutomation/settings.py
-sed -i "s/###DB_PORT##('')###/'$port'/" ../HomeAutomation/settings.py
+sed -i "s/###ADMIN_NAME##('Joe Bloggs')###/'$adminname'/" ../OctaHomeCore/runtime/settings.py
+sed -i "s/###ADMIN_EMAIL##('joebloggs@example.com')###/'$adminemail'/" ../OctaHomeCore/runtime/settings.py
+sed -i "s/###DB_DATABASE##('HomeControl')###/'$database'/" ../OctaHomeCore/runtime/settings.py
+sed -i "s/###DB_HOST##('127.0.0.1')###/'$host'/" ../OctaHomeCore/runtime/settings.py
+sed -i "s/###DB_USER##('root')###/'$user'/" ../OctaHomeCore/runtime/settings.py
+sed -i "s/###DB_PASSWORD##('password')###/'$password'/" ../OctaHomeCore/runtime/settings.py
+sed -i "s/###DB_PORT##('')###/'$port'/" ../OctaHomeCore/runtime/settings.py
 
-sed -i "s/###AUTHY_API_KEY##('')###/'$authyapikey'/" ../HomeAutomation/settings.py
-sed -i "s/###MET_OFFICE_API_KEY##('')###/'$metofficeapikey'/" ../HomeAutomation/settings.py
-sed -i "s/###PROXMOX_IP##('127.0.0.1')###/'$proxmoxip'/" ../HomeAutomation/settings.py
-sed -i "s/###PROXMOX_USER##('homeautomation@pam')###/'$proxmoxuser'/" ../HomeAutomation/settings.py
-sed -i "s/###PROXMOX_PASSWORD##('password')###/'$proxmoxpassword'/" ../HomeAutomation/settings.py
+sed -i "s/###AUTHY_API_KEY##('')###/'$authyapikey'/" ../OctaHomeCore/runtime/settings.py
+sed -i "s/###MET_OFFICE_API_KEY##('')###/'$metofficeapikey'/" ../OctaHomeCore/runtime/settings.py
+sed -i "s/###PROXMOX_IP##('127.0.0.1')###/'$proxmoxip'/" ../OctaHomeCore/runtime/settings.py
+sed -i "s/###PROXMOX_USER##('homeautomation@pam')###/'$proxmoxuser'/" ../OctaHomeCore/runtime/settings.py
+sed -i "s/###PROXMOX_PASSWORD##('password')###/'$proxmoxpassword'/" ../OctaHomeCore/runtime/settings.py
